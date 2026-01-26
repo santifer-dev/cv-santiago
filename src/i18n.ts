@@ -168,7 +168,7 @@ export const translations = {
       slides: 'Slides',
       items: [
         { year: '2025', event: 'Marily Nika', eventUrl: 'https://maven.com/marily-nika/ai-pm-bootcamp', title: 'No-Code: The AI PM\'s Secret Weapon', desc: 'Community session de 1h sobre no-code (Zapier, Make, n8n, Airtable) como superpoder del AI PM para validar y entregar más rápido.', pdf: '/No-Code-The-AI-PMs-Secret-Weapon.pdf' },
-        { year: '2025', event: 'Empresarios locales · Sevilla', title: 'Hiperautomatiza tu Pyme', desc: 'Taller sobre hiperautomatización para pymes: orquestación, RPA, IA y gobernanza. Caso práctico: Santifer iRepair.', pdf: '/Hiperautomatiza tu Pyme (SFVA).pdf' },
+        { year: '2025', event: 'Empresarios locales · Sevilla', eventUrl: '', title: 'Hiperautomatiza tu Pyme', desc: 'Taller sobre hiperautomatización para pymes: orquestación, RPA, IA y gobernanza. Caso práctico: Santifer iRepair.', pdf: '/Hiperautomatiza tu Pyme (SFVA).pdf' },
       ]
     },
     education: {
@@ -366,7 +366,7 @@ export const translations = {
       slides: 'Slides',
       items: [
         { year: '2025', event: 'Marily Nika', eventUrl: 'https://maven.com/marily-nika/ai-pm-bootcamp', title: 'No-Code: The AI PM\'s Secret Weapon', desc: '1h community session on no-code (Zapier, Make, n8n, Airtable) as an AI PM superpower to validate and deliver faster.', pdf: '/No-Code-The-AI-PMs-Secret-Weapon.pdf' },
-        { year: '2025', event: 'Local entrepreneurs · Seville', title: 'Hiperautomatiza tu Pyme', desc: 'Workshop on hyperautomation for SMEs: orchestration, RPA, AI and governance. Case study: Santifer iRepair.', pdf: '/Hiperautomatiza tu Pyme (SFVA).pdf' },
+        { year: '2025', event: 'Local entrepreneurs · Seville', eventUrl: '', title: 'Hiperautomatiza tu Pyme', desc: 'Workshop on hyperautomation for SMEs: orchestration, RPA, AI and governance. Case study: Santifer iRepair.', pdf: '/Hiperautomatiza tu Pyme (SFVA).pdf' },
       ]
     },
     education: {
