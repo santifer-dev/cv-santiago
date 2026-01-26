@@ -89,6 +89,13 @@ export const translations = {
           link: 'github.com/santifer/claudeable'
         },
         {
+          title: 'Watermark Remover',
+          badge: 'Open Source',
+          desc: 'CLI en Python para eliminar marcas de agua de imágenes con IA. Detección automática con YOLO e inpainting con LaMa para reconstrucción realista.',
+          tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
+          link: 'github.com/santifer-dev/watermark-remover'
+        },
+        {
           title: 'santifer.io',
           badge: 'Este Portfolio',
           desc: 'CV interactivo con chat IA integrado. El chatbot "Santi" responde preguntas sobre mi experiencia y habilidades. Streaming en tiempo real, i18n ES/EN, dark mode.',
@@ -285,6 +292,13 @@ export const translations = {
           desc: 'Claude Code meta-project for professional web development. Custom skills, templates and pre-configured MCPs to build Lovable-quality websites.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
           link: 'github.com/santifer/claudeable'
+        },
+        {
+          title: 'Watermark Remover',
+          badge: 'Open Source',
+          desc: 'Python CLI to remove watermarks from images using AI. Automatic detection with YOLO and LaMa inpainting for realistic reconstruction.',
+          tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
+          link: 'github.com/santifer-dev/watermark-remover'
         },
         {
           title: 'santifer.io',
