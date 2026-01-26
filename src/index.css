@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+}
+
+/* ============================================
+   COLOR PROFILES - Change theme class on :root
+   ============================================
+
+   Profile 1: "theme-cyber" (default) - Cyan/Purple
+   Profile 2: "theme-warm" - Orange monochrome
+
+   To switch: add class to <html> element
+   Example: <html class="theme-warm dark">
+   ============================================ */
+
+@layer base {
+  /* ========== PROFILE: CYBER (Default) - Cyan/Purple ========== */
+  :root {
+    --background: 0 0% 99%;
+    --foreground: 240 10% 4%;
+    --muted: 240 5% 94%;
+    --muted-foreground: 240 5% 35%;
+    --primary: 187 74% 32%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 270 70% 45%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 6% 85%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 4%;
+    /* Gradient colors for chat/buttons */
+    --gradient-from: 187 86% 53%; /* cyan-400 */
+    --gradient-to: 270 91% 65%;   /* purple-500 */
+  }
+
+  .dark {
+    --background: 240 6% 10%;       /* #18181b - soft dark like VS Code */
+    --foreground: 0 0% 93%;         /* off-white, easier on eyes */
+    --muted: 240 4% 14%;            /* slightly lighter for hierarchy */
+    --muted-foreground: 240 5% 65%;
+    --primary: 187 86% 53%;
+    --primary-foreground: 240 10% 4%;
+    --accent: 270 91% 65%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 4% 20%;           /* more visible borders */
+    --card: 240 5% 13%;             /* elevated above background */
+    --card-foreground: 0 0% 93%;
+    --gradient-from: 187 86% 53%;
+    --gradient-to: 270 91% 65%;
+  }
+
+  /* ========== PROFILE: WARM - Orange/Teal ========== */
+  .theme-warm {
+    --background: 30 50% 98%;
+    --foreground: 20 20% 10%;
+    --muted: 30 30% 93%;
+    --muted-foreground: 20 15% 40%;
+    --primary: 22 78% 50%;         /* Orange base */
+    --primary-foreground: 0 0% 100%;
+    --accent: 181 100% 26%;        /* Teal */
+    --accent-foreground: 0 0% 100%;
+    --border: 30 20% 82%;
+    --card: 30 40% 99%;
+    --card-foreground: 20 20% 10%;
+    --gradient-from: 24 85% 58%;   /* Bright orange */
+    --gradient-to: 181 100% 32%;   /* Teal */
+  }
+
+  .theme-warm.dark {
+    --background: 20 12% 11%;      /* soft warm dark */
+    --foreground: 30 20% 90%;      /* off-white warm */
+    --muted: 20 10% 15%;
+    --muted-foreground: 30 15% 60%;
+    --primary: 24 90% 55%;         /* Bright orange */
+    --primary-foreground: 20 20% 8%;
+    --accent: 181 90% 40%;         /* Bright teal */
+    --accent-foreground: 0 0% 100%;
+    --border: 20 8% 22%;
+    --card: 20 10% 14%;            /* elevated above background */
+    --card-foreground: 30 20% 90%;
+    --gradient-from: 24 90% 55%;   /* Orange */
+    --gradient-to: 181 85% 38%;    /* Teal */
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px; /* Base accesible WCAG */
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Accesibilidad: tamaños mínimos mejorados */
+  .text-xs {
+    font-size: 0.8125rem; /* 13px en vez de 12px */
+    line-height: 1.4;
+  }
+
+  .text-sm {
+    font-size: 0.9375rem; /* 15px en vez de 14px */
+    line-height: 1.5;
+  }
+}
+
+/* Custom scrollbar - dark mode aware */
+.custom-scrollbar {
+  /* Firefox & modern browsers */
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+.custom-scrollbar:hover {
+  scrollbar-color: hsl(var(--muted-foreground) / 0.5) transparent;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground) / 0.5);
+}
+
+@layer utilities {
+  .bg-background { background-color: hsl(var(--background)); }
+  .bg-foreground { background-color: hsl(var(--foreground)); }
+  .bg-muted { background-color: hsl(var(--muted)); }
+  .bg-muted\/30 { background-color: hsl(var(--muted) / 0.3); }
+  .bg-primary { background-color: hsl(var(--primary)); }
+  .bg-primary\/5 { background-color: hsl(var(--primary) / 0.05); }
+  .bg-primary\/10 { background-color: hsl(var(--primary) / 0.1); }
+  .bg-primary\/20 { background-color: hsl(var(--primary) / 0.2); }
+  .bg-accent { background-color: hsl(var(--accent)); }
+  .bg-accent\/5 { background-color: hsl(var(--accent) / 0.05); }
+  .bg-accent\/10 { background-color: hsl(var(--accent) / 0.1); }
+  .bg-accent\/20 { background-color: hsl(var(--accent) / 0.2); }
+  .bg-card { background-color: hsl(var(--card)); }
+  .bg-border { background-color: hsl(var(--border)); }
+
+  .text-foreground { color: hsl(var(--foreground)); }
+  .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+  .text-primary { color: hsl(var(--primary)); }
+  .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+  .text-accent { color: hsl(var(--accent)); }
+  .text-accent-foreground { color: hsl(var(--accent-foreground)); }
+  .text-card-foreground { color: hsl(var(--card-foreground)); }
+
+  .border-border { border-color: hsl(var(--border)); }
+  .border-primary { border-color: hsl(var(--primary)); }
+  .border-primary\/20 { border-color: hsl(var(--primary) / 0.2); }
+  .border-primary\/30 { border-color: hsl(var(--primary) / 0.3); }
+  .border-primary\/50 { border-color: hsl(var(--primary) / 0.5); }
+  .border-accent\/20 { border-color: hsl(var(--accent) / 0.2); }
+  .border-accent\/30 { border-color: hsl(var(--accent) / 0.3); }
+
+  .from-primary { --tw-gradient-from: hsl(var(--primary)); }
+  .from-primary\/10 { --tw-gradient-from: hsl(var(--primary) / 0.1); }
+  .to-primary { --tw-gradient-to: hsl(var(--primary)); }
+  .to-accent { --tw-gradient-to: hsl(var(--accent)); }
+  .via-accent\/5 { --tw-gradient-via: hsl(var(--accent) / 0.05); }
+
+  /* Gradient utilities using theme tokens */
+  .bg-gradient-theme {
+    background-image: linear-gradient(to bottom right, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
+  }
+  .bg-gradient-theme-r {
+    background-image: linear-gradient(to right, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
+  }
+  .bg-gradient-theme-10 {
+    background-image: linear-gradient(to right, hsl(var(--gradient-from) / 0.1), hsl(var(--gradient-to) / 0.1));
+  }
+  .bg-gradient-theme-30 {
+    background-image: linear-gradient(to bottom right, hsl(var(--gradient-from) / 0.3), hsl(var(--gradient-to) / 0.3));
+  }
+  .bg-gradient-theme-50 {
+    background-image: linear-gradient(to bottom right, hsl(var(--gradient-from) / 0.5), hsl(var(--gradient-to) / 0.5));
+  }
+  .from-gradient { --tw-gradient-from: hsl(var(--gradient-from)); }
+  .to-gradient { --tw-gradient-to: hsl(var(--gradient-to)); }
+  .text-gradient-theme {
+    background-image: linear-gradient(to right, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-gradient {
+    --tw-shadow-color: hsl(var(--gradient-to) / 0.25);
+  }
+}
+
+/* Typewriter cursor blink animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
