@@ -163,6 +163,13 @@ export const translations = {
         }
       }
     },
+    speaking: {
+      title: 'Ponencias',
+      items: [
+        { year: '2025', event: 'Maven AI PM Bootcamp', title: 'No-Code: The AI PM\'s Secret Weapon', desc: 'Community session de 1h sobre no-code (Zapier, Make, n8n, Airtable) como superpoder del AI PM para validar y entregar más rápido.' },
+        { year: '2025', event: 'Empresarios locales · Sevilla', title: 'Hiperautomatiza tu Pyme', desc: 'Taller sobre hiperautomatización para pymes: orquestación, RPA, IA y gobernanza. Caso práctico: Santifer iRepair.' },
+      ]
+    },
     education: {
       title: 'Formación',
       items: [
@@ -352,6 +359,13 @@ export const translations = {
           desc: 'Graph-based RL engine with automatic feedback loops. Liaison between dev, consulting, and project areas. Pioneer system pre-LLMs.'
         }
       }
+    },
+    speaking: {
+      title: 'Speaking',
+      items: [
+        { year: '2025', event: 'Maven AI PM Bootcamp', title: 'No-Code: The AI PM\'s Secret Weapon', desc: '1h community session on no-code (Zapier, Make, n8n, Airtable) as an AI PM superpower to validate and deliver faster.' },
+        { year: '2025', event: 'Local entrepreneurs · Seville', title: 'Hiperautomatiza tu Pyme', desc: 'Workshop on hyperautomation for SMEs: orchestration, RPA, AI and governance. Case study: Santifer iRepair.' },
+      ]
     },
     education: {
       title: 'Education',

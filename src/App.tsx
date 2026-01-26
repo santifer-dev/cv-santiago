@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles } from 'lucide-react'
-import { translations, type Lang } from './i18n'
+import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic } from 'lucide-react'
+import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
 function useInView(threshold = 0.1) {
@@ -277,6 +277,29 @@ function App() {
       }
     }
   }, [location.hash])
+
+  // SEO: Dynamic meta tags based on language
+  useEffect(() => {
+    const seoData = seo[lang]
+    document.title = seoData.title
+
+    // Update meta description
+    const metaDesc = document.querySelector('meta[name="description"]')
+    if (metaDesc) metaDesc.setAttribute('content', seoData.description)
+
+    // Update OG tags
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', seoData.title)
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', seoData.description)
+    document.querySelector('meta[property="og:locale"]')?.setAttribute('content', lang === 'en' ? 'en_US' : 'es_ES')
+
+    // Update canonical
+    const canonical = lang === 'en' ? 'https://santifer.io/en' : 'https://santifer.io/'
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', canonical)
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', canonical)
+
+    // Update html lang
+    document.documentElement.lang = lang
+  }, [lang])
 
   const toggleLang = () => {
     navigate(lang === 'es' ? '/en' : '/')
@@ -708,6 +731,32 @@ function App() {
               </div>
             </div>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Speaking */}
+      <section id="speaking" className="py-16 md:py-24 bg-muted/30">
+        <div className="max-w-5xl mx-auto px-6">
+          <AnimatedSection>
+            <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Mic className="w-5 h-5 text-primary" />
+              </div>
+              {t.speaking.title}
+            </h2>
+          </AnimatedSection>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {t.speaking.items.map((talk, i) => (
+              <AnimatedSection key={i} delay={0.1 + i * 0.1}>
+                <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group h-full">
+                  <span className="text-xs text-primary font-medium">{talk.year} · {talk.event}</span>
+                  <h3 className="font-display font-bold mt-2 group-hover:text-primary transition-colors">{talk.title}</h3>
+                  <p className="text-sm text-muted-foreground mt-2">{talk.desc}</p>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
         </div>
       </section>
 
