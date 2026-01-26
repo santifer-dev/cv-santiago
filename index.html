@@ -53,27 +53,152 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Santiago Fernández de Valderrama",
-      "url": "https://santifer.io",
-      "image": "https://santifer.io/foto-avatar.png",
-      "jobTitle": ["AI Product Manager", "Solutions Architect"],
-      "description": "Ex-fundador especializado en automatización con IA y plataformas no/low-code",
-      "email": "hola@santifer.io",
-      "sameAs": [
-        "https://linkedin.com/in/santifer",
-        "https://github.com/santifer-dev"
-      ],
-      "knowsAbout": ["AI", "Automation", "Product Management", "No-Code", "Low-Code", "LLM", "Agentic Workflows"],
-      "alumniOf": {
-        "@type": "EducationalOrganization",
-        "name": "ETSI - Universidad de Sevilla"
-      },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Sevilla",
-        "addressCountry": "ES"
-      }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://santifer.io/#website",
+          "url": "https://santifer.io",
+          "name": "Santiago Fernández de Valderrama | AI PM & Solutions Architect",
+          "inLanguage": ["es", "en"],
+          "publisher": { "@id": "https://santifer.io/#person" }
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://santifer.io/#profilepage",
+          "url": "https://santifer.io",
+          "dateModified": "2026-01-26",
+          "mainEntity": { "@id": "https://santifer.io/#person" }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://santifer.io/#person",
+          "name": "Santiago Fernández de Valderrama",
+          "alternateName": ["santifer", "Santi"],
+          "url": "https://santifer.io",
+          "image": "https://santifer.io/foto-avatar.png",
+          "email": "hola@santifer.io",
+          "jobTitle": ["AI Product Manager", "Solutions Architect", "AI Forward Deployed Engineer"],
+          "hasOccupation": [
+            {
+              "@type": "Occupation",
+              "name": "AI Product Manager",
+              "occupationLocation": { "@type": "Country", "name": "Spain" },
+              "skills": ["AI Product Discovery", "LLM Integration", "Agentic Workflows", "PRD Writing"]
+            },
+            {
+              "@type": "Occupation",
+              "name": "Solutions Architect (No/Low-Code & AI)",
+              "skills": ["Airtable", "Make", "n8n", "API Integration", "System Design"]
+            },
+            {
+              "@type": "Occupation",
+              "name": "AI Forward Deployed Engineer",
+              "skills": ["Stakeholder Workshops", "Rapid Prototyping", "LLMOps", "Claude API"]
+            }
+          ],
+          "knowsAbout": [
+            "Artificial Intelligence", "AI Product Management", "LLM Integration",
+            "Agentic Workflows", "Tool Calling", "No-Code Automation", "Low-Code Development",
+            "Airtable", "Make", "n8n", "Claude API", "OpenAI API", "Forward Deployed Engineering"
+          ],
+          "hasCredential": [
+            { "@type": "EducationalOccupationalCredential", "name": "Introduction to MCP", "recognizedBy": { "@type": "Organization", "name": "Anthropic" } },
+            { "@type": "EducationalOccupationalCredential", "name": "Claude Code in Action", "recognizedBy": { "@type": "Organization", "name": "Anthropic" } },
+            { "@type": "EducationalOccupationalCredential", "name": "AI App Builder Certification", "recognizedBy": { "@type": "Organization", "name": "Airtable" } }
+          ],
+          "alumniOf": [
+            { "@type": "EducationalOrganization", "name": "Maven - AI PM Bootcamp" },
+            { "@type": "EducationalOrganization", "name": "ETSI - Universidad de Sevilla" }
+          ],
+          "sameAs": ["https://linkedin.com/in/santifer", "https://github.com/santifer-dev"],
+          "address": { "@type": "PostalAddress", "addressLocality": "Sevilla", "addressCountry": "ES" }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Qué experiencia tiene Santiago Fernández con IA?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Ex-fundador con 16+ años construyendo productos. Desarrolló el agente AI omnicanal 'Jacobo' logrando ~90% de autoservicio, integrando voz (ElevenLabs), WhatsApp (n8n/WATI) y tool calling con sub-agentes especializados. Certificado por Anthropic en Claude Code y Model Context Protocol (MCP)." }
+            },
+            {
+              "@type": "Question",
+              "name": "What is Santiago Fernandez AI experience?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Ex-founder with 16+ years building products. Built omnichannel AI agent 'Jacobo' achieving ~90% self-service rate, integrating voice (ElevenLabs), WhatsApp (n8n/WATI) and tool calling with specialized sub-agents. Anthropic certified in Claude Code and Model Context Protocol (MCP)." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué roles busca Santiago Fernández de Valderrama?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Busca roles senior remotos en EU/USA: AI Product Manager, Solutions Architect (No/Low-Code & AI) y AI Forward Deployed Engineer. Disponible para liderar implementaciones de IA y automatización." }
+            },
+            {
+              "@type": "Question",
+              "name": "What roles is Santiago looking for?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Looking for senior remote roles in EU/USA: AI Product Manager, Solutions Architect (No/Low-Code & AI), and AI Forward Deployed Engineer. Available to lead AI and automation implementations." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué es un Forward Deployed Engineer y qué hace Santiago en ese rol?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Un Forward Deployed Engineer trabaja directamente con clientes enterprise para implementar soluciones técnicas. Santiago realiza workshops con stakeholders, mapeo de workflows, prototipado rápido y entrega en producción de flujos de trabajo agénticos con LLMs." }
+            },
+            {
+              "@type": "Question",
+              "name": "What is a Forward Deployed Engineer and what does Santiago do?",
+              "acceptedAnswer": { "@type": "Answer", "text": "A Forward Deployed Engineer works directly with enterprise clients to implement technical solutions. Santiago conducts stakeholder workshops, workflow mapping, rapid prototyping, and production delivery of agentic workflows with LLMs." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué tecnologías domina Santiago para automatización con IA?",
+              "acceptedAnswer": { "@type": "Answer", "text": "AI/LLM: Claude API, OpenAI (GPTs custom, tool use), ElevenLabs (voz). Automatización: Airtable (certificado Builder/Admin), n8n, Make (certificado Advanced), Zapier. Desarrollo: Python, FastAPI, Node.js, React, TypeScript. Integraciones: Aircall, WATI (WhatsApp), webhooks." }
+            },
+            {
+              "@type": "Question",
+              "name": "What technologies does Santiago use for AI automation?",
+              "acceptedAnswer": { "@type": "Answer", "text": "AI/LLM: Claude API, OpenAI (custom GPTs, tool use), ElevenLabs (voice). Automation: Airtable (Builder/Admin certified), n8n, Make (Advanced certified), Zapier. Dev: Python, FastAPI, Node.js, React, TypeScript. Integrations: Aircall, WATI (WhatsApp), webhooks." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué es el agente AI Jacobo que construyó Santiago?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Jacobo es un agente AI omnicanal que logró ~90% de autoservicio en Santifer iRepair. Integra voz (ElevenLabs), WhatsApp (n8n/WATI) y Aircall PBX. Usa orquestación de sub-agentes vía tool calling: router principal, sub-agente de citas, descuentos, pedidos, y escalado HITL con contexto completo." }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the Jacobo AI agent that Santiago built?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Jacobo is an omnichannel AI agent that achieved ~90% self-service at Santifer iRepair. Integrates voice (ElevenLabs), WhatsApp (n8n/WATI) and Aircall PBX. Uses sub-agent orchestration via tool calling: main router, appointments sub-agent, discounts, orders, and HITL escalation with full context." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué certificaciones tiene Santiago en IA y automatización?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Anthropic: Introduction to MCP y Claude Code in Action (2026). Airtable: AI App Builder, Builder y Admin Certification (2024-2025). Make Academy: Make Advanced (2024). También completó el AI Product Management Bootcamp de Maven con Marily Nika (ex-Google PM)." }
+            },
+            {
+              "@type": "Question",
+              "name": "What certifications does Santiago have in AI and automation?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Anthropic: Introduction to MCP and Claude Code in Action (2026). Airtable: AI App Builder, Builder and Admin Certification (2024-2025). Make Academy: Make Advanced (2024). Also completed Maven's AI Product Management Bootcamp with Marily Nika (ex-Google PM)." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo contactar a Santiago Fernández para roles de AI Product Manager?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Email: hola@santifer.io. LinkedIn: linkedin.com/in/santifer. Web: santifer.io (incluye chat con avatar IA para preguntas rápidas). Disponible para roles remotos senior en EU/USA." }
+            },
+            {
+              "@type": "Question",
+              "name": "How to contact Santiago Fernandez for AI Product Manager roles?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Email: hola@santifer.io. LinkedIn: linkedin.com/in/santifer. Website: santifer.io (includes AI avatar chat for quick questions). Available for senior remote roles in EU/USA." }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Dónde ha trabajado Santiago Fernández de Valderrama?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Santifer iRepair (2009-2025): Fundador & Product Lead, exit en 2025, +30,000 reparaciones. LICO Cosmetics (2024-2025): Consultor Airtable para D2C. Everis/NTT DATA (2007-2009): Coordinador de pruebas y analista, desarrolló tesauro médico con RL." }
+            },
+            {
+              "@type": "Question",
+              "name": "Where has Santiago Fernandez de Valderrama worked?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Santifer iRepair (2009-2025): Founder & Product Lead, exit in 2025, +30,000 repairs. LICO Cosmetics (2024-2025): Airtable consultant for D2C. Everis/NTT DATA (2007-2009): Test coordinator and analyst, built medical coding thesaurus with RL." }
+            }
+          ]
+        }
+      ]
     }
     </script>
   </head>

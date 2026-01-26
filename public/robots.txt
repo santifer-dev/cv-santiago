@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Crawlers IA (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Disallow: /api/
+
+Sitemap: https://santifer.io/sitemap.xml

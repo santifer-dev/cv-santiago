@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic } from 'lucide-react'
+import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -749,10 +749,26 @@ function App() {
           <div className="grid md:grid-cols-2 gap-6">
             {t.speaking.items.map((talk, i) => (
               <AnimatedSection key={i} delay={0.1 + i * 0.1}>
-                <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group h-full">
-                  <span className="text-xs text-primary font-medium">{talk.year} · {talk.event}</span>
+                <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group h-full flex flex-col">
+                  <span className="text-xs text-primary font-medium">
+                    {talk.year} · {talk.eventUrl ? (
+                      <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                        {talk.event} <ExternalLink className="w-3 h-3 inline" />
+                      </a>
+                    ) : talk.event}
+                  </span>
                   <h3 className="font-display font-bold mt-2 group-hover:text-primary transition-colors">{talk.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-2">{talk.desc}</p>
+                  <p className="text-sm text-muted-foreground mt-2 flex-1">{talk.desc}</p>
+                  {talk.pdf && (
+                    <a
+                      href={talk.pdf}
+                      download
+                      className="mt-4 inline-flex items-center gap-2 text-xs text-primary hover:underline"
+                    >
+                      <Download className="w-4 h-4" />
+                      {t.speaking.slides}
+                    </a>
+                  )}
                 </div>
               </AnimatedSection>
             ))}

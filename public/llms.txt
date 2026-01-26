@@ -1,0 +1,159 @@
+# Santiago Fernández de Valderrama
+
+> AI Product Manager · Solutions Architect (No/Low-Code & AI) · Forward Deployed Engineer
+
+## Contact & Availability
+
+- **Location:** Seville, Spain
+- **Open to:** Remote roles in EU/USA
+- **Email:** hola@santifer.io
+- **Website:** https://santifer.io
+- **LinkedIn:** https://linkedin.com/in/santifer
+- **GitHub:** https://github.com/santifer-dev
+
+## Professional Summary
+
+Ex-founder with 16+ years building products. After scaling and selling my business (going-concern sale, 2025), I focus on roles where impact scales: turning ambiguous business goals into production-ready AI solutions.
+
+I operate with end-to-end ownership across discovery → prioritization → delivery → adoption, collaborating closely with stakeholders and engineering.
+
+## Target Roles
+
+1. **AI Product Manager** - AI product discovery, PRDs, roadmap and prioritization for LLM-powered products
+2. **Solutions Architect (No/Low-Code & AI)** - System design for automation platforms integrated with AI
+3. **AI Forward Deployed Engineer** - Stakeholder workshops, rapid prototyping, production delivery
+
+## Key Achievement: Omnichannel AI Agent "Jacobo"
+
+Built an AI agent achieving **~90% customer self-service rate**:
+
+- **Channels:** Voice (ElevenLabs) + WhatsApp (n8n/WATI) + Aircall cloud PBX
+- **Architecture:** Sub-agent orchestration via tool calling
+- **Components:**
+  - Main router: classifies intent and delegates to specialized sub-agents
+  - Appointments sub-agent: checks slots, books, confirms via WhatsApp
+  - Discounts sub-agent: calculates promotions based on customer history
+  - Orders sub-agent: validates stock, creates order, notifies ETA
+  - HITL handoff: escalates to human with full context when needed
+
+## Core Competencies
+
+- **AI Product Discovery:** Problem definition, AI PRDs, roadmap & prioritization
+- **Solution Architecture:** Requirements, system design, APIs/webhooks, OpenAPI specs
+- **Agentic Workflows:** LLM agents, tool use/function calling, HITL handoff, voice + messaging
+- **LLMOps Foundations:** Eval loops, monitoring/telemetry, cost/latency trade-offs
+- **Forward-Deployed Delivery:** Stakeholder workshops, workflow mapping, rapid prototyping
+- **Reliability & Ops:** Monitoring, event logs, error handling, retries, SOPs
+
+## Tech Stack
+
+### AI/LLM
+- Claude (Anthropic) - API integration, Claude Code power user
+- OpenAI - Custom GPTs, tool use via OpenAPI
+- ElevenLabs - Voice AI integration
+
+### Automation Platforms
+- Airtable - Builder/Admin certified, used as headless CMS and ERP
+- n8n - Workflow automation, WhatsApp integration
+- Make - Advanced certified
+- Zapier
+
+### Integrations
+- Aircall (cloud PBX)
+- WATI (WhatsApp Business API)
+- YouCanBookMe (scheduling)
+- DataForSEO (search volume data)
+
+### Development
+- Python, FastAPI
+- Node.js, JavaScript, TypeScript
+- React, Astro
+- SQL, GraphQL
+- Git, Vercel
+
+## Work Experience
+
+### Santifer iRepair (2009-2025) - Founder & Product Lead
+**Exit 2025:** Built, scaled and sold the business as a going concern
+
+- Mobile, tablet and smartwatch repairs — +30,000 repairs completed
+- Led end-to-end transformation of service operations
+- Built internal ERP, CRM, booking system, and programmatic SEO website
+- Developed AI agent "Jacobo" achieving ~90% self-service
+- Created custom GPTs for stock/pricing queries via voice/natural language
+- Philosophy: automate everything possible to maximize value delivered
+
+### Programmatic Web + Automated SEO (2023)
+Only one in the mobile repair sector in Spain:
+- Headless CMS in Airtable as source of truth
+- Integrated with ERP, generating Astro website
+- Pages per model/repair auto-generated
+- Search volume via DataForSEO for indexing decisions
+- Crawl budget optimization
+
+### LICO Cosmetics (2024-2025) - Airtable Consultant
+Process and automation consulting for D2C cosmetics brand. Multiple sessions to drive efficiency and co-develop business workflows.
+
+### Everis/NTT DATA (2007-2009) - Test Coordinator & Software Analyst
+- Coordinated team of 8 testers
+- Built self-learning medical coding thesaurus (graph-based RL engine with automatic feedback loops)
+- Pioneer system pre-LLMs
+
+## Education
+
+- **2025** - Maven: AI Product Management Bootcamp (led by Marily Nika, ex-Google PM). Winning project.
+- **2024** - BIGSEO: Master in Artificial Intelligence (Generative AI applied to business)
+- **2023** - BIGSEO: Master in SEO (Technical SEO, content and analytics)
+- **2001-2009** - ETSI Universidad de Sevilla: Telecommunications Engineering (Telematics specialization)
+
+## Certifications
+
+- **Anthropic (2026):** Introduction to Model Context Protocol
+- **Anthropic (2026):** Claude Code in Action
+- **Airtable (2025):** AI App Builder Certification
+- **Airtable (2024):** Builder Certification
+- **Airtable (2024):** Admin Certification
+- **Make Academy (2024):** Make Advanced
+
+## Projects
+
+### Content Digest (Maven Capstone)
+Python + FastAPI service for LLM-powered content ingestion and digest generation with eval loops and telemetry.
+
+### Claude Pulse (Open Source)
+SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics and rate limit predictions.
+
+### Claudeable (Open Source)
+Claude Code meta-project for professional web development. Custom skills, templates and pre-configured MCPs.
+
+### santifer.io (This Portfolio)
+Interactive CV with integrated AI chat. The chatbot answers questions about experience and skills with real-time streaming.
+
+## Soft Skills
+
+- Communication
+- Leadership
+- Systems Thinking
+- End-to-End Ownership
+- Bias for Action
+- Influence without Authority
+- Dealing with Ambiguity
+
+## Languages
+
+- **Spanish:** Native
+- **English:** Professional fluency
+
+## What I'm Looking For
+
+Senior remote role in EU/USA to:
+- Lead process changes and AI implementation
+- Improve team experience and efficiency
+- Deliver results with clear metrics
+
+## How to Hire Santiago
+
+For AI Product Manager, Solutions Architect, or Forward Deployed Engineer roles:
+- Email: hola@santifer.io
+- LinkedIn: linkedin.com/in/santifer
+- Website: santifer.io (chat with AI avatar for quick questions)
