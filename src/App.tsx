@@ -701,7 +701,15 @@ function App() {
                 <div className="h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group">
                   <div className="flex items-start justify-between mb-3">
                     <h3 className="font-display text-lg font-bold group-hover:text-primary transition-colors">{project.title}</h3>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">{project.badge}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">{project.badge}</span>
+                      {project.badgeBuilding && (
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-500 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-dot"></span>
+                          {project.badgeBuilding}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">{project.desc}</p>
                   <div className="flex flex-wrap gap-2">

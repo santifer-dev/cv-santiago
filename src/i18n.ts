@@ -70,13 +70,15 @@ export const translations = {
         {
           title: 'Content Digest',
           badge: 'Maven Capstone',
-          desc: 'Servicio Python + FastAPI para ingestión de contenido con LLM y generación de resúmenes; implementando bucles de evaluación básicos y telemetría.',
+          badgeBuilding: 'Building',
+          desc: 'Servicio Python + FastAPI para ingestión de contenido con LLM y generación de resúmenes. Prototipo ganador, ahora en producción con mejores prácticas empresariales.',
           tech: ['Python', 'FastAPI', 'OpenAI API', 'LLMOps'],
           link: null
         },
         {
           title: 'Claude Pulse',
           badge: 'Open Source',
+          badgeBuilding: '',
           desc: 'Plugin SwiftBar para monitorización en tiempo real del uso de Claude Code en macOS. Métricas de consumo, predicción de rate limits, y consejos contextuales.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
           link: 'github.com/santifer/claude-pulse'
@@ -84,6 +86,7 @@ export const translations = {
         {
           title: 'Claudeable',
           badge: 'Open Source',
+          badgeBuilding: '',
           desc: 'Metaproyecto de Claude Code para desarrollo web profesional. Skills personalizados, templates y MCPs preconfigurados para crear webs al nivel de Lovable.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
           link: 'github.com/santifer/claudeable'
@@ -91,6 +94,7 @@ export const translations = {
         {
           title: 'Watermark Remover',
           badge: 'Open Source',
+          badgeBuilding: '',
           desc: 'CLI en Python para eliminar marcas de agua de imágenes con IA. Detección automática con YOLO e inpainting con LaMa para reconstrucción realista.',
           tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
           link: 'github.com/santifer-dev/watermark-remover'
@@ -98,6 +102,7 @@ export const translations = {
         {
           title: 'santifer.io',
           badge: 'Este Portfolio',
+          badgeBuilding: '',
           desc: 'CV interactivo con chat IA integrado. El chatbot "Santi" responde preguntas sobre mi experiencia y habilidades. Streaming en tiempo real, i18n ES/EN, dark mode.',
           tech: ['React 19', 'TypeScript', 'Claude API', 'Vercel Edge'],
           link: 'santifer.io'
@@ -275,13 +280,15 @@ export const translations = {
         {
           title: 'Content Digest',
           badge: 'Maven Capstone',
-          desc: 'Python + FastAPI service for LLM-powered content ingestion and digest generation; implementing basic eval loops and telemetry.',
+          badgeBuilding: 'Building',
+          desc: 'Python + FastAPI service for LLM-powered content ingestion and digest generation. Winning prototype, now in production with enterprise best practices.',
           tech: ['Python', 'FastAPI', 'OpenAI API', 'LLMOps'],
           link: null
         },
         {
           title: 'Claude Pulse',
           badge: 'Open Source',
+          badgeBuilding: '',
           desc: 'SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics, rate limit predictions, and context-aware tips.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
           link: 'github.com/santifer/claude-pulse'
@@ -289,6 +296,7 @@ export const translations = {
         {
           title: 'Claudeable',
           badge: 'Open Source',
+          badgeBuilding: '',
           desc: 'Claude Code meta-project for professional web development. Custom skills, templates and pre-configured MCPs to build Lovable-quality websites.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
           link: 'github.com/santifer/claudeable'
@@ -296,6 +304,7 @@ export const translations = {
         {
           title: 'Watermark Remover',
           badge: 'Open Source',
+          badgeBuilding: '',
           desc: 'Python CLI to remove watermarks from images using AI. Automatic detection with YOLO and LaMa inpainting for realistic reconstruction.',
           tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
           link: 'github.com/santifer-dev/watermark-remover'
@@ -303,6 +312,7 @@ export const translations = {
         {
           title: 'santifer.io',
           badge: 'This Portfolio',
+          badgeBuilding: '',
           desc: 'Interactive CV with integrated AI chat. The "Santi" chatbot answers questions about my experience and skills. Real-time streaming, i18n ES/EN, dark mode.',
           tech: ['React 19', 'TypeScript', 'Claude API', 'Vercel Edge'],
           link: 'santifer.io'
