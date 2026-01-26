@@ -266,6 +266,18 @@ function App() {
     document.documentElement.classList.toggle('dark', isDark)
   }, [isDark])
 
+  // Scroll to hash anchor on load/navigation
+  useEffect(() => {
+    if (location.hash) {
+      const el = document.querySelector(location.hash)
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }, 100)
+      }
+    }
+  }, [location.hash])
+
   const toggleLang = () => {
     navigate(lang === 'es' ? '/en' : '/')
   }
@@ -410,7 +422,7 @@ function App() {
       </header>
 
       {/* Summary */}
-      <section className="py-16 md:py-24">
+      <section id="about" className="py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
@@ -446,7 +458,7 @@ function App() {
       </section>
 
       {/* Core Competencies */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section id="skills" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
@@ -471,7 +483,7 @@ function App() {
       </section>
 
       {/* Experience - Bento Grid */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section id="experience" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-12 flex items-center gap-3">
@@ -636,7 +648,7 @@ function App() {
       </section>
 
       {/* Projects & Claude Code */}
-      <section className="py-16 md:py-24">
+      <section id="projects" className="py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <div className="flex items-center justify-between mb-12">
@@ -700,7 +712,7 @@ function App() {
       </section>
 
       {/* Education & Certifications */}
-      <section className="py-16 md:py-24">
+      <section id="education" className="py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Education */}
@@ -770,7 +782,7 @@ function App() {
       </section>
 
       {/* Skills */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section id="tech" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-12 flex items-center gap-3">
@@ -830,7 +842,7 @@ function App() {
       </section>
 
       {/* Footer CTA */}
-      <footer className="py-16 md:py-24">
+      <footer id="contact" className="py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <AnimatedSection>
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">

@@ -222,3 +222,8 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+/* Scroll offset for hash anchors */
+section[id], footer[id] {
+  scroll-margin-top: 2rem;
+}
