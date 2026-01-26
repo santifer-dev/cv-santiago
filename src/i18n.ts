@@ -1,3 +1,14 @@
+export const seo = {
+  es: {
+    title: 'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
+    description: 'Ex-fundador y AI Product Manager especializado en automatización con LLMs y no-code. Certificado Anthropic. Disponible para roles remotos EU/USA.',
+  },
+  en: {
+    title: 'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
+    description: 'Ex-founder and AI Product Manager specialized in LLM automation and no-code. Anthropic certified. Available for remote EU/USA roles.',
+  }
+}
+
 export const translations = {
   es: {
     greeting: 'Hola, soy',
@@ -139,9 +150,9 @@ export const translations = {
         crm: { title: 'CRM + Contenido Social', desc: 'Lead scoring, mensajes automáticos, gamificación (Bronze→Platinum)', metric: '60+ h/mes' }
       },
       lico: {
-        role: 'Consultor en Airtable',
-        period: '2024 - 2025 · Cosméticos D2C',
-        desc: 'Consultoría de procesos y automatización usando Airtable. Múltiples sesiones para impulsar eficiencia y co-desarrollar flujos de trabajo empresariales.'
+        role: 'Consultor en Airtable & Operaciones E-commerce',
+        period: '2024 - 2025 · Cosméticos D2C · Shopify',
+        desc: 'Diseño de Airtable como Sistema Operativo interno: inventario, pedidos y tareas. Workshops de co-diseño con operaciones. Análisis de integraciones Airtable ↔ Shopify.'
       },
       everis: {
         role: 'Coordinador de Pruebas (8 testers) & Analista de Software',
@@ -329,9 +340,9 @@ export const translations = {
         crm: { title: 'CRM + Social Content', desc: 'Lead scoring, automated messages, gamification (Bronze→Platinum)', metric: '60+ h/mo' }
       },
       lico: {
-        role: 'Airtable Consultant',
-        period: '2024 - 2025 · D2C Cosmetics',
-        desc: 'Process and automation consulting using Airtable. Multiple sessions to drive efficiency and co-develop business workflows.'
+        role: 'Airtable & E-commerce Operations Consultant',
+        period: '2024 - 2025 · D2C Cosmetics · Shopify',
+        desc: 'Designed Airtable as internal Operating System: inventory, orders, and tasks. Co-design workshops with operations. Airtable ↔ Shopify integration analysis.'
       },
       everis: {
         role: 'Test Coordinator (8 testers) & Software Analyst',
