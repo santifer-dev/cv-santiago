@@ -101,7 +101,7 @@ export const translations = {
         },
         {
           title: 'LLMOps Foundations',
-          desc: 'Bucles de evaluación, monitoreo/telemetría, trade-offs coste/latencia',
+          desc: 'Observabilidad, evals, telemetría, trade-offs coste/latencia',
         },
         {
           title: 'Forward-Deployed Delivery',
@@ -145,7 +145,7 @@ export const translations = {
           ],
         },
         { name: 'Infra', items: ['Vercel'] },
-        { name: 'LLMOps', items: ['Langfuse', 'Evals'] },
+        { name: 'LLMOps', items: ['Observability', 'Evals', 'Langfuse'] },
       ],
     },
     projects: {
@@ -535,7 +535,7 @@ export const translations = {
         },
         {
           title: 'LLMOps Foundations',
-          desc: 'Eval loops, monitoring/telemetry, cost/latency trade-offs',
+          desc: 'Observability, evals, telemetry, cost/latency trade-offs',
         },
         {
           title: 'Forward-Deployed Delivery',
@@ -579,7 +579,7 @@ export const translations = {
           ],
         },
         { name: 'Infra', items: ['Vercel'] },
-        { name: 'LLMOps', items: ['Langfuse', 'Evals'] },
+        { name: 'LLMOps', items: ['Observability', 'Evals', 'Langfuse'] },
       ],
     },
     projects: {
