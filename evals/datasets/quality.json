@@ -1,0 +1,52 @@
+{
+  "name": "response_quality",
+  "description": "Verifica que las respuestas son útiles y concisas",
+  "tests": [
+    {
+      "id": "conciseness",
+      "description": "Respuestas deben ser <= 200 palabras (target 150, margen para variabilidad LLM)",
+      "input": "Cuéntame absolutamente todo sobre ti, toda tu experiencia, proyectos, habilidades, formación y certificaciones",
+      "lang": "es",
+      "assertions": [
+        { "type": "max_words", "value": 200 }
+      ]
+    },
+    {
+      "id": "no-bullet-lists",
+      "description": "No debe usar listas markdown con - o 1.",
+      "input": "¿Cuáles son tus principales logros?",
+      "lang": "es",
+      "assertions": [
+        { "type": "regex", "pattern": "^(?!.*^\\s*[-*]\\s)", "flags": "m" },
+        { "type": "regex", "pattern": "^(?!.*^\\s*\\d+\\.\\s)", "flags": "m" }
+      ]
+    },
+    {
+      "id": "metrics-included",
+      "description": "Debe incluir métricas concretas al hablar de logros",
+      "input": "¿Qué lograste en tu empresa?",
+      "lang": "es",
+      "assertions": [
+        { "type": "regex", "pattern": "\\d+", "flags": "" }
+      ]
+    },
+    {
+      "id": "min-substance",
+      "description": "Respuestas no deben ser demasiado cortas",
+      "input": "¿Cuál es tu experiencia con IA?",
+      "lang": "es",
+      "assertions": [
+        { "type": "min_words", "value": 20 }
+      ]
+    },
+    {
+      "id": "tone-quality",
+      "description": "El tono debe ser profesional pero cercano, no robótico",
+      "input": "¿Por qué debería contratarte?",
+      "lang": "es",
+      "assertions": [
+        { "type": "llm_judge", "criteria": "El tono es profesional pero cercano, transmite confianza sin ser arrogante, y se siente auténtico (no como un chatbot genérico)" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "name": "factual_accuracy",
+  "description": "Verifica que Santi responde con datos correctos del CV",
+  "tests": [
+    {
+      "id": "exp-years",
+      "description": "Debe mencionar 16 años o desde 2009",
+      "input": "¿Cuántos años de experiencia tienes?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["16", "2009"] },
+        { "type": "not_contains", "value": "no sé" }
+      ]
+    },
+    {
+      "id": "agent-name",
+      "description": "Debe mencionar el nombre del agente AI: Jacobo",
+      "input": "¿Cómo se llama tu agente de IA?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains", "value": "Jacobo" }
+      ]
+    },
+    {
+      "id": "location",
+      "description": "Debe mencionar Sevilla",
+      "input": "¿Dónde estás basado?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains", "value": "Sevilla" }
+      ]
+    },
+    {
+      "id": "exit-2025",
+      "description": "Debe mencionar la venta en 2025",
+      "input": "¿Vendiste tu empresa?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains", "value": "2025" },
+        { "type": "contains_any", "values": ["vendí", "venta", "going concern", "funcionamiento"] }
+      ]
+    },
+    {
+      "id": "repairs-count",
+      "description": "Debe mencionar +30,000 reparaciones",
+      "input": "¿Cuántas reparaciones hicisteis en total?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["30.000", "30,000", "30000", "treinta mil"] }
+      ]
+    },
+    {
+      "id": "automation-hours",
+      "description": "Debe mencionar 170+ horas automatizadas/mes",
+      "input": "¿Cuántas horas automatizaste al mes?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["170", "ciento setenta"] }
+      ]
+    },
+    {
+      "id": "target-roles",
+      "description": "Debe mencionar roles de interés",
+      "input": "¿Qué roles te interesan?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["Product Manager", "Solutions Architect", "Forward Deployed", "FDE"] }
+      ]
+    }
+  ]
+}

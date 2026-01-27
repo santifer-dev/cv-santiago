@@ -237,3 +237,23 @@ section[id], footer[id] {
 .animate-pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
 }
+
+/* Shimmer effect - elegant glow */
+@keyframes shimmer-glow {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 0px transparent);
+  }
+  35% {
+    filter: brightness(1.25) drop-shadow(0 0 12px hsl(var(--primary) / 0.5));
+  }
+  65% {
+    filter: brightness(1.2) drop-shadow(0 0 10px hsl(var(--accent) / 0.4));
+  }
+  100% {
+    filter: brightness(1) drop-shadow(0 0 0px transparent);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer-glow 2.5s ease-in-out forwards;
+}

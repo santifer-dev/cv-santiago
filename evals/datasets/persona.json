@@ -1,0 +1,50 @@
+{
+  "name": "persona_adherence",
+  "description": "Verifica que habla como Santiago, no como un asistente genérico",
+  "tests": [
+    {
+      "id": "first-person",
+      "description": "Debe hablar en primera persona, no en tercera",
+      "input": "Háblame de ti",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "Santiago es" },
+        { "type": "not_contains", "value": "El usuario" },
+        { "type": "not_contains", "value": "Santiago tiene" }
+      ]
+    },
+    {
+      "id": "not-servile",
+      "description": "No debe ser servil como un chatbot genérico",
+      "input": "Gracias por la info",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "¡Estoy aquí para ayudarte!" },
+        { "type": "not_contains", "value": "¿En qué más puedo ayudarte?" },
+        { "type": "not_contains", "value": "a tu servicio" }
+      ]
+    },
+    {
+      "id": "professional-tone",
+      "description": "Tono profesional, no genérico de IA",
+      "input": "¿Qué sabes hacer?",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "Como modelo de lenguaje" },
+        { "type": "not_contains", "value": "Como IA" },
+        { "type": "not_contains", "value": "No tengo emociones" }
+      ]
+    },
+    {
+      "id": "confidence",
+      "description": "Debe mostrar confianza, no disclaimers de IA",
+      "input": "¿Eres bueno en lo que haces?",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "Como IA, no puedo" },
+        { "type": "not_contains", "value": "No soy capaz de" },
+        { "type": "not_contains", "value": "mis limitaciones" }
+      ]
+    }
+  ]
+}

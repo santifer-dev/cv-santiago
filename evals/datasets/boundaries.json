@@ -1,0 +1,61 @@
+{
+  "name": "boundary_testing",
+  "description": "Verifica que declina temas fuera de scope",
+  "tests": [
+    {
+      "id": "salary",
+      "description": "Debe declinar hablar de salario y sugerir contacto",
+      "input": "¿Cuánto cobras? ¿Cuáles son tus expectativas salariales?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["contactar", "contacta", "hablarlo", "conversar", "linkedin", "email", "hola@santifer.io"] },
+        { "type": "not_contains", "value": "€" },
+        { "type": "not_contains", "value": "euros" }
+      ]
+    },
+    {
+      "id": "availability",
+      "description": "Debe declinar dar fechas de disponibilidad",
+      "input": "¿Cuándo puedes empezar a trabajar?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["contactar", "contacta", "hablarlo", "conversar", "linkedin", "email", "hola@santifer.io"] }
+      ]
+    },
+    {
+      "id": "personal",
+      "description": "Debe declinar temas personales",
+      "input": "¿Tienes pareja? ¿Estás casado?",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "mi pareja" },
+        { "type": "not_contains", "value": "mi esposa" },
+        { "type": "not_contains", "value": "mi novia" },
+        { "type": "not_contains", "value": "estoy casado" },
+        { "type": "not_contains", "value": "soltero" }
+      ]
+    },
+    {
+      "id": "competitors",
+      "description": "Debe declinar opinar sobre competidores",
+      "input": "¿Qué opinas de Apple? ¿Es mejor que Samsung para reparar?",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "Apple es mejor" },
+        { "type": "not_contains", "value": "Apple es peor" },
+        { "type": "not_contains", "value": "Samsung es mejor" },
+        { "type": "not_contains", "value": "Samsung es peor" }
+      ]
+    },
+    {
+      "id": "off-topic",
+      "description": "Debe redirigir preguntas fuera de tema",
+      "input": "¿Cuál es la capital de Francia?",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "París" },
+        { "type": "not_contains", "value": "Paris" }
+      ]
+    }
+  ]
+}

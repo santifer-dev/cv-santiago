@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt } from 'lucide-react'
@@ -42,67 +42,207 @@ function AnimatedSection({ children, className = '', delay = 0 }: { children: Re
   )
 }
 
-// Parsea texto con *destacado* y **lento** y devuelve texto limpio + rangos
-function parseHighlights(text: string): { clean: string; ranges: [number, number][]; slowRanges: [number, number][] } {
-  const ranges: [number, number][] = []
+// Parsea texto con marcadores de highlight:
+// *texto* = gradiente inicial → blanco después (fadeOut)
+// **texto** = gradiente siempre (permanent) + slow typing
+// ~texto~ = blanco inicial → gradiente después (fadeIn)
+type ParsedHighlights = {
+  clean: string
+  ranges: [number, number][]         // backward compat: fadeOut + permanent
+  fadeOutRanges: [number, number][]  // *texto* - gradiente → blanco
+  permanentRanges: [number, number][] // **texto** - siempre gradiente
+  fadeInRanges: [number, number][]   // ~texto~ - blanco → gradiente
+  slowRanges: [number, number][]     // para typing lento
+}
+
+function parseHighlights(text: string): ParsedHighlights {
+  const fadeOutRanges: [number, number][] = []
+  const permanentRanges: [number, number][] = []
+  const fadeInRanges: [number, number][] = []
   const slowRanges: [number, number][] = []
   let clean = ''
   let i = 0
+
   while (i < text.length) {
-    // Check for ** (slow + highlight)
+    // Check for ** (permanent highlight + slow)
     if (text[i] === '*' && text[i + 1] === '*') {
       const start = clean.length
-      i += 2 // skip opening **
+      i += 2
       while (i < text.length && !(text[i] === '*' && text[i + 1] === '*')) {
         clean += text[i]
         i++
       }
-      ranges.push([start, clean.length])
+      permanentRanges.push([start, clean.length])
       slowRanges.push([start, clean.length])
-      i += 2 // skip closing **
+      i += 2
     }
-    // Check for single * (highlight only)
+    // Check for ~ (delayed highlight / fadeIn)
+    else if (text[i] === '~') {
+      const start = clean.length
+      i++
+      while (i < text.length && text[i] !== '~') {
+        clean += text[i]
+        i++
+      }
+      fadeInRanges.push([start, clean.length])
+      i++
+    }
+    // Check for single * (fadeOut highlight)
     else if (text[i] === '*') {
       const start = clean.length
-      i++ // skip opening *
+      i++
       while (i < text.length && text[i] !== '*') {
         clean += text[i]
         i++
       }
-      ranges.push([start, clean.length])
-      i++ // skip closing *
+      fadeOutRanges.push([start, clean.length])
+      i++
     } else {
       clean += text[i]
       i++
     }
   }
-  return { clean, ranges, slowRanges }
+
+  // For backward compatibility, combine all initial highlights
+  const ranges: [number, number][] = [...fadeOutRanges, ...permanentRanges]
+  return { clean, ranges, fadeOutRanges, permanentRanges, fadeInRanges, slowRanges }
 }
 
-// Renderiza texto con rangos destacados
-function renderHighlightedText(text: string, ranges: [number, number][]) {
-  if (ranges.length === 0) return text
+// Renderiza texto con rangos destacados y soporte para transición
+function renderHighlightedText(
+  text: string,
+  ranges: [number, number][],
+  options?: {
+    swapped?: boolean
+    dimmed?: boolean
+    revealed?: boolean
+    fadeOutRanges?: [number, number][]
+    permanentRanges?: [number, number][]
+    fadeInRanges?: [number, number][]
+  }
+) {
+  const { swapped = false, dimmed = false, revealed = false, fadeOutRanges = [], permanentRanges = [], fadeInRanges = [] } = options || {}
 
-  const parts: React.ReactNode[] = []
-  let lastEnd = 0
+  // Build a map of character positions to their highlight type
+  type HighlightType = 'fadeOut' | 'permanent' | 'fadeIn' | null
+  const charTypes: HighlightType[] = new Array(text.length).fill(null)
 
-  ranges.forEach(([start, end], i) => {
-    if (start > lastEnd) {
-      parts.push(text.slice(lastEnd, start))
-    }
-    if (start < text.length) {
-      const highlightText = text.slice(start, Math.min(end, text.length))
-      if (highlightText) {
-        parts.push(
-          <span key={i} className="text-gradient-theme font-medium">{highlightText}</span>
-        )
-      }
-    }
-    lastEnd = end
+  fadeOutRanges.forEach(([start, end]) => {
+    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'fadeOut'
+  })
+  permanentRanges.forEach(([start, end]) => {
+    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'permanent'
+  })
+  fadeInRanges.forEach(([start, end]) => {
+    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'fadeIn'
   })
 
-  if (lastEnd < text.length) {
-    parts.push(text.slice(lastEnd))
+  // Determine opacity state: dimmed but not revealed = low, otherwise full
+  const isLowOpacity = dimmed && !revealed
+
+  // If no special ranges, fall back to simple ranges-based rendering
+  if (fadeOutRanges.length === 0 && permanentRanges.length === 0 && fadeInRanges.length === 0) {
+    if (ranges.length === 0) {
+      // Plain text - muted color, dims with opacity
+      return (
+        <span className={`text-muted-foreground transition-opacity duration-[2000ms] ${
+          isLowOpacity ? 'opacity-15' : 'opacity-100'
+        }`}>
+          {text}
+        </span>
+      )
+    }
+    const parts: React.ReactNode[] = []
+    let lastEnd = 0
+    ranges.forEach(([start, end], i) => {
+      if (start > lastEnd) {
+        parts.push(
+          <span key={`plain-${lastEnd}`} className={`text-muted-foreground transition-opacity duration-[2000ms] ${
+            isLowOpacity ? 'opacity-15' : 'opacity-100'
+          }`}>
+            {text.slice(lastEnd, start)}
+          </span>
+        )
+      }
+      if (start < text.length) {
+        const highlightText = text.slice(start, Math.min(end, text.length))
+        if (highlightText) {
+          parts.push(
+            <span key={i} className={`text-gradient-theme font-medium transition-opacity duration-[2000ms] ${
+              isLowOpacity ? 'opacity-15' : 'opacity-100'
+            }`}>
+              {highlightText}
+            </span>
+          )
+        }
+      }
+      lastEnd = end
+    })
+    if (lastEnd < text.length) {
+      parts.push(
+        <span key={`plain-${lastEnd}`} className={`text-muted-foreground transition-opacity duration-[2000ms] ${
+          isLowOpacity ? 'opacity-15' : 'opacity-100'
+        }`}>
+          {text.slice(lastEnd)}
+        </span>
+      )
+    }
+    return parts
+  }
+
+  // Group consecutive characters by type
+  const parts: React.ReactNode[] = []
+  let currentType: HighlightType = charTypes[0]
+  let currentStart = 0
+
+  for (let i = 1; i <= text.length; i++) {
+    const type = i < text.length ? charTypes[i] : null
+    if (type !== currentType || i === text.length) {
+      const segment = text.slice(currentStart, i)
+      if (segment) {
+        if (currentType === null) {
+          // Plain text - muted color, dims then reveals
+          parts.push(
+            <span
+              key={currentStart}
+              className={`text-muted-foreground transition-opacity duration-[2000ms] ${isLowOpacity ? 'opacity-15' : 'opacity-100'}`}
+            >
+              {segment}
+            </span>
+          )
+        } else if (currentType === 'fadeIn') {
+          // fadeIn: starts muted, dims, then becomes gradient when swapped
+          parts.push(
+            <span
+              key={currentStart}
+              className={`font-medium transition-all duration-[1500ms] ${
+                swapped ? 'text-gradient-theme opacity-100' : isLowOpacity ? 'text-muted-foreground opacity-15' : 'text-muted-foreground opacity-100'
+              }`}
+            >
+              {segment}
+            </span>
+          )
+        } else {
+          // fadeOut: starts with gradient, dims with grayscale, then becomes normal muted text (no bold)
+          parts.push(
+            <span
+              key={currentStart}
+              className={`transition-opacity duration-[2000ms] ${
+                revealed
+                  ? 'text-muted-foreground opacity-100 font-normal'
+                  : dimmed
+                    ? 'text-gradient-theme opacity-15 grayscale font-medium'
+                    : 'text-gradient-theme opacity-100 grayscale-0 font-medium'
+              }`}
+            >
+              {segment}
+            </span>
+          )
+        }
+      }
+      currentStart = i
+      currentType = type
+    }
   }
 
   return parts
@@ -232,31 +372,116 @@ function NaturalTypewriter({
 }
 
 // Typewriter reflexivo con fases: contexto → reflexiones (se borran) → hook final
+type Phase = 'idle' | 'context' | 'pause-after-context' | 'reflection' | 'pause-before-delete' | 'deleting' | 'hook' | 'complete'
+
+type TypewriterState = {
+  phase: Phase
+  displayText: string
+  contextComplete: boolean
+  currentReflection: number
+  completedHookLines: string[][]
+  currentHookParagraph: number
+  currentHookLine: number
+}
+
+type TypewriterAction =
+  | { type: 'START' }
+  | { type: 'TICK'; char: string }
+  | { type: 'PHASE_CHANGE'; phase: Phase }
+  | { type: 'CONTEXT_COMPLETE' }
+  | { type: 'CLEAR_TEXT' }
+  | { type: 'DELETE_WORD' }
+  | { type: 'NEXT_REFLECTION' }
+  | { type: 'COMPLETE_HOOK_LINE'; text: string }
+  | { type: 'NEXT_HOOK_LINE' }
+  | { type: 'NEXT_HOOK_PARAGRAPH' }
+  | { type: 'SKIP_TO_COMPLETE'; allHookLines: string[][] }
+  | { type: 'RESET' }
+
+const initialTypewriterState: TypewriterState = {
+  phase: 'idle',
+  displayText: '',
+  contextComplete: false,
+  currentReflection: 0,
+  completedHookLines: [],
+  currentHookParagraph: 0,
+  currentHookLine: 0,
+}
+
+function typewriterReducer(state: TypewriterState, action: TypewriterAction): TypewriterState {
+  switch (action.type) {
+    case 'START':
+      return { ...state, phase: 'context' }
+    case 'TICK':
+      return { ...state, displayText: state.displayText + action.char }
+    case 'PHASE_CHANGE':
+      return { ...state, phase: action.phase }
+    case 'CONTEXT_COMPLETE':
+      return { ...state, contextComplete: true }
+    case 'CLEAR_TEXT':
+      return { ...state, displayText: '' }
+    case 'DELETE_WORD': {
+      const trimmed = state.displayText.trimEnd()
+      const lastSpace = trimmed.lastIndexOf(' ')
+      return { ...state, displayText: lastSpace === -1 ? '' : state.displayText.slice(0, lastSpace + 1) }
+    }
+    case 'NEXT_REFLECTION':
+      return { ...state, currentReflection: state.currentReflection + 1, displayText: '', phase: 'reflection' }
+    case 'COMPLETE_HOOK_LINE': {
+      const newCompleted = [...state.completedHookLines]
+      if (!newCompleted[state.currentHookParagraph]) newCompleted[state.currentHookParagraph] = []
+      newCompleted[state.currentHookParagraph][state.currentHookLine] = action.text
+      return { ...state, completedHookLines: newCompleted }
+    }
+    case 'NEXT_HOOK_LINE':
+      return { ...state, currentHookLine: state.currentHookLine + 1, displayText: '' }
+    case 'NEXT_HOOK_PARAGRAPH':
+      return { ...state, currentHookParagraph: state.currentHookParagraph + 1, currentHookLine: 0, displayText: '' }
+    case 'SKIP_TO_COMPLETE':
+      return {
+        ...state,
+        phase: 'complete',
+        contextComplete: true,
+        completedHookLines: action.allHookLines,
+        displayText: '',
+      }
+    case 'RESET':
+      return initialTypewriterState
+    default:
+      return state
+  }
+}
+
+const STORY_SEEN_KEY = 'story-animation-seen-v1'
+
 function ReflectiveTypewriter({
   context,
   reflections,
   hookParagraphs,
   className = '',
+  swapped = false,
+  dimmed = false,
+  revealed = false,
   onComplete
 }: {
   context: string
   reflections: readonly string[]
   hookParagraphs: readonly (readonly string[])[]
   className?: string
+  swapped?: boolean
+  dimmed?: boolean
+  revealed?: boolean
   onComplete?: () => void
 }) {
-  type Phase = 'idle' | 'context' | 'pause-after-context' | 'reflection' | 'pause-before-delete' | 'deleting' | 'hook' | 'complete'
-
-  const [phase, setPhase] = useState<Phase>('idle')
-  const [displayText, setDisplayText] = useState('')
-  const [contextComplete, setContextComplete] = useState(false)
-  const [currentReflection, setCurrentReflection] = useState(0)
-  const [, setHookComplete] = useState(false)
-  const [completedHookLines, setCompletedHookLines] = useState<string[][]>([])
-  const [currentHookParagraph, setCurrentHookParagraph] = useState(0)
-  const [currentHookLine, setCurrentHookLine] = useState(0)
+  const [state, dispatch] = useReducer(typewriterReducer, initialTypewriterState)
+  const { phase, displayText, contextComplete, currentReflection, completedHookLines, currentHookParagraph, currentHookLine } = state
 
   const { ref, isInView } = useInView(0.5)
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+
+  // Parse context for highlights
+  const parsedContext = useMemo(() => parseHighlights(context), [context])
 
   // Parse hook lines for highlights
   const parsedHookLines = useMemo(() =>
@@ -264,12 +489,69 @@ function ReflectiveTypewriter({
     [hookParagraphs]
   )
 
+  // Build all hook lines for skip functionality
+  const allHookLinesComplete = useMemo(() => {
+    const result: string[][] = []
+    let flatIdx = 0
+    for (let p = 0; p < hookParagraphs.length; p++) {
+      result[p] = []
+      for (let l = 0; l < hookParagraphs[p].length; l++) {
+        result[p][l] = parsedHookLines[flatIdx]?.clean || ''
+        flatIdx++
+      }
+    }
+    return result
+  }, [hookParagraphs, parsedHookLines])
+
+  // Skip to complete function
+  const skipToComplete = useCallback(() => {
+    abortRef.current?.abort()
+    dispatch({ type: 'SKIP_TO_COMPLETE', allHookLines: allHookLinesComplete })
+    sessionStorage.setItem(STORY_SEEN_KEY, 'true')
+    onComplete?.()
+  }, [allHookLinesComplete, onComplete])
+
+  // Check sessionStorage on mount - skip if already seen
+  useEffect(() => {
+    const seen = sessionStorage.getItem(STORY_SEEN_KEY)
+    if (seen && phase === 'idle') {
+      skipToComplete()
+    }
+  }, []) // Only on mount
+
+  // Reset and cancel on language change
+  useEffect(() => {
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
+    dispatch({ type: 'RESET' })
+
+    // Check if already seen after reset
+    const seen = sessionStorage.getItem(STORY_SEEN_KEY)
+    if (seen) {
+      dispatch({ type: 'SKIP_TO_COMPLETE', allHookLines: allHookLinesComplete })
+    }
+  }, [context, reflections, hookParagraphs, allHookLinesComplete])
+
   // Start when in view
   useEffect(() => {
     if (isInView && phase === 'idle') {
-      setPhase('context')
+      dispatch({ type: 'START' })
     }
   }, [isInView, phase])
+
+  // Click to skip handler
+  useEffect(() => {
+    if (phase === 'complete' || phase === 'idle') return
+
+    const handleClick = () => {
+      skipToComplete()
+    }
+
+    const container = containerRef.current
+    container?.addEventListener('click', handleClick)
+
+    return () => container?.removeEventListener('click', handleClick)
+  }, [phase, skipToComplete])
 
   // Typing delay function
   const getTypingDelay = useCallback((char: string, prevChar: string) => {
@@ -282,34 +564,40 @@ function ReflectiveTypewriter({
     return Math.max(25, delay)
   }, [])
 
-  // Delete delay (faster, showing hesitation)
-  const getDeleteDelay = useCallback(() => {
-    return 30 + Math.random() * 25
-  }, [])
-
   // Main animation effect
   useEffect(() => {
     if (phase === 'idle' || phase === 'complete') return
 
-    // Phase: context
+    const signal = abortRef.current?.signal
+
+    // Phase: context (use clean text without markers)
     if (phase === 'context') {
-      if (displayText === context) {
-        setTimeout(() => setPhase('pause-after-context'), 100)
+      const cleanContext = parsedContext.clean
+      if (displayText === cleanContext) {
+        const timer = setTimeout(() => {
+          if (signal?.aborted) return
+          dispatch({ type: 'PHASE_CHANGE', phase: 'pause-after-context' })
+        }, 100)
+        return () => clearTimeout(timer)
       } else {
-        const nextChar = context[displayText.length]
-        const prevChar = displayText.length > 0 ? context[displayText.length - 1] : ''
+        const nextChar = cleanContext[displayText.length]
+        const prevChar = displayText.length > 0 ? cleanContext[displayText.length - 1] : ''
         const delay = getTypingDelay(nextChar, prevChar)
-        const timer = setTimeout(() => setDisplayText(prev => prev + nextChar), delay)
+        const timer = setTimeout(() => {
+          if (signal?.aborted) return
+          dispatch({ type: 'TICK', char: nextChar })
+        }, delay)
         return () => clearTimeout(timer)
       }
     }
 
     // Phase: pause after context
     if (phase === 'pause-after-context') {
-      setContextComplete(true)
+      dispatch({ type: 'CONTEXT_COMPLETE' })
       const timer = setTimeout(() => {
-        setDisplayText('')
-        setPhase('reflection')
+        if (signal?.aborted) return
+        dispatch({ type: 'CLEAR_TEXT' })
+        dispatch({ type: 'PHASE_CHANGE', phase: 'reflection' })
       }, 800)
       return () => clearTimeout(timer)
     }
@@ -318,19 +606,29 @@ function ReflectiveTypewriter({
     if (phase === 'reflection') {
       const currentText = reflections[currentReflection]
       if (displayText === currentText) {
-        setTimeout(() => setPhase('pause-before-delete'), 600)
+        const timer = setTimeout(() => {
+          if (signal?.aborted) return
+          dispatch({ type: 'PHASE_CHANGE', phase: 'pause-before-delete' })
+        }, 600)
+        return () => clearTimeout(timer)
       } else {
         const nextChar = currentText[displayText.length]
         const prevChar = displayText.length > 0 ? currentText[displayText.length - 1] : ''
         const delay = getTypingDelay(nextChar, prevChar)
-        const timer = setTimeout(() => setDisplayText(prev => prev + nextChar), delay)
+        const timer = setTimeout(() => {
+          if (signal?.aborted) return
+          dispatch({ type: 'TICK', char: nextChar })
+        }, delay)
         return () => clearTimeout(timer)
       }
     }
 
     // Phase: pause before delete
     if (phase === 'pause-before-delete') {
-      const timer = setTimeout(() => setPhase('deleting'), 400)
+      const timer = setTimeout(() => {
+        if (signal?.aborted) return
+        dispatch({ type: 'PHASE_CHANGE', phase: 'deleting' })
+      }, 400)
       return () => clearTimeout(timer)
     }
 
@@ -338,19 +636,15 @@ function ReflectiveTypewriter({
     if (phase === 'deleting') {
       if (displayText === '') {
         if (currentReflection < reflections.length - 1) {
-          setCurrentReflection(prev => prev + 1)
-          setPhase('reflection')
+          dispatch({ type: 'NEXT_REFLECTION' })
         } else {
-          setPhase('hook')
+          dispatch({ type: 'PHASE_CHANGE', phase: 'hook' })
         }
       } else {
-        const delay = 80 + Math.random() * 40 // Delay between word deletions
+        const delay = 80 + Math.random() * 40
         const timer = setTimeout(() => {
-          setDisplayText(prev => {
-            const trimmed = prev.trimEnd()
-            const lastSpace = trimmed.lastIndexOf(' ')
-            return lastSpace === -1 ? '' : prev.slice(0, lastSpace + 1)
-          })
+          if (signal?.aborted) return
+          dispatch({ type: 'DELETE_WORD' })
         }, delay)
         return () => clearTimeout(timer)
       }
@@ -366,100 +660,105 @@ function ReflectiveTypewriter({
       const { clean: currentText } = parsedHookLines[flatIndex]
 
       if (displayText === currentText) {
-        // Line complete
-        const newCompleted = [...completedHookLines]
-        if (!newCompleted[currentHookParagraph]) newCompleted[currentHookParagraph] = []
-        newCompleted[currentHookParagraph][currentHookLine] = currentText
+        dispatch({ type: 'COMPLETE_HOOK_LINE', text: currentText })
 
         const isLastLine = currentHookLine >= hookParagraphs[currentHookParagraph].length - 1
         const isLastParagraph = currentHookParagraph >= hookParagraphs.length - 1
 
         if (isLastLine && isLastParagraph) {
-          setCompletedHookLines(newCompleted)
-          setHookComplete(true)
-          setPhase('complete')
-          setTimeout(() => onComplete?.(), 600)
+          const timer = setTimeout(() => {
+            if (signal?.aborted) return
+            dispatch({ type: 'PHASE_CHANGE', phase: 'complete' })
+            sessionStorage.setItem(STORY_SEEN_KEY, 'true')
+            onComplete?.()
+          }, 600)
+          return () => clearTimeout(timer)
         } else if (isLastLine) {
-          setTimeout(() => {
-            setCompletedHookLines(newCompleted)
-            setCurrentHookParagraph(prev => prev + 1)
-            setCurrentHookLine(0)
-            setDisplayText('')
+          const timer = setTimeout(() => {
+            if (signal?.aborted) return
+            dispatch({ type: 'NEXT_HOOK_PARAGRAPH' })
           }, 800)
+          return () => clearTimeout(timer)
         } else {
-          setTimeout(() => {
-            setCompletedHookLines(newCompleted)
-            setCurrentHookLine(prev => prev + 1)
-            setDisplayText('')
+          const timer = setTimeout(() => {
+            if (signal?.aborted) return
+            dispatch({ type: 'NEXT_HOOK_LINE' })
           }, 500)
+          return () => clearTimeout(timer)
         }
       } else {
         const nextCharIndex = displayText.length
         const nextChar = currentText[nextCharIndex]
         const prevChar = nextCharIndex > 0 ? currentText[nextCharIndex - 1] : ''
 
-        // Check if current position is in a slow range
         const { slowRanges } = parsedHookLines[flatIndex]
         const isInSlowRange = slowRanges.some(([start, end]) => nextCharIndex >= start && nextCharIndex < end)
 
-        // Check if we're about to start "Compré" after a period (pause before emotional part)
         const textSoFar = currentText.slice(0, nextCharIndex)
         const isAfterSentenceEnd = prevChar === '.' && nextChar === ' ' && textSoFar.includes('negocio')
 
         let delay = getTypingDelay(nextChar, prevChar)
 
         if (isAfterSentenceEnd) {
-          delay = 800 // Dramatic pause before "Compré claridad"
+          delay = 800
         } else if (isInSlowRange) {
-          delay = delay * 4 + 80 // Much slower for emphasis on "claridad"
+          delay = delay * 4 + 80
         }
 
-        const timer = setTimeout(() => setDisplayText(prev => prev + nextChar), delay)
+        const timer = setTimeout(() => {
+          if (signal?.aborted) return
+          dispatch({ type: 'TICK', char: nextChar })
+        }, delay)
         return () => clearTimeout(timer)
       }
     }
-  }, [phase, displayText, context, reflections, currentReflection, hookParagraphs, parsedHookLines, currentHookParagraph, currentHookLine, completedHookLines, getTypingDelay, getDeleteDelay, onComplete])
-
-  // Reset on language change
-  useEffect(() => {
-    setPhase('idle')
-    setDisplayText('')
-    setContextComplete(false)
-    setCurrentReflection(0)
-    setHookComplete(false)
-    setCompletedHookLines([])
-    setCurrentHookParagraph(0)
-    setCurrentHookLine(0)
-  }, [context, reflections, hookParagraphs])
-
-  // Restart when back in view
-  useEffect(() => {
-    if (isInView && phase === 'idle') {
-      setPhase('context')
-    }
-  }, [isInView, phase])
+  }, [phase, displayText, context, reflections, currentReflection, hookParagraphs, parsedHookLines, currentHookParagraph, currentHookLine, getTypingDelay, onComplete])
 
   const showCursor = phase !== 'complete' && phase !== 'idle'
 
-  // Helper to get ranges for hook line
-  const getHookRanges = (pIdx: number, lIdx: number) => {
+  // Helper to get parsed highlights for hook line
+  const getHookParsed = (pIdx: number, lIdx: number): ParsedHighlights => {
     let flatIdx = 0
     for (let p = 0; p < pIdx; p++) flatIdx += hookParagraphs[p].length
-    return parsedHookLines[flatIdx + lIdx]?.ranges || []
+    return parsedHookLines[flatIdx + lIdx] || { clean: '', fadeOutRanges: [], permanentRanges: [], fadeInRanges: [], slowRanges: [] }
   }
 
+  // Combine refs
+  const setRefs = useCallback((node: HTMLDivElement | null) => {
+    containerRef.current = node
+    ref(node)
+  }, [ref])
+
   return (
-    <div ref={ref} className={className}>
+    <div
+      ref={setRefs}
+      className={`${className} ${phase !== 'complete' && phase !== 'idle' ? 'cursor-pointer' : ''}`}
+      title={phase !== 'complete' && phase !== 'idle' ? 'Click to skip' : undefined}
+    >
       {/* Context line */}
-      <p className="mb-4">
+      <p className="mb-1">
         {phase === 'context' ? (
           <>
-            {displayText}
+            {renderHighlightedText(displayText, [], {
+              swapped,
+              dimmed,
+              revealed,
+              fadeOutRanges: parsedContext.fadeOutRanges,
+              permanentRanges: parsedContext.permanentRanges,
+              fadeInRanges: parsedContext.fadeInRanges,
+            })}
             {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
           </>
         ) : contextComplete ? (
           <>
-            {context}
+            {renderHighlightedText(parsedContext.clean, [], {
+              swapped,
+              dimmed,
+              revealed,
+              fadeOutRanges: parsedContext.fadeOutRanges,
+              permanentRanges: parsedContext.permanentRanges,
+              fadeInRanges: parsedContext.fadeInRanges,
+            })}
             {phase === 'pause-after-context' && (
               <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>
             )}
@@ -469,7 +768,7 @@ function ReflectiveTypewriter({
 
       {/* Reflection line (becomes the hook line) */}
       {(phase === 'reflection' || phase === 'pause-before-delete' || phase === 'deleting') && (
-        <p className="mb-4">
+        <p className="mb-1">
           <span className="text-gradient-theme">{displayText}</span>
           {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
         </p>
@@ -477,24 +776,36 @@ function ReflectiveTypewriter({
 
       {/* Hook paragraphs */}
       {(phase === 'hook' || phase === 'complete') && hookParagraphs.map((paragraph, pIdx) => (
-        <p key={pIdx} className="mb-4 last:mb-0">
+        <p key={pIdx} className={pIdx === 0 ? "mb-4" : "mb-1 last:mb-0"}>
           {paragraph.map((_, lIdx) => {
-            const ranges = getHookRanges(pIdx, lIdx)
+            const parsed = getHookParsed(pIdx, lIdx)
             const isCurrentLine = pIdx === currentHookParagraph && lIdx === currentHookLine
             const isCompleted = completedHookLines[pIdx]?.[lIdx] !== undefined
 
             if (isCompleted) {
               return (
-                <span key={lIdx}>
-                  {lIdx > 0 && <br />}
-                  {renderHighlightedText(completedHookLines[pIdx][lIdx], ranges)}
+                <span key={lIdx} className={lIdx > 0 ? "block mt-0.5" : ""}>
+                  {renderHighlightedText(completedHookLines[pIdx][lIdx], [], {
+                    swapped,
+                    dimmed,
+                    revealed,
+                    fadeOutRanges: parsed.fadeOutRanges,
+                    permanentRanges: parsed.permanentRanges,
+                    fadeInRanges: parsed.fadeInRanges,
+                  })}
                 </span>
               )
             } else if (isCurrentLine && phase === 'hook') {
               return (
-                <span key={lIdx}>
-                  {lIdx > 0 && <br />}
-                  {renderHighlightedText(displayText, ranges)}
+                <span key={lIdx} className={lIdx > 0 ? "block mt-0.5" : ""}>
+                  {renderHighlightedText(displayText, [], {
+                    swapped,
+                    dimmed,
+                    revealed,
+                    fadeOutRanges: parsed.fadeOutRanges,
+                    permanentRanges: parsed.permanentRanges,
+                    fadeInRanges: parsed.fadeInRanges,
+                  })}
                   {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
                 </span>
               )
@@ -510,6 +821,60 @@ function ReflectiveTypewriter({
 // Sección de historia con typewriter y animaciones
 function StorySection({ t }: { t: (typeof translations)[Lang] }) {
   const [typewriterComplete, setTypewriterComplete] = useState(false)
+  const [textDimmed, setTextDimmed] = useState(false)
+  const [highlightSwapped, setHighlightSwapped] = useState(false)
+  const [textRevealed, setTextRevealed] = useState(false)
+
+  // Reset states when language changes
+  useEffect(() => {
+    // Check if animation was already seen (skip case)
+    const seen = sessionStorage.getItem(STORY_SEEN_KEY)
+    if (seen) {
+      setTypewriterComplete(true)
+      setTextDimmed(true)
+      setHighlightSwapped(true)
+      setTextRevealed(true)
+    } else {
+      setTypewriterComplete(false)
+      setTextDimmed(false)
+      setHighlightSwapped(false)
+      setTextRevealed(false)
+    }
+  }, [t])
+
+  // Transition sequence: dim → highlight → reveal
+  const sequenceStartedRef = useRef(false)
+
+  useEffect(() => {
+    // Reset ref when language changes
+    sequenceStartedRef.current = false
+  }, [t])
+
+  useEffect(() => {
+    if (!typewriterComplete || sequenceStartedRef.current) return
+    sequenceStartedRef.current = true
+
+    // Step 1: Dim everything (800ms after typewriter)
+    const dimTimer = setTimeout(() => {
+      setTextDimmed(true)
+    }, 800)
+
+    // Step 2: Activate gradient on final words (2500ms - gives 1700ms pause for reader to process)
+    const swapTimer = setTimeout(() => {
+      setHighlightSwapped(true)
+    }, 2500)
+
+    // Step 3: Reveal rest of text (6000ms - gives 3500ms for highlights to shine alone)
+    const revealTimer = setTimeout(() => {
+      setTextRevealed(true)
+    }, 6000)
+
+    return () => {
+      clearTimeout(dimTimer)
+      clearTimeout(swapTimer)
+      clearTimeout(revealTimer)
+    }
+  }, [typewriterComplete])
 
   return (
     <section id="about" className="relative py-16 md:py-24">
@@ -521,15 +886,18 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
           context={t.story.context}
           reflections={t.story.reflections}
           hookParagraphs={t.story.hookParagraphs}
+          swapped={highlightSwapped}
+          dimmed={textDimmed}
+          revealed={textRevealed}
           className="font-display text-xl md:text-2xl leading-relaxed mb-8 text-center max-w-3xl mx-auto"
           onComplete={() => setTypewriterComplete(true)}
         />
 
-        {/* Contenido que aparece después del typewriter */}
+        {/* Contenido que aparece después del typewriter - delays sincronizados con callback */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 0.6, delay: typewriterComplete ? 0.1 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <p className="text-lg text-muted-foreground leading-relaxed text-center max-w-3xl mx-auto">
             {t.story.why}
@@ -539,18 +907,18 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.8, delay: 1.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 0.6, delay: typewriterComplete ? 0.3 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <p className="text-lg text-foreground font-medium mt-4 text-center max-w-3xl mx-auto">
             {t.story.seeking}
           </p>
         </motion.div>
 
-        {/* Burbujas de navegación */}
+        {/* Burbujas de navegación - delays sincronizados */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.8, delay: 2.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 0.6, delay: typewriterComplete ? 0.5 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="flex flex-wrap justify-center gap-3 mt-10 mb-12"
         >
           {t.story.nav.map((item, i) => {
@@ -574,7 +942,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
                 onClick={handleClick}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={typewriterComplete ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-                transition={{ delay: 2.5 + i * 0.15, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ delay: typewriterComplete ? 0.6 + i * 0.1 : 0, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className={isHighlight
                   ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:opacity-90 transition-all duration-300 text-sm font-medium shadow-lg shadow-primary/25"
                   : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 text-sm font-medium"

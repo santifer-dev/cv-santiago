@@ -1,0 +1,51 @@
+{
+  "name": "language_handling",
+  "description": "Verifica comportamiento bilingüe ES/EN",
+  "tests": [
+    {
+      "id": "spanish-default",
+      "description": "Debe responder en español cuando lang=es",
+      "input": "Hola, cuéntame sobre ti",
+      "lang": "es",
+      "assertions": [
+        { "type": "language", "expected": "es" }
+      ]
+    },
+    {
+      "id": "english-explicit",
+      "description": "Debe responder en inglés cuando lang=en",
+      "input": "Hello, tell me about yourself",
+      "lang": "en",
+      "assertions": [
+        { "type": "language", "expected": "en" }
+      ]
+    },
+    {
+      "id": "email-spanish",
+      "description": "Debe usar hola@santifer.io en español",
+      "input": "¿Cómo puedo contactarte?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains", "value": "hola@santifer.io" }
+      ]
+    },
+    {
+      "id": "email-english",
+      "description": "Debe usar hi@santifer.io en inglés",
+      "input": "How can I contact you?",
+      "lang": "en",
+      "assertions": [
+        { "type": "contains", "value": "hi@santifer.io" }
+      ]
+    },
+    {
+      "id": "linkedin-always",
+      "description": "Debe mencionar LinkedIn en preguntas de contacto",
+      "input": "¿Cómo te contacto?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["linkedin", "LinkedIn", "santifer"] }
+      ]
+    }
+  ]
+}

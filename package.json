@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "evals": "npx tsx evals/runner.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
+    "langfuse": "^3.38.6",
     "lucide-react": "^0.563.0",
     "motion": "^12.29.0",
     "react": "^19.2.0",

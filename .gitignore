@@ -30,3 +30,4 @@ CLAUDE.md
 # Backups and drafts
 backup/
 linkedin-post.md
+.env*.local

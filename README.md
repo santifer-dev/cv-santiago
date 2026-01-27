@@ -28,7 +28,29 @@
 | Frontend | React 19, TypeScript, Vite |
 | Styling | Tailwind CSS v4, Motion |
 | AI | Claude API, Streaming SSE |
+| LLMOps | Langfuse, Evals |
 | Deploy | Vercel Edge Functions |
+
+---
+
+## LLMOps & Observability
+
+This project implements production-grade LLM practices:
+
+| Practice | Implementation |
+|----------|----------------|
+| **Observability** | [Langfuse](https://langfuse.com) for tracing, metrics & cost tracking |
+| **Telemetry** | Every conversation logged with latency, tokens, model version |
+| **Evals** | 31 automated tests covering accuracy, persona, safety |
+| **Prompt Caching** | Anthropic ephemeral cache for cost optimization |
+
+### Why This Matters
+
+For AI Product Managers, FDEs, and Solutions Architects, understanding LLMOps is critical:
+- **Debug production issues** with full conversation traces
+- **Track costs** per conversation and optimize spend
+- **Measure quality** with automated evaluations
+- **Version prompts** and compare performance
 
 ---
 
@@ -121,7 +143,29 @@ I build AI-powered products that solve real business problems. 10+ years turning
 | Frontend | React 19, TypeScript, Vite |
 | Estilos | Tailwind CSS v4, Motion |
 | IA | Claude API, Streaming SSE |
+| LLMOps | Langfuse, Evals |
 | Deploy | Vercel Edge Functions |
+
+---
+
+## LLMOps y Observabilidad
+
+Este proyecto implementa prácticas LLM de nivel producción:
+
+| Práctica | Implementación |
+|----------|----------------|
+| **Observabilidad** | [Langfuse](https://langfuse.com) para tracing, métricas y costes |
+| **Telemetría** | Cada conversación registrada con latencia, tokens, versión del modelo |
+| **Evals** | 31 tests automatizados cubriendo precisión, persona, seguridad |
+| **Prompt Caching** | Cache ephemeral de Anthropic para optimización de costes |
+
+### Por Qué Importa
+
+Para AI Product Managers, FDEs y Solutions Architects, entender LLMOps es crítico:
+- **Debug en producción** con trazas completas de conversación
+- **Control de costes** por conversación y optimización de gasto
+- **Medir calidad** con evaluaciones automatizadas
+- **Versionar prompts** y comparar rendimiento
 
 ---
 
