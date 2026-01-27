@@ -3,13 +3,13 @@ export const seo = {
     title:
       'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
     description:
-      'Ex-fundador y AI Product Manager especializado en automatización con LLMs y no-code. Certificado Anthropic. Disponible para roles remotos EU/USA.',
+      'Ex-fundador y AI Product Manager especializado en automatización con LLMs y no-code. Certificado Anthropic. Disponible para roles remotos EU / USA.',
   },
   en: {
     title:
       'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
     description:
-      'Ex-founder and AI Product Manager specialized in LLM automation and no-code. Anthropic certified. Available for remote EU/USA roles.',
+      'Ex-founder and AI Product Manager specialized in LLM automation and no-code. Anthropic certified. Available for remote EU / USA roles.',
   },
 };
 
@@ -54,10 +54,10 @@ export const translations = {
       '*Construyo* agentes que trabajan solos.',
       'Si se repite, lo *automatizo*.',
     ],
-    location: 'Sevilla, ES · EU/USA remoto',
+    location: 'Sevilla, ES · EU / USA remoto',
     roles: [
       'AI Product Manager',
-      'Solutions Architect (No/Low-Code & AI)',
+      'Solutions Architect (No / Low-Code & AI)',
       'AI Forward Deployed Engineer',
     ],
     summary: {
@@ -65,7 +65,7 @@ export const translations = {
       p1: 'Ex-fundador y constructor de productos especializado en',
       p1Highlight: 'automatización impulsada por IA',
       p1End:
-        'y plataformas no/low-code. Después de escalar y vender mi negocio (venta en funcionamiento, 2025), ahora me enfoco en roles donde el impacto escala: convertir objetivos empresariales ambiguos en productos y flujos de trabajo seguros, medibles y listos para empresas.',
+        'y plataformas no / low-code. Después de escalar y vender mi negocio (venta en funcionamiento, 2025), ahora me enfoco en roles donde el impacto escala: convertir objetivos empresariales ambiguos en productos y flujos de trabajo seguros, medibles y listos para empresas.',
       p2: 'Opero con propiedad end-to-end a través de',
       p2Highlight: 'descubrimiento → priorización → entrega → adopción',
       p2End: ', colaborando estrechamente con stakeholders e ingeniería.',
@@ -80,7 +80,7 @@ export const translations = {
         },
         {
           title: 'Fluidez Técnica',
-          desc: 'APIs, flujos de trabajo LLM/agentes, orquestación y automatización',
+          desc: 'APIs, flujos de trabajo LLM / agentes, orquestación y automatización',
         },
       ],
     },
@@ -93,7 +93,7 @@ export const translations = {
         },
         {
           title: 'Arquitectura de Soluciones',
-          desc: 'Requisitos, diseño de sistemas, APIs/webhooks, OpenAPI',
+          desc: 'Requisitos, diseño de sistemas, APIs / webhooks, OpenAPI',
         },
         {
           title: 'Workflows Agénticos',
@@ -101,7 +101,7 @@ export const translations = {
         },
         {
           title: 'LLMOps Foundations',
-          desc: 'Observabilidad, evals, telemetría, trade-offs coste/latencia',
+          desc: 'Observabilidad, evals, telemetría, trade-offs coste / latencia',
         },
         {
           title: 'Forward-Deployed Delivery',
@@ -117,7 +117,7 @@ export const translations = {
       title: 'Stack Técnico',
       categories: [
         {
-          name: 'AI/LLM',
+          name: 'AI / LLM',
           items: [
             'OpenAI (custom GPTs, tool use via OpenAPI)',
             'ElevenLabs',
@@ -126,7 +126,7 @@ export const translations = {
         },
         {
           name: 'Automation',
-          items: ['Airtable (Builder/Admin)', 'n8n', 'Make', 'Zapier'],
+          items: ['Airtable (Builder / Admin)', 'n8n', 'Make', 'Zapier'],
         },
         {
           name: 'Integrations',
@@ -138,7 +138,7 @@ export const translations = {
             'Python',
             'FastAPI',
             'SQL',
-            'Node.js/JavaScript',
+            'Node.js / JavaScript',
             'Astro',
             'GraphQL',
             'Git',
@@ -232,7 +232,7 @@ export const translations = {
           metrics: [
             { value: '+2,100', label: 'campos' },
             { value: '12', label: 'bases conectadas' },
-            { value: '+170h', label: 'automatizadas/mes' },
+            { value: '+170h', label: 'automatizadas / mes' },
           ],
           modules: [
             {
@@ -265,7 +265,7 @@ export const translations = {
         jacobo: {
           title: 'Agente AI Omnicanal "Jacobo"',
           badge: '~90% autoservicio',
-          desc: 'Voz (ElevenLabs) + WhatsApp (n8n/WATI) + Aircall cloud PBX. Orquestación de sub-agentes especializados vía tool calling.',
+          desc: 'Voz (ElevenLabs) + WhatsApp (n8n / WATI) + Aircall cloud PBX. Orquestación de sub-agentes especializados vía tool calling.',
           items: [
             'Router principal: clasifica intent y delega a sub-agentes',
             'Sub-agente Citas: consulta slots, reserva, confirma vía WhatsApp',
@@ -280,8 +280,8 @@ export const translations = {
           badge: 'Única en el sector en España',
           desc: '100% custom-made (2023). Headless CMS en Airtable como fuente de verdad, integrado con ERP, generando web en Astro con SEO programático.',
           items: [
-            'Páginas por modelo/reparación generadas automáticamente',
-            'Fotos antes/después + reseñas internas/externas desde ERP',
+            'Páginas por modelo / reparación generadas automáticamente',
+            'Fotos antes / después + reseñas internas / externas desde ERP',
             'Volumen de búsquedas vía DataForSEO por taxonomía',
             'Decisión automatizada: indexable (SEO) vs solo UX',
             'Optimización de crawl budget',
@@ -291,12 +291,12 @@ export const translations = {
         erp: {
           title: 'ERP Interno',
           desc: 'Pedidos, inventario, órdenes + purchase orders automáticos de stock mínimo',
-          metric: '20+ h/mes',
+          metric: '20+ h / mes',
         },
         gpts: {
           title: 'GPTs Custom',
-          desc: 'Stock, ubicación y precios via OpenAPI (voz/lenguaje natural)',
-          metric: '10+ h/mes',
+          desc: 'Stock, ubicación y precios via OpenAPI (voz / lenguaje natural)',
+          metric: '10+ h / mes',
         },
         reservas: {
           title: 'Reservas',
@@ -306,7 +306,7 @@ export const translations = {
         crm: {
           title: 'CRM + Contenido Social',
           desc: 'Lead scoring, mensajes automáticos, gamificación (Bronze→Platinum)',
-          metric: '60+ h/mes',
+          metric: '60+ h / mes',
         },
       },
       lico: {
@@ -444,7 +444,7 @@ export const translations = {
     },
     cta: {
       title: '¿Hablamos?',
-      desc: 'Busco un rol senior remoto en EU/USA para liderar cambios de proceso, mejorar la experiencia y eficiencia del equipo, y entregar resultados con métricas claras.',
+      desc: 'Busco un rol senior remoto en EU / USA para liderar cambios de proceso, mejorar la experiencia y eficiencia del equipo, y entregar resultados con métricas claras.',
       contact: 'Contactar',
     },
   },
@@ -488,10 +488,10 @@ export const translations = {
       'I *build* agents that work on their own.',
       'If it repeats, I *automate* it.',
     ],
-    location: 'Seville, ES · EU/USA remote',
+    location: 'Seville, ES · EU / USA remote',
     roles: [
       'AI Product Manager',
-      'Solutions Architect (No/Low-Code & AI)',
+      'Solutions Architect (No / Low-Code & AI)',
       'AI Forward Deployed Engineer',
     ],
     summary: {
@@ -499,7 +499,7 @@ export const translations = {
       p1: 'Former founder and product builder specialized in',
       p1Highlight: 'AI-powered automation',
       p1End:
-        'and no/low-code platforms. After scaling and selling my business (going-concern sale, 2025), I now focus on roles where impact scales: turning ambiguous business goals into secure, measurable, enterprise-ready products and workflows.',
+        'and no / low-code platforms. After scaling and selling my business (going-concern sale, 2025), I now focus on roles where impact scales: turning ambiguous business goals into secure, measurable, enterprise-ready products and workflows.',
       p2: 'I operate with end-to-end ownership across',
       p2Highlight: 'discovery → prioritization → delivery → adoption',
       p2End: ', collaborating closely with stakeholders and engineering.',
@@ -514,7 +514,7 @@ export const translations = {
         },
         {
           title: 'Technical Fluency',
-          desc: 'APIs, LLM/agent workflows, orchestration and automation',
+          desc: 'APIs, LLM / agent workflows, orchestration and automation',
         },
       ],
     },
@@ -527,7 +527,7 @@ export const translations = {
         },
         {
           title: 'Solution Architecture',
-          desc: 'Requirements, system design, APIs/webhooks, OpenAPI',
+          desc: 'Requirements, system design, APIs / webhooks, OpenAPI',
         },
         {
           title: 'Agentic Workflows',
@@ -535,7 +535,7 @@ export const translations = {
         },
         {
           title: 'LLMOps Foundations',
-          desc: 'Observability, evals, telemetry, cost/latency trade-offs',
+          desc: 'Observability, evals, telemetry, cost / latency trade-offs',
         },
         {
           title: 'Forward-Deployed Delivery',
@@ -551,7 +551,7 @@ export const translations = {
       title: 'Tech Stack',
       categories: [
         {
-          name: 'AI/LLM',
+          name: 'AI / LLM',
           items: [
             'OpenAI (custom GPTs, tool use via OpenAPI)',
             'ElevenLabs',
@@ -560,7 +560,7 @@ export const translations = {
         },
         {
           name: 'Automation',
-          items: ['Airtable (Builder/Admin)', 'n8n', 'Make', 'Zapier'],
+          items: ['Airtable (Builder / Admin)', 'n8n', 'Make', 'Zapier'],
         },
         {
           name: 'Integrations',
@@ -572,7 +572,7 @@ export const translations = {
             'Python',
             'FastAPI',
             'SQL',
-            'Node.js/JavaScript',
+            'Node.js / JavaScript',
             'Astro',
             'GraphQL',
             'Git',
@@ -665,7 +665,7 @@ export const translations = {
           metrics: [
             { value: '+2,100', label: 'fields' },
             { value: '12', label: 'connected bases' },
-            { value: '+170h', label: 'automated/month' },
+            { value: '+170h', label: 'automated / month' },
           ],
           modules: [
             {
@@ -695,7 +695,7 @@ export const translations = {
         jacobo: {
           title: 'Omnichannel AI Agent "Jacobo"',
           badge: '~90% self-service',
-          desc: 'Voice (ElevenLabs) + WhatsApp (n8n/WATI) + Aircall cloud PBX. Sub-agent orchestration via tool calling.',
+          desc: 'Voice (ElevenLabs) + WhatsApp (n8n / WATI) + Aircall cloud PBX. Sub-agent orchestration via tool calling.',
           items: [
             'Main router: classifies intent and delegates to sub-agents',
             'Appointments sub-agent: checks slots, books, confirms via WhatsApp',
@@ -710,8 +710,8 @@ export const translations = {
           badge: 'Only one in sector in Spain',
           desc: '100% custom-made (2023). Headless CMS in Airtable as source of truth, integrated with ERP, generating Astro website with programmatic SEO.',
           items: [
-            'Pages per model/repair auto-generated',
-            'Before/after photos + internal/external reviews from ERP',
+            'Pages per model / repair auto-generated',
+            'Before / after photos + internal / external reviews from ERP',
             'Search volume via DataForSEO by taxonomy',
             'Automated decision: indexable (SEO) vs UX-only',
             'Crawl budget optimization',
@@ -721,12 +721,12 @@ export const translations = {
         erp: {
           title: 'Internal ERP',
           desc: 'Orders, inventory, work orders + automatic min-stock purchase orders',
-          metric: '20+ h/mo',
+          metric: '20+ h / mo',
         },
         gpts: {
           title: 'Custom GPTs',
-          desc: 'Stock, location & pricing via OpenAPI (voice/natural language)',
-          metric: '10+ h/mo',
+          desc: 'Stock, location & pricing via OpenAPI (voice / natural language)',
+          metric: '10+ h / mo',
         },
         reservas: {
           title: 'Bookings',
@@ -736,7 +736,7 @@ export const translations = {
         crm: {
           title: 'CRM + Social Content',
           desc: 'Lead scoring, automated messages, gamification (Bronze→Platinum)',
-          metric: '60+ h/mo',
+          metric: '60+ h / mo',
         },
       },
       lico: {
@@ -874,7 +874,7 @@ export const translations = {
     },
     cta: {
       title: "Let's talk?",
-      desc: 'Looking for a senior remote role in EU/USA to lead process changes, improve team experience and efficiency, and deliver results with clear metrics.',
+      desc: 'Looking for a senior remote role in EU / USA to lead process changes, improve team experience and efficiency, and deliver results with clear metrics.',
       contact: 'Contact',
     },
   },
