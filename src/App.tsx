@@ -1197,8 +1197,13 @@ function App() {
           {/* Santifer iRepair - Bento Grid */}
           <AnimatedSection delay={0.1}>
             <div className="mb-12">
-              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
-                <h3 className="font-display text-2xl font-bold">Santifer iRepair</h3>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#888] shrink-0">
+                    <img src="/logo-santifer.jpg" alt="Santifer iRepair" className="w-full h-full object-cover" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold">Santifer iRepair</h3>
+                </div>
                 <a href="https://santiferirepair.es" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline flex items-center gap-1">
                   santiferirepair.es <ExternalLink className="w-3 h-3" />
                 </a>
@@ -1223,7 +1228,7 @@ function App() {
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center shrink-0">
                       <svg viewBox="0 0 200 170" className="w-6 h-6">
                         <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
                         <path fill="#18BFFF" d="M105.312 88.46v65.617c0 3.12 3.147 5.258 6.048 4.108l73.806-28.648a4.42 4.42 0 0 0 2.79-4.108V59.813c0-3.121-3.147-5.258-6.048-4.108l-73.806 28.648a4.42 4.42 0 0 0-2.79 4.108"/>
@@ -1259,11 +1264,11 @@ function App() {
                   </ul>
                   <a href="#contact" className="block text-xs font-medium italic mt-auto pt-4 text-[#B8860B] dark:text-[#FCB400] hover:opacity-80 transition-opacity">{t.experience.santifer.businessOS.footer}</a>
                 </div>
-                <div className="flex lg:flex-col gap-4 lg:gap-3">
+                <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2 lg:gap-3 mt-4 lg:mt-0">
                   {t.experience.santifer.businessOS.metrics.map((metric, i) => (
-                    <div key={i} className="flex-1 lg:flex-none text-center p-4 rounded-xl bg-background/50 border border-[#B8860B]/20 dark:border-[#FCB400]/20">
-                      <div className="font-display text-2xl font-bold text-[#B8860B] dark:text-[#FCB400]">{metric.value}</div>
-                      <div className="text-xs text-muted-foreground">{metric.label}</div>
+                    <div key={i} className="text-center p-2 lg:p-4 rounded-xl bg-background/50 border border-[#B8860B]/20 dark:border-[#FCB400]/20">
+                      <div className="font-display text-lg lg:text-2xl font-bold text-[#B8860B] dark:text-[#FCB400]">{metric.value}</div>
+                      <div className="text-[10px] lg:text-xs text-muted-foreground leading-tight">{metric.label}</div>
                     </div>
                   ))}
                 </div>
@@ -1368,8 +1373,13 @@ function App() {
           {/* LICO Cosmetics */}
           <AnimatedSection delay={0.5} className="mt-16">
             <div className="mb-6">
-              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
-                <h3 className="font-display text-2xl font-bold">LICO Cosmetics</h3>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F3EE] flex items-center justify-center shrink-0">
+                    <img src="/logo-lico.png" alt="LICO Cosmetics" className="w-full h-full object-contain p-1" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold">LICO Cosmetics</h3>
+                </div>
                 <a href="https://licocosmetics.es" target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline flex items-center gap-1">
                   licocosmetics.es <ExternalLink className="w-3 h-3" />
                 </a>
@@ -1384,8 +1394,13 @@ function App() {
           {/* Everis */}
           <AnimatedSection delay={0.6} className="mt-16">
             <div className="mb-6">
-              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
-                <h3 className="font-display text-2xl font-bold">Everis (NTT DATA)</h3>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shrink-0 p-1.5">
+                    <img src="/logo-everis.jpg" alt="Everis" className="w-full h-full object-contain" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold">Everis (NTT DATA)</h3>
+                </div>
               </div>
               <p className="text-primary font-medium mb-1">{t.experience.everis.role}</p>
               <p className="text-sm text-muted-foreground mb-4">{t.experience.everis.period}</p>
@@ -1420,12 +1435,12 @@ function App() {
                 href={`https://${t.projects.githubLink}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
-                {t.projects.githubLink}
+                {t.projects.githubLink.split('/').pop()}
               </a>
             </div>
           </AnimatedSection>
