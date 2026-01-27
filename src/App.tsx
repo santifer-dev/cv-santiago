@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github } from 'lucide-react'
+import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -42,15 +42,29 @@ function AnimatedSection({ children, className = '', delay = 0 }: { children: Re
   )
 }
 
-// Parsea texto con *destacado* y devuelve texto limpio + rangos destacados
-function parseHighlights(text: string): { clean: string; ranges: [number, number][] } {
+// Parsea texto con *destacado* y **lento** y devuelve texto limpio + rangos
+function parseHighlights(text: string): { clean: string; ranges: [number, number][]; slowRanges: [number, number][] } {
   const ranges: [number, number][] = []
+  const slowRanges: [number, number][] = []
   let clean = ''
   let i = 0
   while (i < text.length) {
-    if (text[i] === '*') {
+    // Check for ** (slow + highlight)
+    if (text[i] === '*' && text[i + 1] === '*') {
       const start = clean.length
-      i++
+      i += 2 // skip opening **
+      while (i < text.length && !(text[i] === '*' && text[i + 1] === '*')) {
+        clean += text[i]
+        i++
+      }
+      ranges.push([start, clean.length])
+      slowRanges.push([start, clean.length])
+      i += 2 // skip closing **
+    }
+    // Check for single * (highlight only)
+    else if (text[i] === '*') {
+      const start = clean.length
+      i++ // skip opening *
       while (i < text.length && text[i] !== '*') {
         clean += text[i]
         i++
@@ -62,7 +76,7 @@ function parseHighlights(text: string): { clean: string; ranges: [number, number
       i++
     }
   }
-  return { clean, ranges }
+  return { clean, ranges, slowRanges }
 }
 
 // Renderiza texto con rangos destacados
@@ -214,6 +228,366 @@ function NaturalTypewriter({
         style={{ animation: 'blink 0.6s step-end infinite' }}
       >|</span>
     </span>
+  )
+}
+
+// Typewriter reflexivo con fases: contexto → reflexiones (se borran) → hook final
+function ReflectiveTypewriter({
+  context,
+  reflections,
+  hookParagraphs,
+  className = '',
+  onComplete
+}: {
+  context: string
+  reflections: readonly string[]
+  hookParagraphs: readonly (readonly string[])[]
+  className?: string
+  onComplete?: () => void
+}) {
+  type Phase = 'idle' | 'context' | 'pause-after-context' | 'reflection' | 'pause-before-delete' | 'deleting' | 'hook' | 'complete'
+
+  const [phase, setPhase] = useState<Phase>('idle')
+  const [displayText, setDisplayText] = useState('')
+  const [contextComplete, setContextComplete] = useState(false)
+  const [currentReflection, setCurrentReflection] = useState(0)
+  const [, setHookComplete] = useState(false)
+  const [completedHookLines, setCompletedHookLines] = useState<string[][]>([])
+  const [currentHookParagraph, setCurrentHookParagraph] = useState(0)
+  const [currentHookLine, setCurrentHookLine] = useState(0)
+
+  const { ref, isInView } = useInView(0.5)
+
+  // Parse hook lines for highlights
+  const parsedHookLines = useMemo(() =>
+    hookParagraphs.flatMap(p => [...p]).map(parseHighlights),
+    [hookParagraphs]
+  )
+
+  // Start when in view
+  useEffect(() => {
+    if (isInView && phase === 'idle') {
+      setPhase('context')
+    }
+  }, [isInView, phase])
+
+  // Typing delay function
+  const getTypingDelay = useCallback((char: string, prevChar: string) => {
+    let delay = 40
+    if (/[.,!?;:—]/.test(char)) delay += 120 + Math.random() * 100
+    else if (char === ' ') delay += 20 + Math.random() * 30
+    else if (prevChar === ' ') delay += 25 + Math.random() * 20
+    else if (/[áéíóúñü¿¡]/i.test(char)) delay += 30 + Math.random() * 20
+    delay += (Math.random() - 0.5) * 20
+    return Math.max(25, delay)
+  }, [])
+
+  // Delete delay (faster, showing hesitation)
+  const getDeleteDelay = useCallback(() => {
+    return 30 + Math.random() * 25
+  }, [])
+
+  // Main animation effect
+  useEffect(() => {
+    if (phase === 'idle' || phase === 'complete') return
+
+    // Phase: context
+    if (phase === 'context') {
+      if (displayText === context) {
+        setTimeout(() => setPhase('pause-after-context'), 100)
+      } else {
+        const nextChar = context[displayText.length]
+        const prevChar = displayText.length > 0 ? context[displayText.length - 1] : ''
+        const delay = getTypingDelay(nextChar, prevChar)
+        const timer = setTimeout(() => setDisplayText(prev => prev + nextChar), delay)
+        return () => clearTimeout(timer)
+      }
+    }
+
+    // Phase: pause after context
+    if (phase === 'pause-after-context') {
+      setContextComplete(true)
+      const timer = setTimeout(() => {
+        setDisplayText('')
+        setPhase('reflection')
+      }, 800)
+      return () => clearTimeout(timer)
+    }
+
+    // Phase: reflection (typing)
+    if (phase === 'reflection') {
+      const currentText = reflections[currentReflection]
+      if (displayText === currentText) {
+        setTimeout(() => setPhase('pause-before-delete'), 600)
+      } else {
+        const nextChar = currentText[displayText.length]
+        const prevChar = displayText.length > 0 ? currentText[displayText.length - 1] : ''
+        const delay = getTypingDelay(nextChar, prevChar)
+        const timer = setTimeout(() => setDisplayText(prev => prev + nextChar), delay)
+        return () => clearTimeout(timer)
+      }
+    }
+
+    // Phase: pause before delete
+    if (phase === 'pause-before-delete') {
+      const timer = setTimeout(() => setPhase('deleting'), 400)
+      return () => clearTimeout(timer)
+    }
+
+    // Phase: deleting (word by word, like Alt+Backspace)
+    if (phase === 'deleting') {
+      if (displayText === '') {
+        if (currentReflection < reflections.length - 1) {
+          setCurrentReflection(prev => prev + 1)
+          setPhase('reflection')
+        } else {
+          setPhase('hook')
+        }
+      } else {
+        const delay = 80 + Math.random() * 40 // Delay between word deletions
+        const timer = setTimeout(() => {
+          setDisplayText(prev => {
+            const trimmed = prev.trimEnd()
+            const lastSpace = trimmed.lastIndexOf(' ')
+            return lastSpace === -1 ? '' : prev.slice(0, lastSpace + 1)
+          })
+        }, delay)
+        return () => clearTimeout(timer)
+      }
+    }
+
+    // Phase: hook
+    if (phase === 'hook') {
+      const flatIndex = (() => {
+        let idx = 0
+        for (let p = 0; p < currentHookParagraph; p++) idx += hookParagraphs[p].length
+        return idx + currentHookLine
+      })()
+      const { clean: currentText } = parsedHookLines[flatIndex]
+
+      if (displayText === currentText) {
+        // Line complete
+        const newCompleted = [...completedHookLines]
+        if (!newCompleted[currentHookParagraph]) newCompleted[currentHookParagraph] = []
+        newCompleted[currentHookParagraph][currentHookLine] = currentText
+
+        const isLastLine = currentHookLine >= hookParagraphs[currentHookParagraph].length - 1
+        const isLastParagraph = currentHookParagraph >= hookParagraphs.length - 1
+
+        if (isLastLine && isLastParagraph) {
+          setCompletedHookLines(newCompleted)
+          setHookComplete(true)
+          setPhase('complete')
+          setTimeout(() => onComplete?.(), 600)
+        } else if (isLastLine) {
+          setTimeout(() => {
+            setCompletedHookLines(newCompleted)
+            setCurrentHookParagraph(prev => prev + 1)
+            setCurrentHookLine(0)
+            setDisplayText('')
+          }, 800)
+        } else {
+          setTimeout(() => {
+            setCompletedHookLines(newCompleted)
+            setCurrentHookLine(prev => prev + 1)
+            setDisplayText('')
+          }, 500)
+        }
+      } else {
+        const nextCharIndex = displayText.length
+        const nextChar = currentText[nextCharIndex]
+        const prevChar = nextCharIndex > 0 ? currentText[nextCharIndex - 1] : ''
+
+        // Check if current position is in a slow range
+        const { slowRanges } = parsedHookLines[flatIndex]
+        const isInSlowRange = slowRanges.some(([start, end]) => nextCharIndex >= start && nextCharIndex < end)
+
+        // Check if we're about to start "Compré" after a period (pause before emotional part)
+        const textSoFar = currentText.slice(0, nextCharIndex)
+        const isAfterSentenceEnd = prevChar === '.' && nextChar === ' ' && textSoFar.includes('negocio')
+
+        let delay = getTypingDelay(nextChar, prevChar)
+
+        if (isAfterSentenceEnd) {
+          delay = 800 // Dramatic pause before "Compré claridad"
+        } else if (isInSlowRange) {
+          delay = delay * 4 + 80 // Much slower for emphasis on "claridad"
+        }
+
+        const timer = setTimeout(() => setDisplayText(prev => prev + nextChar), delay)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [phase, displayText, context, reflections, currentReflection, hookParagraphs, parsedHookLines, currentHookParagraph, currentHookLine, completedHookLines, getTypingDelay, getDeleteDelay, onComplete])
+
+  // Reset on language change
+  useEffect(() => {
+    setPhase('idle')
+    setDisplayText('')
+    setContextComplete(false)
+    setCurrentReflection(0)
+    setHookComplete(false)
+    setCompletedHookLines([])
+    setCurrentHookParagraph(0)
+    setCurrentHookLine(0)
+  }, [context, reflections, hookParagraphs])
+
+  // Restart when back in view
+  useEffect(() => {
+    if (isInView && phase === 'idle') {
+      setPhase('context')
+    }
+  }, [isInView, phase])
+
+  const showCursor = phase !== 'complete' && phase !== 'idle'
+
+  // Helper to get ranges for hook line
+  const getHookRanges = (pIdx: number, lIdx: number) => {
+    let flatIdx = 0
+    for (let p = 0; p < pIdx; p++) flatIdx += hookParagraphs[p].length
+    return parsedHookLines[flatIdx + lIdx]?.ranges || []
+  }
+
+  return (
+    <div ref={ref} className={className}>
+      {/* Context line */}
+      <p className="mb-4">
+        {phase === 'context' ? (
+          <>
+            {displayText}
+            {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
+          </>
+        ) : contextComplete ? (
+          <>
+            {context}
+            {phase === 'pause-after-context' && (
+              <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>
+            )}
+          </>
+        ) : null}
+      </p>
+
+      {/* Reflection line (becomes the hook line) */}
+      {(phase === 'reflection' || phase === 'pause-before-delete' || phase === 'deleting') && (
+        <p className="mb-4">
+          <span className="text-gradient-theme">{displayText}</span>
+          {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
+        </p>
+      )}
+
+      {/* Hook paragraphs */}
+      {(phase === 'hook' || phase === 'complete') && hookParagraphs.map((paragraph, pIdx) => (
+        <p key={pIdx} className="mb-4 last:mb-0">
+          {paragraph.map((_, lIdx) => {
+            const ranges = getHookRanges(pIdx, lIdx)
+            const isCurrentLine = pIdx === currentHookParagraph && lIdx === currentHookLine
+            const isCompleted = completedHookLines[pIdx]?.[lIdx] !== undefined
+
+            if (isCompleted) {
+              return (
+                <span key={lIdx}>
+                  {lIdx > 0 && <br />}
+                  {renderHighlightedText(completedHookLines[pIdx][lIdx], ranges)}
+                </span>
+              )
+            } else if (isCurrentLine && phase === 'hook') {
+              return (
+                <span key={lIdx}>
+                  {lIdx > 0 && <br />}
+                  {renderHighlightedText(displayText, ranges)}
+                  {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
+                </span>
+              )
+            }
+            return null
+          })}
+        </p>
+      ))}
+    </div>
+  )
+}
+
+// Sección de historia con typewriter y animaciones
+function StorySection({ t }: { t: (typeof translations)[Lang] }) {
+  const [typewriterComplete, setTypewriterComplete] = useState(false)
+
+  return (
+    <section id="about" className="relative py-16 md:py-24">
+      {/* Fade de opacidad: transparente arriba → fondo sólido abajo */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none" />
+      <div className="relative max-w-5xl mx-auto px-6">
+        {/* Hook emocional con typewriter reflexivo */}
+        <ReflectiveTypewriter
+          context={t.story.context}
+          reflections={t.story.reflections}
+          hookParagraphs={t.story.hookParagraphs}
+          className="font-display text-xl md:text-2xl leading-relaxed mb-8 text-center max-w-3xl mx-auto"
+          onComplete={() => setTypewriterComplete(true)}
+        />
+
+        {/* Contenido que aparece después del typewriter */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <p className="text-lg text-muted-foreground leading-relaxed text-center max-w-3xl mx-auto">
+            {t.story.why}
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+          transition={{ duration: 0.8, delay: 1.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <p className="text-lg text-foreground font-medium mt-4 text-center max-w-3xl mx-auto">
+            {t.story.seeking}
+          </p>
+        </motion.div>
+
+        {/* Burbujas de navegación */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+          transition={{ duration: 0.8, delay: 2.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="flex flex-wrap justify-center gap-3 mt-10 mb-12"
+        >
+          {t.story.nav.map((item, i) => {
+            const icons: Record<string, React.ReactNode> = {
+              briefcase: <Briefcase className="w-4 h-4" />,
+              folder: <FolderGit2 className="w-4 h-4" />,
+              mail: <Mail className="w-4 h-4" />,
+              bot: <Bot className="w-4 h-4" />
+            }
+            const isHighlight = 'highlight' in item && item.highlight
+            const handleClick = (e: React.MouseEvent) => {
+              if (item.href === '#chat') {
+                e.preventDefault()
+                window.dispatchEvent(new Event('openChat'))
+              }
+            }
+            return (
+              <motion.a
+                key={item.href}
+                href={item.href}
+                onClick={handleClick}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={typewriterComplete ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+                transition={{ delay: 2.5 + i * 0.15, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className={isHighlight
+                  ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:opacity-90 transition-all duration-300 text-sm font-medium shadow-lg shadow-primary/25"
+                  : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 text-sm font-medium"
+                }
+              >
+                {icons[item.icon]}
+                {item.label}
+              </motion.a>
+            )
+          })}
+        </motion.div>
+      </div>
+    </section>
   )
 }
 
@@ -403,118 +777,53 @@ function App() {
                 pauseBetween={2500}
               />
 
-              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-muted-foreground">
-                <a href={`mailto:${t.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
-                  <Mail className="w-4 h-4" />
-                  {t.email}
-                </a>
-                <span className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  {t.location}
-                </span>
-                <a href="https://linkedin.com/in/santifer/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
-                  <Linkedin className="w-4 h-4" />
-                  /santifer
-                </a>
+              <div className="flex flex-wrap justify-center md:justify-start gap-3">
+                <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm font-medium text-primary">AI Product Manager</span>
+                <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm font-medium text-primary">Solutions Architect</span>
+                <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm font-medium text-primary">AI FDE</span>
               </div>
             </motion.div>
           </div>
 
-          {/* Target Roles - subtle separator */}
-          <div className="mt-12 pt-8 border-t border-border/50">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-wrap justify-center gap-3"
-            >
-              {t.roles.map((role, i) => (
-                <motion.span
-                  key={role}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm font-medium text-primary"
-                >
-                  {role}
-                </motion.span>
-              ))}
-            </motion.div>
-          </div>
         </div>
       </header>
 
-      {/* Summary */}
-      <section id="about" className="py-16 md:py-24">
-        <div className="max-w-5xl mx-auto px-6">
-          <AnimatedSection>
-            <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Users className="w-5 h-5 text-primary" />
-              </div>
-              {t.summary.title}
-            </h2>
-          </AnimatedSection>
+      {/* Summary - Con storytelling integrado */}
+      <StorySection t={t} />
 
-          <AnimatedSection delay={0.1}>
-            <div className="prose prose-invert max-w-none">
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                {t.summary.p1} <span className="text-foreground font-medium">{t.summary.p1Highlight}</span> {t.summary.p1End}
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                {t.summary.p2} <span className="text-foreground font-medium">{t.summary.p2Highlight}</span>{t.summary.p2End}
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid md:grid-cols-3 gap-6 mt-10">
-            {t.summary.cards.map((item, i) => (
-              <AnimatedSection key={item.title} delay={0.2 + i * 0.1}>
-                <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 h-full">
-                  <h3 className="font-display font-semibold mb-2">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Core Competencies */}
-      <section id="skills" className="py-16 md:py-24 bg-muted/30">
-        <div className="max-w-5xl mx-auto px-6">
-          <AnimatedSection>
-            <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-                <Zap className="w-5 h-5 text-accent" />
-              </div>
-              {t.coreCompetencies.title}
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {t.coreCompetencies.items.map((item, i) => (
-              <AnimatedSection key={item.title} delay={0.1 + i * 0.05}>
-                <div className="p-5 rounded-2xl bg-card border border-border hover:border-accent/30 transition-all duration-300 h-full group">
-                  <h3 className="font-display font-semibold mb-2 group-hover:text-accent transition-colors">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Experience - Bento Grid */}
+      {/* Experience - Con preámbulo de competencias */}
       <section id="experience" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
-            <h2 className="font-display text-2xl font-semibold mb-12 flex items-center gap-3">
+            <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-primary" />
               </div>
               {t.experience.title}
             </h2>
+          </AnimatedSection>
+
+          {/* Preámbulo: Cómo trabajo + Competencias */}
+          <AnimatedSection delay={0.1}>
+            <div className="mb-12 p-6 rounded-2xl bg-card/50">
+              <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-6">
+                {t.summary.p2} <span className="text-foreground font-medium">{t.summary.p2Highlight}</span>{t.summary.p2End}
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+                {t.coreCompetencies.items.map((item, i) => (
+                  <div
+                    key={i}
+                    className="p-4 rounded-xl bg-background/50 border border-border hover:border-accent/30 transition-colors group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <Zap className="w-4 h-4 text-accent shrink-0" />
+                      <span className="text-sm font-semibold group-hover:text-accent transition-colors">{item.title}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground pl-6">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </AnimatedSection>
 
           {/* Santifer iRepair - Bento Grid */}
@@ -540,6 +849,60 @@ function App() {
             </div>
           </AnimatedSection>
 
+          {/* Business OS - Full Width Hero Card */}
+          <AnimatedSection delay={0.1} className="mb-8">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-[#B8860B]/15 dark:from-[#FCB400]/15 via-[#B8860B]/5 dark:via-[#FCB400]/5 to-transparent border border-[#B8860B]/30 dark:border-[#FCB400]/30 hover:border-[#B8860B]/50 dark:hover:border-[#FCB400]/50 transition-all duration-300 group">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                <div className="flex-1 flex flex-col">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center">
+                      <svg viewBox="0 0 200 170" className="w-6 h-6">
+                        <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
+                        <path fill="#18BFFF" d="M105.312 88.46v65.617c0 3.12 3.147 5.258 6.048 4.108l73.806-28.648a4.42 4.42 0 0 0 2.79-4.108V59.813c0-3.121-3.147-5.258-6.048-4.108l-73.806 28.648a4.42 4.42 0 0 0-2.79 4.108"/>
+                        <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="font-display text-2xl font-bold">{t.experience.santifer.businessOS.title}</h4>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">Airtable</span>
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">Source of Truth</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground mb-6">{t.experience.santifer.businessOS.desc}</p>
+                  <ul className="text-sm text-muted-foreground space-y-2">
+                    {t.experience.santifer.businessOS.modules.map((item, i) => {
+                      const icons: Record<string, React.ReactNode> = {
+                        database: <Database className="w-4 h-4" />,
+                        users: <Users className="w-4 h-4" />,
+                        layout: <Layout className="w-4 h-4" />,
+                        package: <Package className="w-4 h-4" />,
+                        messageSquare: <MessageSquare className="w-4 h-4" />,
+                        receipt: <Receipt className="w-4 h-4" />
+                      }
+                      return (
+                        <li key={i} className="flex items-start gap-3">
+                          <span className="text-[#B8860B] dark:text-[#FCB400] mt-0.5">{icons[item.icon]}</span>
+                          <span>{item.text}</span>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <a href="#contact" className="block text-xs font-medium italic mt-auto pt-4 text-[#B8860B] dark:text-[#FCB400] hover:opacity-80 transition-opacity">{t.experience.santifer.businessOS.footer}</a>
+                </div>
+                <div className="flex lg:flex-col gap-4 lg:gap-3">
+                  {t.experience.santifer.businessOS.metrics.map((metric, i) => (
+                    <div key={i} className="flex-1 lg:flex-none text-center p-4 rounded-xl bg-background/50 border border-[#B8860B]/20 dark:border-[#FCB400]/20">
+                      <div className="font-display text-2xl font-bold text-[#B8860B] dark:text-[#FCB400]">{metric.value}</div>
+                      <div className="text-xs text-muted-foreground">{metric.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+
           {/* Bento Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {/* Large card - AI Agent */}
@@ -558,7 +921,7 @@ function App() {
                     <li key={i}>• {item}</li>
                   ))}
                 </ul>
-                <p className="text-xs font-medium text-primary italic mt-auto pt-4">{t.experience.santifer.jacobo.soldWith}</p>
+                <a href="#contact" className="text-xs font-medium text-primary italic mt-auto pt-4 hover:underline">{t.experience.santifer.jacobo.soldWith}</a>
               </div>
             </AnimatedSection>
 
@@ -578,16 +941,16 @@ function App() {
                     <li key={i}>• {item}</li>
                   ))}
                 </ul>
-                <p className="text-xs font-medium text-accent italic mt-auto pt-4">{t.experience.santifer.webSeo.codeAvailable}</p>
+                <a href="#contact" className="text-xs font-medium text-accent italic mt-auto pt-4 hover:underline">{t.experience.santifer.webSeo.codeAvailable}</a>
               </div>
             </AnimatedSection>
 
-            {/* Sale card */}
+            {/* EXIT 2025 - Verde Success para destacar logro/credibilidad */}
             <AnimatedSection delay={0.25} className="col-span-2">
-              <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 hover:border-primary/40 transition-all duration-300">
+              <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-[#16A34A]/10 dark:from-[#22C55E]/10 to-[#16A34A]/5 dark:to-[#22C55E]/5 border border-[#16A34A]/30 dark:border-[#22C55E]/30 hover:border-[#16A34A]/50 dark:hover:border-[#22C55E]/50 transition-all duration-300">
                 <div className="flex items-center gap-3 mb-2">
-                  <Zap className="w-5 h-5 text-primary" />
-                  <span className="font-display font-bold text-primary">{t.experience.santifer.exit}</span>
+                  <Zap className="w-5 h-5 text-[#16A34A] dark:text-[#22C55E]" />
+                  <span className="font-display font-bold text-[#16A34A] dark:text-[#22C55E]">{t.experience.santifer.exit}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.exitDesc}</p>
               </div>
@@ -639,6 +1002,10 @@ function App() {
             <div className="mb-6">
               <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
                 <h3 className="font-display text-2xl font-bold">LICO Cosmetics</h3>
+                <a href="https://licocosmetics.es" target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline flex items-center gap-1">
+                  licocosmetics.es <ExternalLink className="w-3 h-3" />
+                </a>
+                <span className="text-sm text-muted-foreground">{lang === 'es' ? 'Sevilla, España' : 'Seville, Spain'}</span>
               </div>
               <p className="text-accent font-medium mb-1">{t.experience.lico.role}</p>
               <p className="text-sm text-muted-foreground mb-4">{t.experience.lico.period}</p>

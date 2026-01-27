@@ -136,6 +136,13 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
     }
   }, [isOpen, isMobile]);
 
+  // Escuchar evento global para abrir chat desde otros componentes
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('openChat', handleOpenChat);
+    return () => window.removeEventListener('openChat', handleOpenChat);
+  }, []);
+
   // Bloquear scroll del body cuando el chat está abierto en móvil
   useEffect(() => {
     if (isMobile && isOpen) {

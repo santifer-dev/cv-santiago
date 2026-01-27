@@ -14,6 +14,33 @@ export const translations = {
     greeting: 'Hola, soy',
     email: 'hola@santifer.io',
     role: 'Quitando fricción de lo que importa',
+    story: {
+      context: "16 años construyendo mi empresa.",
+      reflections: [
+        "¿Esto es lo que quería?",
+        "¿Y si no lo intento?"
+      ],
+      hookParagraphs: [
+        ["Un día, vendí el negocio. Compré **claridad.**"],
+        ["Lo que me apasiona no cabe en una tienda.", "*Construir sistemas* que liberan equipos. Eso escala."]
+      ],
+      why: "En Santifer automaticé todo lo que pude: desde un agente de IA que atendía el 90% de los clientes hasta un sistema operativo que orquestaba 12 bases de datos.",
+      seeking: "Ahora busco hacer eso a mayor escala—en empresas donde el impacto se multiplica.",
+      nav: [
+        { icon: 'briefcase', label: 'Mi camino', href: '#experience' },
+        { icon: 'folder', label: 'Lo que construyo', href: '#projects' },
+        { icon: 'mail', label: 'Hablemos', href: '#contact' },
+        { icon: 'bot', label: 'Pregúntame', href: '#chat', highlight: true }
+      ],
+      skills: [
+        'AI Product Discovery',
+        'Arquitectura de Soluciones',
+        'Workflows Agénticos',
+        'LLMOps',
+        'Forward-Deployed',
+        'Reliability & Ops'
+      ]
+    },
     taglines: [
       '*Quitando* fricción de lo que *importa*.',
       '*Descubriendo* los límites de la IA.',
@@ -132,6 +159,25 @@ export const translations = {
           'Experiencia directa front-of-house (2009-2015) y reparación técnica (2009-2019)',
           'Filosofía: automatizar todo lo posible—para el cliente y para procesos internos—para maximizar el valor entregado'
         ],
+        businessOS: {
+          title: 'Business Operating System',
+          badge: 'Airtable · Source of Truth',
+          desc: 'Sistema operativo empresarial completo construido 100% en Airtable. Single source of truth que alimenta todos los sistemas: web, agente AI, GPTs, comunicaciones y operaciones.',
+          metrics: [
+            { value: '+2,100', label: 'campos' },
+            { value: '12', label: 'bases conectadas' },
+            { value: '+170h', label: 'automatizadas/mes' }
+          ],
+          modules: [
+            { icon: 'database', text: 'ERP completo con 496 campos y 20+ validaciones automáticas' },
+            { icon: 'users', text: 'CRM con gamificación (Bronze→Platinum) y Aircall integrado' },
+            { icon: 'layout', text: 'CMS Headless → Web sincronizada automáticamente' },
+            { icon: 'package', text: 'Inventario inteligente con pedidos automáticos a mínimo stock' },
+            { icon: 'messageSquare', text: 'Comunicaciones omnicanal: SMS, WhatsApp, email automáticos' },
+            { icon: 'receipt', text: 'Contabilidad automatizada: conciliación bancaria, facturas y gastos' }
+          ],
+          footer: 'Walkthrough de arquitectura disponible selectivamente'
+        },
         jacobo: {
           title: 'Agente AI Omnicanal "Jacobo"',
           badge: '~90% autoservicio',
@@ -226,6 +272,33 @@ export const translations = {
     greeting: "Hi, I'm",
     email: 'hi@santifer.io',
     role: 'Removing friction from what matters',
+    story: {
+      context: "16 years building my company.",
+      reflections: [
+        "Is this what I wanted?",
+        "What if I don't try?"
+      ],
+      hookParagraphs: [
+        ["One day, I sold the business. I bought **clarity.**"],
+        ["What I'm passionate about doesn't fit in a store.", "*Building systems* that free teams. That scales."]
+      ],
+      why: "At Santifer I automated everything I could: from an AI agent that handled 90% of customers to an operating system orchestrating 12 databases.",
+      seeking: "Now I'm looking to do that at scale—in companies where impact multiplies.",
+      nav: [
+        { icon: 'briefcase', label: 'My path', href: '#experience' },
+        { icon: 'folder', label: 'What I build', href: '#projects' },
+        { icon: 'mail', label: "Let's talk", href: '#contact' },
+        { icon: 'bot', label: 'Ask me', href: '#chat', highlight: true }
+      ],
+      skills: [
+        'AI Product Discovery',
+        'Solution Architecture',
+        'Agentic Workflows',
+        'LLMOps',
+        'Forward-Deployed',
+        'Reliability & Ops'
+      ]
+    },
     taglines: [
       '*Removing* friction from what *matters*.',
       '*Discovering* AI\'s limits.',
@@ -344,6 +417,25 @@ export const translations = {
           'Direct front-of-house experience (2009-2015) and hands-on repairs (2009-2019)',
           'Philosophy: automate everything possible—for the customer and for internal processes—to maximize value delivered'
         ],
+        businessOS: {
+          title: 'Business Operating System',
+          badge: 'Airtable · Source of Truth',
+          desc: 'Complete business operating system built 100% in Airtable. Single source of truth powering all systems: web, AI agent, GPTs, communications, and operations.',
+          metrics: [
+            { value: '+2,100', label: 'fields' },
+            { value: '12', label: 'connected bases' },
+            { value: '+170h', label: 'automated/month' }
+          ],
+          modules: [
+            { icon: 'database', text: 'Full ERP with 496 fields and 20+ automatic validations' },
+            { icon: 'users', text: 'CRM with gamification (Bronze→Platinum) and Aircall integrated' },
+            { icon: 'layout', text: 'Headless CMS → Auto-synced website' },
+            { icon: 'package', text: 'Smart inventory with automatic min-stock purchase orders' },
+            { icon: 'messageSquare', text: 'Omnichannel comms: SMS, WhatsApp, email automations' },
+            { icon: 'receipt', text: 'Automated accounting: bank reconciliation, invoices and expenses' }
+          ],
+          footer: 'Architecture walkthrough available selectively'
+        },
         jacobo: {
           title: 'Omnichannel AI Agent "Jacobo"',
           badge: '~90% self-service',
