@@ -1227,7 +1227,7 @@ function App() {
             <div className="p-8 rounded-2xl bg-gradient-to-br from-[#B8860B]/15 dark:from-[#FCB400]/15 via-[#B8860B]/5 dark:via-[#FCB400]/5 to-transparent border border-[#B8860B]/30 dark:border-[#FCB400]/30 hover:border-[#B8860B]/50 dark:hover:border-[#FCB400]/50 transition-all duration-300 group">
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div className="flex-1 flex flex-col">
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center shrink-0">
                       <svg viewBox="0 0 200 170" className="w-6 h-6">
                         <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
@@ -1235,14 +1235,9 @@ function App() {
                         <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
                       </svg>
                     </div>
-                    <div>
-                      <h4 className="font-display text-2xl font-bold">{t.experience.santifer.businessOS.title}</h4>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">Airtable</span>
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">Source of Truth</span>
-                      </div>
-                    </div>
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">Source of Truth</span>
                   </div>
+                  <h4 className="font-display text-2xl font-bold mb-4">{t.experience.santifer.businessOS.title}</h4>
                   <p className="text-muted-foreground mb-6">{t.experience.santifer.businessOS.desc}</p>
                   <ul className="text-sm text-muted-foreground space-y-2">
                     {t.experience.santifer.businessOS.modules.map((item, i) => {
