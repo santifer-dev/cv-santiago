@@ -190,7 +190,7 @@ export const translations = {
           title: 'santifer.io',
           badge: 'Este Portfolio',
           badgeBuilding: '',
-          desc: 'CV interactivo con chat IA integrado. El chatbot "Santi" responde preguntas sobre mi experiencia y habilidades. Streaming en tiempo real, prompt caching, i18n ES/EN, dark mode.',
+          desc: 'CV interactivo con chat IA integrado. Implementa prácticas LLMOps de producción: observabilidad con Langfuse, 31 evals automatizados, prompt caching y clasificación de intents.',
           tech: [
             'React 19',
             'TypeScript',
@@ -624,7 +624,7 @@ export const translations = {
           title: 'santifer.io',
           badge: 'This Portfolio',
           badgeBuilding: '',
-          desc: 'Interactive CV with integrated AI chat. The "Santi" chatbot answers questions about my experience and skills. Real-time streaming, prompt caching, i18n ES/EN, dark mode.',
+          desc: 'Interactive CV with integrated AI chat. Implements production LLMOps practices: Langfuse observability, 31 automated evals, prompt caching and intent classification.',
           tech: [
             'React 19',
             'TypeScript',
