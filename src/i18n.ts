@@ -66,14 +66,16 @@ export const translations = {
     projects: {
       title: 'Proyectos',
       githubLink: 'github.com/santifer-dev',
+      viewCode: 'Ver código',
+      viewPrototype: 'Ver prototipo',
       items: [
         {
           title: 'Content Digest',
           badge: 'Maven Capstone',
-          badgeBuilding: 'Building',
+          badgeBuilding: 'En desarrollo',
           desc: 'Servicio Python + FastAPI para ingestión de contenido con LLM y generación de resúmenes. Prototipo ganador, ahora en producción con mejores prácticas empresariales.',
           tech: ['Python', 'FastAPI', 'OpenAI API', 'LLMOps'],
-          link: null
+          link: 'contentdigest.santifer.io'
         },
         {
           title: 'Claude Pulse',
@@ -81,7 +83,7 @@ export const translations = {
           badgeBuilding: '',
           desc: 'Plugin SwiftBar para monitorización en tiempo real del uso de Claude Code en macOS. Métricas de consumo, predicción de rate limits, y consejos contextuales.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
-          link: 'github.com/santifer/claude-pulse'
+          link: 'github.com/santifer-dev/claude-pulse'
         },
         {
           title: 'Claudeable',
@@ -89,7 +91,7 @@ export const translations = {
           badgeBuilding: '',
           desc: 'Metaproyecto de Claude Code para desarrollo web profesional. Skills personalizados, templates y MCPs preconfigurados para crear webs al nivel de Lovable.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
-          link: 'github.com/santifer/claudeable'
+          link: 'github.com/santifer-dev/claudeable'
         },
         {
           title: 'Watermark Remover',
@@ -103,9 +105,9 @@ export const translations = {
           title: 'santifer.io',
           badge: 'Este Portfolio',
           badgeBuilding: '',
-          desc: 'CV interactivo con chat IA integrado. El chatbot "Santi" responde preguntas sobre mi experiencia y habilidades. Streaming en tiempo real, i18n ES/EN, dark mode.',
-          tech: ['React 19', 'TypeScript', 'Claude API', 'Vercel Edge'],
-          link: 'santifer.io'
+          desc: 'CV interactivo con chat IA integrado. El chatbot "Santi" responde preguntas sobre mi experiencia y habilidades. Streaming en tiempo real, prompt caching, i18n ES/EN, dark mode.',
+          tech: ['React 19', 'TypeScript', 'Claude API', 'Prompt Caching', 'Vercel Edge'],
+          link: 'github.com/santifer-dev/cv-santiago'
         }
       ]
     },
@@ -186,7 +188,7 @@ export const translations = {
     education: {
       title: 'Formación',
       items: [
-        { year: '2025', org: 'Maven', title: 'AI Product Management Bootcamp', desc: 'Liderado por Marily Nika (ex-Google PM). AI PRDs, diseño de agentes. Proyecto ganador.' },
+        { year: '2025', org: 'Maven', title: 'AI Product Management Bootcamp', desc: 'Liderado por Marily Nika (ex-Google PM). AI PRDs, diseño de agentes.', projectLink: 'contentdigest.santifer.io', projectLabel: 'Proyecto ganador' },
         { year: '2024', org: 'BIGSEO', title: 'Master en Inteligencia Artificial', desc: 'IA Generativa aplicada a negocios' },
         { year: '2023', org: 'BIGSEO', title: 'Master en SEO', desc: 'SEO técnico, contenido y analítica' },
         { year: '2001 - 2009', org: 'ETSI', title: 'Ing. de Telecomunicaciones', desc: 'Especialidad en Telemática' },
@@ -276,6 +278,8 @@ export const translations = {
     projects: {
       title: 'Projects',
       githubLink: 'github.com/santifer-dev',
+      viewCode: 'View code',
+      viewPrototype: 'View prototype',
       items: [
         {
           title: 'Content Digest',
@@ -283,7 +287,7 @@ export const translations = {
           badgeBuilding: 'Building',
           desc: 'Python + FastAPI service for LLM-powered content ingestion and digest generation. Winning prototype, now in production with enterprise best practices.',
           tech: ['Python', 'FastAPI', 'OpenAI API', 'LLMOps'],
-          link: null
+          link: 'contentdigest.santifer.io'
         },
         {
           title: 'Claude Pulse',
@@ -291,7 +295,7 @@ export const translations = {
           badgeBuilding: '',
           desc: 'SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics, rate limit predictions, and context-aware tips.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
-          link: 'github.com/santifer/claude-pulse'
+          link: 'github.com/santifer-dev/claude-pulse'
         },
         {
           title: 'Claudeable',
@@ -299,7 +303,7 @@ export const translations = {
           badgeBuilding: '',
           desc: 'Claude Code meta-project for professional web development. Custom skills, templates and pre-configured MCPs to build Lovable-quality websites.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
-          link: 'github.com/santifer/claudeable'
+          link: 'github.com/santifer-dev/claudeable'
         },
         {
           title: 'Watermark Remover',
@@ -313,9 +317,9 @@ export const translations = {
           title: 'santifer.io',
           badge: 'This Portfolio',
           badgeBuilding: '',
-          desc: 'Interactive CV with integrated AI chat. The "Santi" chatbot answers questions about my experience and skills. Real-time streaming, i18n ES/EN, dark mode.',
-          tech: ['React 19', 'TypeScript', 'Claude API', 'Vercel Edge'],
-          link: 'santifer.io'
+          desc: 'Interactive CV with integrated AI chat. The "Santi" chatbot answers questions about my experience and skills. Real-time streaming, prompt caching, i18n ES/EN, dark mode.',
+          tech: ['React 19', 'TypeScript', 'Claude API', 'Prompt Caching', 'Vercel Edge'],
+          link: 'github.com/santifer-dev/cv-santiago'
         }
       ]
     },
@@ -396,7 +400,7 @@ export const translations = {
     education: {
       title: 'Education',
       items: [
-        { year: '2025', org: 'Maven', title: 'AI Product Management Bootcamp', desc: 'Led by Marily Nika (ex-Google PM). AI PRDs, agent design. Winning project.' },
+        { year: '2025', org: 'Maven', title: 'AI Product Management Bootcamp', desc: 'Led by Marily Nika (ex-Google PM). AI PRDs, agent design.', projectLink: 'contentdigest.santifer.io', projectLabel: 'Winning project' },
         { year: '2024', org: 'BIGSEO', title: 'Master in Artificial Intelligence', desc: 'Generative AI applied to business' },
         { year: '2023', org: 'BIGSEO', title: 'Master in SEO', desc: 'Technical SEO, content and analytics' },
         { year: '2001 - 2009', org: 'ETSI', title: 'Telecommunications Engineering', desc: 'Telematics specialization' },

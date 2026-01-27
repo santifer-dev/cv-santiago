@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download } from 'lucide-react'
+import { Mail, MapPin, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -712,11 +712,31 @@ function App() {
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">{project.desc}</p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((tech) => (
                       <span key={tech} className="px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground">{tech}</span>
                     ))}
                   </div>
+                  {project.link && (
+                    <a
+                      href={`https://${project.link}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-xs text-primary hover:underline"
+                    >
+                      {project.link.includes('github.com') ? (
+                        <>
+                          <Github className="w-4 h-4" />
+                          {t.projects.viewCode}
+                        </>
+                      ) : (
+                        <>
+                          <ExternalLink className="w-4 h-4" />
+                          {t.projects.viewPrototype}
+                        </>
+                      )}
+                    </a>
+                  )}
                 </div>
               </AnimatedSection>
             ))}
@@ -807,7 +827,23 @@ function App() {
                         <div>
                           <span className="text-xs text-primary font-medium">{item.year} · {item.org}</span>
                           <h3 className="font-display font-semibold mt-1 group-hover:text-primary transition-colors">{item.title}</h3>
-                          <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {item.desc}
+                            {('projectLink' in item && item.projectLink) && (
+                              <>
+                                {' '}
+                                <a
+                                  href={`https://${item.projectLink}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-primary hover:underline"
+                                >
+                                  {item.projectLabel}
+                                  <ExternalLink className="w-3 h-3" />
+                                </a>
+                              </>
+                            )}
+                          </p>
                         </div>
                       </div>
                     </div>

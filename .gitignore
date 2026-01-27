@@ -27,9 +27,6 @@ dist-ssr
 .env.local
 CLAUDE.md
 
-# Chatbot prompt (stored in Vercel env)
-chatbot-prompt.txt
-
 # Backups and drafts
 backup/
 linkedin-post.md
