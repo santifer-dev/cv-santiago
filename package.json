@@ -8,17 +8,20 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "evals": "npx tsx evals/runner.ts"
+    "evals": "npx tsx evals/runner.ts",
+    "evaluate-traces": "npx tsx scripts/evaluate-traces.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
+    "@vercel/functions": "^3.3.6",
     "langfuse": "^3.38.6",
     "lucide-react": "^0.563.0",
     "motion": "^12.29.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.12.0"
+    "react-router-dom": "^7.12.0",
+    "resend": "^6.9.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -27,6 +30,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "dotenv": "^17.2.3",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

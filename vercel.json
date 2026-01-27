@@ -4,5 +4,11 @@
       "source": "/((?!api|assets|.*\\..*).*)",
       "destination": "/index.html"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/evaluate",
+      "schedule": "0 8 * * *"
+    }
   ]
 }
