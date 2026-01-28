@@ -1021,6 +1021,14 @@ function CertLogo({ logo }: { logo: string }) {
 }
 
 // Banner sutil para sugerir cambio de idioma
+function getCookie(name: string): boolean {
+  return document.cookie.split('; ').some(c => c === `${name}=true`)
+}
+
+function setCookie(name: string) {
+  document.cookie = `${name}=true; max-age=31536000; SameSite=Lax; path=/`
+}
+
 function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: () => void; onDismiss: () => void }) {
   const prefersEnglish = typeof navigator !== 'undefined' &&
     !navigator.language.toLowerCase().startsWith('es')
@@ -1029,10 +1037,7 @@ function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: (
   const shouldShow = (lang === 'es' && prefersEnglish) || (lang === 'en' && !prefersEnglish)
 
   // Verificar si ya lo descartó
-  const [dismissed, setDismissed] = useState(() => {
-    if (typeof localStorage === 'undefined') return false
-    return localStorage.getItem('lang-banner-dismissed') === 'true'
-  })
+  const [dismissed, setDismissed] = useState(() => getCookie('lang-banner-dismissed'))
 
   const [visible, setVisible] = useState(false)
 
@@ -1047,7 +1052,7 @@ function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: (
   // Si el usuario cambia idioma con el toggle principal mientras el banner está visible, guardar preferencia
   useEffect(() => {
     if (visible && !shouldShow) {
-      localStorage.setItem('lang-banner-dismissed', 'true')
+      setCookie('lang-banner-dismissed')
       setVisible(false)
       setDismissed(true)
     }
@@ -1055,14 +1060,14 @@ function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: (
 
   const handleDismiss = () => {
     setVisible(false)
-    localStorage.setItem('lang-banner-dismissed', 'true')
+    setCookie('lang-banner-dismissed')
     setDismissed(true)
     onDismiss()
   }
 
   const handleSwitch = () => {
     setVisible(false)
-    localStorage.setItem('lang-banner-dismissed', 'true')
+    setCookie('lang-banner-dismissed')
     onSwitch()
   }
 
