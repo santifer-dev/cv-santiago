@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { motion } from 'motion/react'
-import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
+import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -916,7 +916,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
           dimmed={textDimmed}
           finalReveal={finalReveal}
           revealed={textRevealed}
-          className="font-display text-xl md:text-2xl leading-relaxed mb-8 text-center max-w-3xl mx-auto"
+          className="font-display text-lg md:text-2xl leading-relaxed mb-8 text-center max-w-3xl mx-auto"
           onComplete={() => setTypewriterComplete(true)}
         />
 
@@ -926,7 +926,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
           animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
           transition={{ duration: 0.6, delay: typewriterComplete ? 0.1 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <p className="text-lg text-muted-foreground leading-relaxed text-center max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-center max-w-3xl mx-auto">
             {t.story.why}
           </p>
         </motion.div>
@@ -936,7 +936,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
           animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
           transition={{ duration: 0.6, delay: typewriterComplete ? 0.3 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
-          <p className="text-lg text-foreground font-medium mt-4 text-center max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-foreground font-medium mt-4 text-center max-w-3xl mx-auto">
             {t.story.seeking}
           </p>
         </motion.div>
@@ -1020,6 +1020,88 @@ function CertLogo({ logo }: { logo: string }) {
   return logos[logo] || null
 }
 
+// Banner sutil para sugerir cambio de idioma
+function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: () => void; onDismiss: () => void }) {
+  const prefersEnglish = typeof navigator !== 'undefined' &&
+    !navigator.language.toLowerCase().startsWith('es')
+
+  // Mostrar solo si el idioma preferido no coincide con la página
+  const shouldShow = (lang === 'es' && prefersEnglish) || (lang === 'en' && !prefersEnglish)
+
+  // Verificar si ya lo descartó
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof localStorage === 'undefined') return false
+    return localStorage.getItem('lang-banner-dismissed') === 'true'
+  })
+
+  const [visible, setVisible] = useState(false)
+
+  // Mostrar banner con delay para no ser intrusivo
+  useEffect(() => {
+    if (shouldShow && !dismissed) {
+      const timer = setTimeout(() => setVisible(true), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [shouldShow, dismissed])
+
+  // Si el usuario cambia idioma con el toggle principal mientras el banner está visible, guardar preferencia
+  useEffect(() => {
+    if (visible && !shouldShow) {
+      localStorage.setItem('lang-banner-dismissed', 'true')
+      setVisible(false)
+      setDismissed(true)
+    }
+  }, [lang, visible, shouldShow])
+
+  const handleDismiss = () => {
+    setVisible(false)
+    localStorage.setItem('lang-banner-dismissed', 'true')
+    setDismissed(true)
+    onDismiss()
+  }
+
+  const handleSwitch = () => {
+    setVisible(false)
+    localStorage.setItem('lang-banner-dismissed', 'true')
+    onSwitch()
+  }
+
+  if (!visible) return null
+
+  const message = lang === 'es'
+    ? '🇬🇧 This site is available in English'
+    : '🇪🇸 Este sitio está disponible en español'
+
+  const switchLabel = lang === 'es' ? 'Switch' : 'Cambiar'
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, x: 20 }}
+      animate={{ opacity: 1, scale: 1, x: 0 }}
+      exit={{ opacity: 0, scale: 0.8, x: 20 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      className="fixed top-20 right-6 md:top-[1.35rem] md:right-36 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full bg-card/95 backdrop-blur-sm border border-border shadow-lg"
+    >
+      <span className="text-sm text-foreground">{message}</span>
+      <button
+        onClick={handleSwitch}
+        className="px-3 py-1 text-sm font-medium rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+      >
+        {switchLabel}
+      </button>
+      <button
+        onClick={handleDismiss}
+        className="p-1 text-muted-foreground hover:text-foreground transition-colors"
+        aria-label="Dismiss"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </motion.div>
+  )
+}
+
 function App() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -1073,6 +1155,15 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-300">
+      {/* Language suggestion banner */}
+      <AnimatePresence>
+        <LanguageBanner
+          lang={lang}
+          onSwitch={toggleLang}
+          onDismiss={() => {}}
+        />
+      </AnimatePresence>
+
       {/* Controls */}
       <div className="fixed top-6 right-6 z-50 flex gap-3">
         <motion.button
@@ -1309,10 +1400,22 @@ function App() {
                 </div>
                 <h4 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition-colors">{t.experience.santifer.jacobo.title}</h4>
                 <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.jacobo.desc}</p>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {t.experience.santifer.jacobo.items.map((item, i) => (
-                    <li key={i}>• {item}</li>
-                  ))}
+                <ul className="text-sm text-muted-foreground space-y-2">
+                  {t.experience.santifer.jacobo.items.map((item, i) => {
+                    const icons: Record<string, React.ReactNode> = {
+                      network: <Network className="w-4 h-4" />,
+                      calendar: <Calendar className="w-4 h-4" />,
+                      percent: <Percent className="w-4 h-4" />,
+                      package: <Package className="w-4 h-4" />,
+                      userCheck: <UserCheck className="w-4 h-4" />
+                    }
+                    return (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-primary mt-0.5 shrink-0">{icons[item.icon]}</span>
+                        <span>{item.text}</span>
+                      </li>
+                    )
+                  })}
                 </ul>
                 <a href="#contact" className="text-xs font-medium text-primary italic mt-auto pt-4 hover:underline">{t.experience.santifer.jacobo.soldWith}</a>
               </div>
@@ -1329,10 +1432,22 @@ function App() {
                 </div>
                 <h4 className="font-display text-xl font-bold mb-2 group-hover:text-accent transition-colors">{t.experience.santifer.webSeo.title}</h4>
                 <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.webSeo.desc}</p>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {t.experience.santifer.webSeo.items.map((item, i) => (
-                    <li key={i}>• {item}</li>
-                  ))}
+                <ul className="text-sm text-muted-foreground space-y-2">
+                  {t.experience.santifer.webSeo.items.map((item, i) => {
+                    const icons: Record<string, React.ReactNode> = {
+                      fileText: <FileText className="w-4 h-4" />,
+                      image: <Image className="w-4 h-4" />,
+                      trendingUp: <TrendingUp className="w-4 h-4" />,
+                      gitBranch: <GitBranch className="w-4 h-4" />,
+                      bot: <Bot className="w-4 h-4" />
+                    }
+                    return (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-accent mt-0.5 shrink-0">{icons[item.icon]}</span>
+                        <span>{item.text}</span>
+                      </li>
+                    )
+                  })}
                 </ul>
                 <a href="#contact" className="text-xs font-medium text-accent italic mt-auto pt-4 hover:underline">{t.experience.santifer.webSeo.codeAvailable}</a>
               </div>
@@ -1372,7 +1487,7 @@ function App() {
             {/* Reservas card */}
             <AnimatedSection delay={0.4}>
               <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
-                <Zap className="w-5 h-5 text-primary mb-3" />
+                <Timer className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.reservas.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
                 <span className="text-xs font-medium text-accent mt-auto pt-3">{t.experience.santifer.reservas.metric}</span>
@@ -1386,6 +1501,16 @@ function App() {
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.crm.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.crm.desc}</p>
                 <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.crm.metric}</span>
+              </div>
+            </AnimatedSection>
+
+            {/* GenAI Marketing card */}
+            <AnimatedSection delay={0.5}>
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
+                <Sparkles className="w-5 h-5 text-primary mb-3" />
+                <p className="font-medium text-sm mb-1">{t.experience.santifer.genAI.title}</p>
+                <p className="text-xs text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
+                <span className="text-xs font-medium text-accent mt-auto pt-3">{t.experience.santifer.genAI.metric}</span>
               </div>
             </AnimatedSection>
           </div>
