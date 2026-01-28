@@ -107,6 +107,11 @@ function useIsMobile() {
   return isMobile;
 }
 
+// Generate unique session ID
+function generateSessionId() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
 export default function FloatingChat({ lang }: FloatingChatProps) {
   const t = texts[lang];
   const [isOpen, setIsOpen] = useState(false);
@@ -116,6 +121,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPrompts, setShowPrompts] = useState(true);
+  const [sessionId] = useState(() => generateSessionId());
     const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -202,6 +208,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
             (m) => m.role !== 'assistant' || m.content !== t.greeting,
           ),
           lang,
+          sessionId,
         }),
       });
 
@@ -456,32 +463,27 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                 ),
               )}
 
-              {/* Quick Prompts - más grandes en móvil para mejor touch */}
+              {/* Quick Prompts - animación estilo Story, colores originales */}
               {showPrompts && !isLoading && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
+                  transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className={`flex flex-wrap gap-2 pt-2 ${isMobile ? 'gap-2.5' : ''}`}
                 >
                   {t.prompts.map((prompt, i) => (
-                    <motion.button
+                    <button
                       key={i}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.3 + i * 0.1 }}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
                       onClick={() => handlePromptClick(prompt.query)}
-                      className={`flex items-center gap-1.5 rounded-full font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 active:bg-primary/30 transition-all ${
+                      className={`flex items-center gap-1.5 rounded-full font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 active:bg-primary/30 transition-all duration-300 ${
                         isMobile
-                          ? 'px-4 py-2.5 text-sm min-h-[44px]' // Mínimo 44px para touch targets
+                          ? 'px-4 py-2.5 text-sm min-h-[44px]'
                           : 'px-3 py-1.5 text-xs'
                       }`}
                     >
                       <PromptIcon icon={prompt.icon} />
                       {prompt.label}
-                    </motion.button>
+                    </button>
                   ))}
                 </motion.div>
               )}
