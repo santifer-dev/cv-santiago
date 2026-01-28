@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "evals": "npx tsx evals/runner.ts",
-    "evaluate-traces": "npx tsx scripts/evaluate-traces.ts"
+    "evaluate-traces": "npx tsx scripts/evaluate-traces.ts",
+    "chats": "npx tsx scripts/chats.ts",
+    "chats:tui": "npx tsx scripts/chats-tui.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",

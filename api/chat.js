@@ -104,7 +104,7 @@ export default async function handler(req) {
   let generation = null
 
   try {
-    const { messages, lang } = await req.json()
+    const { messages, lang, sessionId } = await req.json()
 
     // Get last user message for classification
     const lastUserMessage = messages.filter(m => m.role === 'user').pop()?.content || ''
@@ -119,6 +119,7 @@ export default async function handler(req) {
     if (langfuse) {
       trace = langfuse.trace({
         name: 'chat',
+        sessionId: sessionId || undefined,
         tags: [lang, ...intentTags],
         metadata: {
           lang,
