@@ -1572,14 +1572,71 @@ function App() {
             </div>
           </AnimatedSection>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            {t.projects.items.map((project, i) => (
-              <AnimatedSection key={project.title} delay={0.1 + i * 0.1}>
-                <div className="h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group">
+          {/* Projects Grid with Dependency Lines */}
+          {(() => {
+            // Tipo para proyecto
+            type Project = {
+              title: string
+              badge: string
+              badgeBuilding: string
+              desc: string
+              tech: readonly string[]
+              link: string
+              isDependency?: boolean
+              dependencyRole?: string
+            }
+
+            // Separar proyectos
+            const allProjects = t.projects.items as readonly Project[]
+            const contentDigest = allProjects.find(p => p.title === 'Content Digest')!
+            const santiferIo = allProjects.find(p => p.title === 'santifer.io')!
+            // Tools que dependen de santifer.io (fila 3)
+            const claudeEye = allProjects.find(p => p.title === 'Claude Eye')!
+            const claudeable = allProjects.find(p => p.title === 'Claudeable')!
+            // Fila 4: Claude Pulse + Watermark Remover
+            const claudePulse = allProjects.find(p => p.title === 'Claude Pulse')!
+            const watermarkRemover = allProjects.find(p => p.title === 'Watermark Remover')!
+
+            // Helper para parsear **bold** a elementos con estilo
+            const parseBold = (text: string): React.ReactNode[] => {
+              return text.split(/\*\*(.*?)\*\*/g).map((part, i) =>
+                i % 2 === 1 ? <strong key={i} className="text-cyan-500 font-semibold">{part}</strong> : part
+              )
+            }
+
+            // Componente de tarjeta de proyecto
+            const ProjectCard = ({ project, variant = 'default', cardRef }: {
+              project: Project,
+              variant?: 'default' | 'highlight' | 'tool' | 'tool-static',
+              cardRef?: React.RefObject<HTMLDivElement | null> | ((el: HTMLDivElement | null) => void)
+            }) => {
+              const isHighlight = variant === 'highlight'
+              const isTool = variant === 'tool' || variant === 'tool-static'
+              const hasHover = variant !== 'tool-static'
+
+              return (
+                <div
+                  ref={cardRef}
+                  className={`h-full p-6 rounded-2xl transition-all duration-300 flex flex-col ${hasHover ? 'group' : ''} ${
+                    isHighlight
+                      ? 'bg-gradient-to-br from-accent/5 to-transparent border-2 border-accent/50 hover:border-accent/70'
+                      : isTool
+                      ? `bg-card border border-cyan-500/30 ${hasHover ? 'hover:border-cyan-500/50' : ''}`
+                      : 'bg-card border border-border hover:border-primary/30'
+                  }`}
+                >
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-display text-lg font-bold group-hover:text-primary transition-colors">{project.title}</h3>
+                    <h3 className={`font-display text-lg font-bold transition-colors ${
+                      isTool ? 'group-hover:text-cyan-500' : 'group-hover:text-primary'
+                    }`}>{project.title}</h3>
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">{project.badge}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                        isTool
+                          ? 'bg-cyan-500/10 text-cyan-500'
+                          : isHighlight
+                          ? 'bg-accent/20 text-accent'
+                          : 'bg-primary/10 text-primary'
+                      }`}>{project.badge}</span>
                       {project.badgeBuilding && (
                         <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-500 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-dot"></span>
@@ -1588,10 +1645,16 @@ function App() {
                       )}
                     </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-4">{project.desc}</p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {isHighlight ? parseBold(project.desc) : project.desc}
+                  </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((tech) => (
-                      <span key={tech} className="px-2 py-1 rounded-md text-xs bg-muted text-muted-foreground">{tech}</span>
+                      <span key={tech} className={`px-2 py-1 rounded-md text-xs ${
+                        isTool
+                          ? 'bg-cyan-500/10 text-cyan-400'
+                          : 'bg-muted text-muted-foreground'
+                      }`}>{tech}</span>
                     ))}
                   </div>
                   {project.link && (
@@ -1599,7 +1662,9 @@ function App() {
                       href={`https://${project.link}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-xs text-primary hover:underline"
+                      className={`inline-flex items-center gap-2 text-xs mt-auto ${
+                        isTool ? 'text-cyan-500 hover:text-cyan-400' : 'text-primary'
+                      } hover:underline`}
                     >
                       {project.link.includes('github.com') ? (
                         <>
@@ -1615,9 +1680,44 @@ function App() {
                     </a>
                   )}
                 </div>
-              </AnimatedSection>
-            ))}
-          </div>
+              )
+            }
+
+
+            return (
+              <div className="mb-12">
+                {/* Fila 1: Content Digest + santifer.io */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <AnimatedSection delay={0.1}>
+                    <ProjectCard project={contentDigest} />
+                  </AnimatedSection>
+                  <AnimatedSection delay={0.15}>
+                    <ProjectCard project={santiferIo} variant="highlight" />
+                  </AnimatedSection>
+                </div>
+
+                {/* Fila 2: Claude Eye + Claudeable */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <AnimatedSection delay={0.2}>
+                    <ProjectCard project={claudeEye} variant="tool-static" />
+                  </AnimatedSection>
+                  <AnimatedSection delay={0.25}>
+                    <ProjectCard project={claudeable} variant="tool-static" />
+                  </AnimatedSection>
+                </div>
+
+                {/* Fila 3: Claude Pulse + Watermark Remover */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <AnimatedSection delay={0.3}>
+                    <ProjectCard project={claudePulse} variant="tool-static" />
+                  </AnimatedSection>
+                  <AnimatedSection delay={0.35}>
+                    <ProjectCard project={watermarkRemover} />
+                  </AnimatedSection>
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Claude Code Power User */}
           <AnimatedSection delay={0.3}>

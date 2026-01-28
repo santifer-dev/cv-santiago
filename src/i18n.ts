@@ -166,7 +166,7 @@ export const translations = {
           title: 'santifer.io',
           badge: 'Este Portfolio',
           badgeBuilding: '',
-          desc: 'CV interactivo con chat IA. Construido con Claudeable, monitorizado con Claude Pulse, animaciones debuggeadas con Claude Eye. LLMOps: Langfuse, 31 evals, prompt caching.',
+          desc: 'CV interactivo con chat IA. Construido con **Claudeable**, monitorizado con **Claude Pulse**, animaciones debuggeadas con **Claude Eye**. LLMOps: Langfuse, 31 evals, prompt caching.',
           tech: ['React 19', 'TypeScript', 'Claude API', 'Langfuse', 'Vercel Edge'],
           link: 'github.com/santifer-dev/cv-santiago',
         },
@@ -177,6 +177,8 @@ export const translations = {
           desc: 'Plugin SwiftBar para monitorización en tiempo real del uso de Claude Code en macOS. Métricas de consumo, predicción de rate limits, y consejos contextuales.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
           link: 'github.com/santifer-dev/claude-pulse',
+          isDependency: true,
+          dependencyRole: 'monitoring',
         },
         {
           title: 'Claude Eye',
@@ -185,6 +187,8 @@ export const translations = {
           desc: 'CLI que analiza videos de animaciones web frame por frame con Claude Vision. Detecta desyncs en transiciones CSS y genera reportes con timestamps exactos.',
           tech: ['Node.js', 'TypeScript', 'Claude Vision', 'FFmpeg'],
           link: 'github.com/santifer-dev/claude-eye',
+          isDependency: true,
+          dependencyRole: 'animations',
         },
         {
           title: 'Claudeable',
@@ -193,6 +197,8 @@ export const translations = {
           desc: 'Metaproyecto de Claude Code para desarrollo web profesional. Skills personalizados, templates y MCPs preconfigurados para crear webs al nivel de Lovable.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
           link: 'github.com/santifer-dev/claudeable',
+          isDependency: true,
+          dependencyRole: 'framework',
         },
         {
           title: 'Watermark Remover',
@@ -636,7 +642,7 @@ export const translations = {
           title: 'santifer.io',
           badge: 'This Portfolio',
           badgeBuilding: '',
-          desc: 'Interactive CV with AI chat. Built with Claudeable, monitored with Claude Pulse, animations debugged with Claude Eye. LLMOps: Langfuse, 31 evals, prompt caching.',
+          desc: 'Interactive CV with AI chat. Built with **Claudeable**, monitored with **Claude Pulse**, animations debugged with **Claude Eye**. LLMOps: Langfuse, 31 evals, prompt caching.',
           tech: ['React 19', 'TypeScript', 'Claude API', 'Langfuse', 'Vercel Edge'],
           link: 'github.com/santifer-dev/cv-santiago',
         },
@@ -647,6 +653,8 @@ export const translations = {
           desc: 'SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics, rate limit predictions, and context-aware tips.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
           link: 'github.com/santifer-dev/claude-pulse',
+          isDependency: true,
+          dependencyRole: 'monitoring',
         },
         {
           title: 'Claude Eye',
@@ -655,6 +663,8 @@ export const translations = {
           desc: 'CLI that analyzes web animation videos frame-by-frame using Claude Vision. Detects CSS transition desyncs and generates reports with exact timestamps.',
           tech: ['Node.js', 'TypeScript', 'Claude Vision', 'FFmpeg'],
           link: 'github.com/santifer-dev/claude-eye',
+          isDependency: true,
+          dependencyRole: 'animations',
         },
         {
           title: 'Claudeable',
@@ -663,6 +673,8 @@ export const translations = {
           desc: 'Claude Code meta-project for professional web development. Custom skills, templates and pre-configured MCPs to build Lovable-quality websites.',
           tech: ['Claude Code', 'React', 'Tailwind', 'shadcn/ui', 'MCP'],
           link: 'github.com/santifer-dev/claudeable',
+          isDependency: true,
+          dependencyRole: 'framework',
         },
         {
           title: 'Watermark Remover',

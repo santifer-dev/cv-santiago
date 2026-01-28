@@ -255,3 +255,12 @@ section[id], footer[id] {
   animation: shimmer-glow 2.5s ease-in-out forwards;
   will-change: box-shadow;
 }
+
+/* Dependency graph line animation */
+@keyframes dash-flow {
+  to { stroke-dashoffset: -8; }
+}
+
+.dependency-line {
+  animation: dash-flow 1s linear infinite;
+}
