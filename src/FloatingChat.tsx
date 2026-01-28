@@ -284,7 +284,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
         animate={{ opacity: 1, scale: 1 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         onClick={() => setIsOpen(!isOpen)}
         className="fixed z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
         style={{
@@ -348,7 +348,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
             initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
             animate={isMobile ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
             exit={isMobile ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
-            transition={isMobile ? { duration: 0.15 } : { type: 'spring', stiffness: 300, damping: 30 }}
+            transition={isMobile ? { duration: 0.2, ease: 'easeOut' } : { type: 'spring', stiffness: 300, damping: 30 }}
             className={`fixed z-50 flex flex-col bg-card border-border shadow-2xl ${
               isMobile
                 ? 'inset-0 h-dvh rounded-none border-0 overscroll-contain'

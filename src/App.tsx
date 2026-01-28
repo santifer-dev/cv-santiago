@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt } from 'lucide-react'
+import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -43,22 +43,22 @@ function AnimatedSection({ children, className = '', delay = 0 }: { children: Re
 }
 
 // Parsea texto con marcadores de highlight:
-// *texto* = gradiente inicial → blanco después (fadeOut)
+// *texto* = Tipo B: gradiente durante typewriter (frase activa), luego normal
+// +texto+ = Tipo C: normal durante typewriter, gradiente en encendido final
 // **texto** = gradiente siempre (permanent) + slow typing
-// ~texto~ = blanco inicial → gradiente después (fadeIn)
 type ParsedHighlights = {
   clean: string
-  ranges: [number, number][]         // backward compat: fadeOut + permanent
-  fadeOutRanges: [number, number][]  // *texto* - gradiente → blanco
-  permanentRanges: [number, number][] // **texto** - siempre gradiente
-  fadeInRanges: [number, number][]   // ~texto~ - blanco → gradiente
-  slowRanges: [number, number][]     // para typing lento
+  ranges: [number, number][]          // backward compat
+  typewriterRanges: [number, number][] // *texto* - Tipo B: gradiente solo durante typewriter
+  finalRanges: [number, number][]      // +texto+ - Tipo C: gradiente solo en encendido final
+  permanentRanges: [number, number][]  // **texto** - siempre gradiente
+  slowRanges: [number, number][]       // para typing lento
 }
 
 function parseHighlights(text: string): ParsedHighlights {
-  const fadeOutRanges: [number, number][] = []
-  const permanentRanges: [number, number][] = []
-  const fadeInRanges: [number, number][] = []
+  const typewriterRanges: [number, number][] = []  // Tipo B: *texto*
+  const finalRanges: [number, number][] = []       // Tipo C: +texto+
+  const permanentRanges: [number, number][] = []   // **texto**
   const slowRanges: [number, number][] = []
   let clean = ''
   let i = 0
@@ -76,18 +76,18 @@ function parseHighlights(text: string): ParsedHighlights {
       slowRanges.push([start, clean.length])
       i += 2
     }
-    // Check for ~ (delayed highlight / fadeIn)
-    else if (text[i] === '~') {
+    // Check for + (Tipo C: gradiente solo en encendido final)
+    else if (text[i] === '+') {
       const start = clean.length
       i++
-      while (i < text.length && text[i] !== '~') {
+      while (i < text.length && text[i] !== '+') {
         clean += text[i]
         i++
       }
-      fadeInRanges.push([start, clean.length])
+      finalRanges.push([start, clean.length])
       i++
     }
-    // Check for single * (fadeOut highlight)
+    // Check for single * (Tipo B: gradiente solo durante typewriter)
     else if (text[i] === '*') {
       const start = clean.length
       i++
@@ -95,7 +95,7 @@ function parseHighlights(text: string): ParsedHighlights {
         clean += text[i]
         i++
       }
-      fadeOutRanges.push([start, clean.length])
+      typewriterRanges.push([start, clean.length])
       i++
     } else {
       clean += text[i]
@@ -103,91 +103,71 @@ function parseHighlights(text: string): ParsedHighlights {
     }
   }
 
-  // For backward compatibility, combine all initial highlights
-  const ranges: [number, number][] = [...fadeOutRanges, ...permanentRanges]
-  return { clean, ranges, fadeOutRanges, permanentRanges, fadeInRanges, slowRanges }
+  // For backward compatibility
+  const ranges: [number, number][] = [...permanentRanges]
+  return { clean, ranges, typewriterRanges, finalRanges, permanentRanges, slowRanges }
 }
 
 // Renderiza texto con rangos destacados y soporte para transición
+// Tipos de highlight:
+// - typewriter (Tipo B): gradiente durante typewriter, luego normal
+// - final (Tipo C): normal durante typewriter, gradiente en encendido final
+// - permanent: siempre gradiente
 function renderHighlightedText(
   text: string,
-  ranges: [number, number][],
+  _ranges: [number, number][],  // kept for API compatibility
   options?: {
-    swapped?: boolean
-    dimmed?: boolean
-    revealed?: boolean
-    fadeOutRanges?: [number, number][]
+    dimmed?: boolean           // texto atenuado (después del typewriter)
+    finalReveal?: boolean      // Tipo C se enciende con gradiente
+    revealed?: boolean         // resto del texto se enciende
+    typewriterRanges?: [number, number][]  // Tipo B
+    finalRanges?: [number, number][]       // Tipo C
     permanentRanges?: [number, number][]
-    fadeInRanges?: [number, number][]
+    highlightsActive?: boolean // gradiente activo durante typewriter
   }
 ) {
-  const { swapped = false, dimmed = false, revealed = false, fadeOutRanges = [], permanentRanges = [], fadeInRanges = [] } = options || {}
+  const {
+    dimmed = false,
+    finalReveal = false,
+    revealed = false,
+    typewriterRanges = [],
+    finalRanges = [],
+    permanentRanges = [],
+    highlightsActive = false
+  } = options || {}
 
   // Build a map of character positions to their highlight type
-  type HighlightType = 'fadeOut' | 'permanent' | 'fadeIn' | null
+  type HighlightType = 'typewriter' | 'final' | 'permanent' | null
   const charTypes: HighlightType[] = new Array(text.length).fill(null)
 
-  fadeOutRanges.forEach(([start, end]) => {
-    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'fadeOut'
+  typewriterRanges.forEach(([start, end]) => {
+    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'typewriter'
+  })
+  finalRanges.forEach(([start, end]) => {
+    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'final'
   })
   permanentRanges.forEach(([start, end]) => {
     for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'permanent'
   })
-  fadeInRanges.forEach(([start, end]) => {
-    for (let i = start; i < end && i < text.length; i++) charTypes[i] = 'fadeIn'
-  })
 
-  // Determine opacity state: dimmed but not revealed = low, otherwise full
-  const isLowOpacity = dimmed && !revealed
+  // Opacity states - SEPARADOS para cada tipo
+  // Texto normal y Tipo B: atenuados hasta que revealed=true
+  const isTextLowOpacity = dimmed && !revealed
+  // Tipo C: atenuados hasta que finalReveal=true (se encienden ANTES que el resto)
+  const isFinalLowOpacity = dimmed && !finalReveal
 
-  // If no special ranges, fall back to simple ranges-based rendering
-  if (fadeOutRanges.length === 0 && permanentRanges.length === 0 && fadeInRanges.length === 0) {
-    if (ranges.length === 0) {
-      // Plain text - muted color, dims with opacity
-      return (
-        <span className={`text-muted-foreground transition-opacity duration-[2000ms] ${
-          isLowOpacity ? 'opacity-15' : 'opacity-100'
-        }`}>
-          {text}
-        </span>
-      )
-    }
-    const parts: React.ReactNode[] = []
-    let lastEnd = 0
-    ranges.forEach(([start, end], i) => {
-      if (start > lastEnd) {
-        parts.push(
-          <span key={`plain-${lastEnd}`} className={`text-muted-foreground transition-opacity duration-[2000ms] ${
-            isLowOpacity ? 'opacity-15' : 'opacity-100'
-          }`}>
-            {text.slice(lastEnd, start)}
-          </span>
-        )
-      }
-      if (start < text.length) {
-        const highlightText = text.slice(start, Math.min(end, text.length))
-        if (highlightText) {
-          parts.push(
-            <span key={i} className={`text-gradient-theme font-medium transition-opacity duration-[2000ms] ${
-              isLowOpacity ? 'opacity-15' : 'opacity-100'
-            }`}>
-              {highlightText}
-            </span>
-          )
-        }
-      }
-      lastEnd = end
-    })
-    if (lastEnd < text.length) {
-      parts.push(
-        <span key={`plain-${lastEnd}`} className={`text-muted-foreground transition-opacity duration-[2000ms] ${
-          isLowOpacity ? 'opacity-15' : 'opacity-100'
-        }`}>
-          {text.slice(lastEnd)}
-        </span>
-      )
-    }
-    return parts
+  // UN SOLO TIMING para TODO - sincronización perfecta
+  const timing = 'duration-[2500ms] ease-in-out'
+
+  // If no special ranges, render as plain text
+  if (typewriterRanges.length === 0 && finalRanges.length === 0 && permanentRanges.length === 0) {
+    // Plain text - dims then reveals with the rest
+    const opacity = isTextLowOpacity ? 'opacity-15' : 'opacity-100'
+    return (
+      <span className={`text-muted-foreground transition-opacity ${timing} ${opacity}`}>
+        {text}
+      </span>
+    )
   }
 
   // Group consecutive characters by type
@@ -201,41 +181,79 @@ function renderHighlightedText(
       const segment = text.slice(currentStart, i)
       if (segment) {
         if (currentType === null) {
-          // Plain text - muted color, dims then reveals
+          // Plain text - dims then reveals with the rest (usa isTextLowOpacity)
+          const opacity = isTextLowOpacity ? 'opacity-15' : 'opacity-100'
           parts.push(
             <span
               key={currentStart}
-              className={`text-muted-foreground transition-opacity duration-[2000ms] ${isLowOpacity ? 'opacity-15' : 'opacity-100'}`}
+              className={`text-muted-foreground transition-opacity ${timing} ${opacity}`}
             >
               {segment}
             </span>
           )
-        } else if (currentType === 'fadeIn') {
-          // fadeIn: starts muted, dims, then becomes gradient when swapped
+        } else if (currentType === 'typewriter') {
+          // Tipo B: gradiente SOLO durante typewriter (highlightsActive), luego texto normal
+          // Después del typewriter, se comporta IGUAL que texto normal (usa isTextLowOpacity)
+          const showGradient = highlightsActive
           parts.push(
-            <span
-              key={currentStart}
-              className={`font-medium transition-all duration-[1500ms] ${
-                swapped ? 'text-gradient-theme opacity-100' : isLowOpacity ? 'text-muted-foreground opacity-15' : 'text-muted-foreground opacity-100'
-              }`}
-            >
-              {segment}
+            <span key={currentStart} className="inline-grid">
+              <span
+                className={`col-start-1 row-start-1 text-gradient-theme font-medium transition-opacity ${timing} ${
+                  showGradient ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {segment}
+              </span>
+              <span
+                className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${
+                  showGradient ? 'opacity-0' : isTextLowOpacity ? 'opacity-15' : 'opacity-100'
+                }`}
+              >
+                {segment}
+              </span>
+            </span>
+          )
+        } else if (currentType === 'final') {
+          // Tipo C: normal durante typewriter, gradiente en encendido final (finalReveal)
+          // Usa isFinalLowOpacity - se enciende ANTES que el resto
+          const showGradient = finalReveal
+          parts.push(
+            <span key={currentStart} className="inline-grid">
+              <span
+                className={`col-start-1 row-start-1 text-gradient-theme font-medium transition-opacity ${timing} ${
+                  showGradient ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {segment}
+              </span>
+              <span
+                className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${
+                  showGradient ? 'opacity-0' : isFinalLowOpacity ? 'opacity-15' : 'opacity-100'
+                }`}
+              >
+                {segment}
+              </span>
             </span>
           )
         } else {
-          // fadeOut: starts with gradient, dims with grayscale, then becomes normal muted text (no bold)
+          // permanent: siempre gradiente (mientras no esté revealed)
+          const showGradient = !revealed
           parts.push(
-            <span
-              key={currentStart}
-              className={`transition-opacity duration-[2000ms] ${
-                revealed
-                  ? 'text-muted-foreground opacity-100 font-normal'
-                  : dimmed
-                    ? 'text-gradient-theme opacity-15 grayscale font-medium'
-                    : 'text-gradient-theme opacity-100 grayscale-0 font-medium'
-              }`}
-            >
-              {segment}
+            <span key={currentStart} className="inline-grid">
+              <span
+                className={`col-start-1 row-start-1 text-gradient-theme font-medium transition-opacity ${timing} ${
+                  showGradient ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {segment}
+              </span>
+              <span
+                className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${
+                  showGradient ? 'opacity-0' : 'opacity-100'
+                }`}
+              >
+                {segment}
+              </span>
             </span>
           )
         }
@@ -459,8 +477,8 @@ function ReflectiveTypewriter({
   reflections,
   hookParagraphs,
   className = '',
-  swapped = false,
   dimmed = false,
+  finalReveal = false,
   revealed = false,
   onComplete
 }: {
@@ -468,8 +486,8 @@ function ReflectiveTypewriter({
   reflections: readonly string[]
   hookParagraphs: readonly (readonly string[])[]
   className?: string
-  swapped?: boolean
   dimmed?: boolean
+  finalReveal?: boolean
   revealed?: boolean
   onComplete?: () => void
 }) {
@@ -740,24 +758,26 @@ function ReflectiveTypewriter({
         {phase === 'context' ? (
           <>
             {renderHighlightedText(displayText, [], {
-              swapped,
               dimmed,
+              finalReveal,
               revealed,
-              fadeOutRanges: parsedContext.fadeOutRanges,
+              typewriterRanges: parsedContext.typewriterRanges,
+              finalRanges: parsedContext.finalRanges,
               permanentRanges: parsedContext.permanentRanges,
-              fadeInRanges: parsedContext.fadeInRanges,
+              highlightsActive: true, // gradiente activo durante typewriter del context
             })}
             {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
           </>
         ) : contextComplete ? (
           <>
             {renderHighlightedText(parsedContext.clean, [], {
-              swapped,
               dimmed,
+              finalReveal,
               revealed,
-              fadeOutRanges: parsedContext.fadeOutRanges,
+              typewriterRanges: parsedContext.typewriterRanges,
+              finalRanges: parsedContext.finalRanges,
               permanentRanges: parsedContext.permanentRanges,
-              fadeInRanges: parsedContext.fadeInRanges,
+              highlightsActive: false, // ya no estamos en el context, gradiente apagado
             })}
             {phase === 'pause-after-context' && (
               <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>
@@ -782,35 +802,36 @@ function ReflectiveTypewriter({
             const isCurrentLine = pIdx === currentHookParagraph && lIdx === currentHookLine
             const isCompleted = completedHookLines[pIdx]?.[lIdx] !== undefined
 
-            if (isCompleted) {
-              return (
-                <span key={lIdx} className={lIdx > 0 ? "block mt-0.5" : ""}>
-                  {renderHighlightedText(completedHookLines[pIdx][lIdx], [], {
-                    swapped,
-                    dimmed,
-                    revealed,
-                    fadeOutRanges: parsed.fadeOutRanges,
-                    permanentRanges: parsed.permanentRanges,
-                    fadeInRanges: parsed.fadeInRanges,
-                  })}
-                </span>
-              )
-            } else if (isCurrentLine && phase === 'hook') {
-              return (
-                <span key={lIdx} className={lIdx > 0 ? "block mt-0.5" : ""}>
-                  {renderHighlightedText(displayText, [], {
-                    swapped,
-                    dimmed,
-                    revealed,
-                    fadeOutRanges: parsed.fadeOutRanges,
-                    permanentRanges: parsed.permanentRanges,
-                    fadeInRanges: parsed.fadeInRanges,
-                  })}
-                  {showCursor && <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>}
-                </span>
-              )
-            }
-            return null
+            // Unificar renderizado para permitir transiciones CSS suaves
+            // El texto a mostrar: completado > actual (displayText) > vacío
+            const textToShow = isCompleted
+              ? completedHookLines[pIdx][lIdx]
+              : (isCurrentLine && phase === 'hook')
+                ? displayText
+                : ''
+
+            // Tipo B highlights activos SOLO mientras se escribe esta línea
+            const highlightsActive = isCurrentLine && phase === 'hook'
+
+            // Solo renderizar si hay texto o es la línea actual
+            if (!textToShow && !isCurrentLine) return null
+
+            return (
+              <span key={lIdx} className={lIdx > 0 ? "block mt-0.5" : ""}>
+                {renderHighlightedText(textToShow, [], {
+                  dimmed,
+                  finalReveal,
+                  revealed,
+                  typewriterRanges: parsed.typewriterRanges,
+                  finalRanges: parsed.finalRanges,
+                  permanentRanges: parsed.permanentRanges,
+                  highlightsActive,
+                })}
+                {isCurrentLine && phase === 'hook' && showCursor && (
+                  <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>
+                )}
+              </span>
+            )
           })}
         </p>
       ))}
@@ -822,8 +843,8 @@ function ReflectiveTypewriter({
 function StorySection({ t }: { t: (typeof translations)[Lang] }) {
   const [typewriterComplete, setTypewriterComplete] = useState(false)
   const [textDimmed, setTextDimmed] = useState(false)
-  const [highlightSwapped, setHighlightSwapped] = useState(false)
-  const [textRevealed, setTextRevealed] = useState(false)
+  const [finalReveal, setFinalReveal] = useState(false)  // Tipo C se enciende con gradiente
+  const [textRevealed, setTextRevealed] = useState(false) // Resto del texto se enciende
 
   // Reset states when language changes
   useEffect(() => {
@@ -832,17 +853,17 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
     if (seen) {
       setTypewriterComplete(true)
       setTextDimmed(true)
-      setHighlightSwapped(true)
+      setFinalReveal(true)
       setTextRevealed(true)
     } else {
       setTypewriterComplete(false)
       setTextDimmed(false)
-      setHighlightSwapped(false)
+      setFinalReveal(false)
       setTextRevealed(false)
     }
   }, [t])
 
-  // Transition sequence: dim → highlight → reveal
+  // Transition sequence: dim → finalReveal (Tipo C gradient) → revealed (rest)
   const sequenceStartedRef = useRef(false)
 
   useEffect(() => {
@@ -854,24 +875,30 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
     if (!typewriterComplete || sequenceStartedRef.current) return
     sequenceStartedRef.current = true
 
-    // Step 1: Dim everything (800ms after typewriter)
+    // Secuencia de animación post-typewriter:
+    // 1. Esperar a que Tipo B (Construir) termine de desvanecerse (~2.5s transición)
+    // 2. Dimmed: todo se atenúa
+    // 3. FinalReveal: Tipo C se enciende con gradiente (16 años + sistemas)
+    // 4. Revealed: resto del texto se enciende, Tipo C MANTIENE gradiente
+
+    // Step 1: Dim everything (2500ms - espera a que Tipo B haya perdido gradiente)
     const dimTimer = setTimeout(() => {
       setTextDimmed(true)
-    }, 800)
-
-    // Step 2: Activate gradient on final words (2500ms - gives 1700ms pause for reader to process)
-    const swapTimer = setTimeout(() => {
-      setHighlightSwapped(true)
     }, 2500)
 
-    // Step 3: Reveal rest of text (6000ms - gives 3500ms for highlights to shine alone)
+    // Step 2: Tipo C se enciende con gradiente (4500ms - contenido adicional ya visible)
+    const finalRevealTimer = setTimeout(() => {
+      setFinalReveal(true)
+    }, 4500)
+
+    // Step 3: Resto del texto se enciende (8000ms - Tipo C tuvo tiempo de brillar)
     const revealTimer = setTimeout(() => {
       setTextRevealed(true)
-    }, 6000)
+    }, 8000)
 
     return () => {
       clearTimeout(dimTimer)
-      clearTimeout(swapTimer)
+      clearTimeout(finalRevealTimer)
       clearTimeout(revealTimer)
     }
   }, [typewriterComplete])
@@ -886,8 +913,8 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
           context={t.story.context}
           reflections={t.story.reflections}
           hookParagraphs={t.story.hookParagraphs}
-          swapped={highlightSwapped}
           dimmed={textDimmed}
+          finalReveal={finalReveal}
           revealed={textRevealed}
           className="font-display text-xl md:text-2xl leading-relaxed mb-8 text-center max-w-3xl mx-auto"
           onComplete={() => setTypewriterComplete(true)}
@@ -921,7 +948,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
           transition={{ duration: 0.6, delay: typewriterComplete ? 0.5 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="flex flex-wrap justify-center gap-3 mt-10 mb-12"
         >
-          {t.story.nav.map((item, i) => {
+          {t.story.nav.map((item) => {
             const icons: Record<string, React.ReactNode> = {
               briefcase: <Briefcase className="w-4 h-4" />,
               folder: <FolderGit2 className="w-4 h-4" />,
@@ -936,13 +963,10 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
               }
             }
             return (
-              <motion.a
+              <a
                 key={item.href}
                 href={item.href}
                 onClick={handleClick}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={typewriterComplete ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-                transition={{ delay: typewriterComplete ? 0.6 + i * 0.1 : 0, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className={isHighlight
                   ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:opacity-90 transition-all duration-300 text-sm font-medium shadow-lg shadow-primary/25"
                   : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 text-sm font-medium"
@@ -950,7 +974,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
               >
                 {icons[item.icon]}
                 {item.label}
-              </motion.a>
+              </a>
             )
           })}
         </motion.div>
@@ -1095,8 +1119,8 @@ function App() {
       {/* Hero Section */}
       <header className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-2xl md:blur-3xl -translate-y-1/2 translate-x-1/2 hidden sm:block" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-2xl md:blur-3xl translate-y-1/2 -translate-x-1/2 hidden sm:block" />
 
         <div className="relative max-w-5xl mx-auto px-6 py-20 md:py-32">
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
@@ -1111,7 +1135,7 @@ function App() {
                 {/* Glow effect */}
                 <div className="absolute inset-0 rounded-full bg-gradient-theme-30 blur-xl" />
                 {/* Glassmorphism frame */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-sm border border-white/20 shadow-2xl" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-white/5 md:backdrop-blur-sm border border-white/20 shadow-2xl" />
                 {/* Inner border */}
                 <div className="absolute inset-2 rounded-full bg-gradient-theme-50 p-[2px]">
                   <div className="w-full h-full rounded-full overflow-hidden">
@@ -1247,7 +1271,8 @@ function App() {
                         layout: <Layout className="w-4 h-4" />,
                         package: <Package className="w-4 h-4" />,
                         messageSquare: <MessageSquare className="w-4 h-4" />,
-                        receipt: <Receipt className="w-4 h-4" />
+                        receipt: <Receipt className="w-4 h-4" />,
+                        calendarCheck: <CalendarCheck className="w-4 h-4" />
                       }
                       return (
                         <li key={i} className="flex items-start gap-3">
@@ -1383,6 +1408,28 @@ function App() {
               <p className="text-accent font-medium mb-1">{t.experience.lico.role}</p>
               <p className="text-sm text-muted-foreground mb-4">{t.experience.lico.period}</p>
               <p className="text-muted-foreground">{t.experience.lico.desc}</p>
+
+              {/* Testimonial */}
+              <blockquote className="mt-6 p-4 rounded-xl bg-accent/5 border border-accent/10">
+                <p className="text-sm text-muted-foreground italic mb-4">
+                  "{t.experience.lico.testimonial.quote}"
+                </p>
+                <footer className="flex items-center gap-3">
+                  <img src="/juan-sabate.jpeg" alt={t.experience.lico.testimonial.author} className="w-10 h-10 rounded-full object-cover" />
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-foreground block">{t.experience.lico.testimonial.author}</span>
+                    <span className="text-xs text-muted-foreground">{t.experience.lico.testimonial.role}</span>
+                  </div>
+                  <a
+                    href="https://www.linkedin.com/in/juan-sabat%C3%A9-garrach%C3%B3n-b4102b55/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent hover:underline"
+                  >
+                    <Linkedin className="w-3 h-3" />
+                  </a>
+                </footer>
+              </blockquote>
             </div>
           </AnimatedSection>
 
@@ -1411,6 +1458,28 @@ function App() {
                 </div>
               </div>
             </div>
+
+            {/* Testimonial */}
+            <blockquote className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10">
+              <p className="text-sm text-muted-foreground italic mb-4">
+                "{t.experience.everis.testimonial.quote}"
+              </p>
+              <footer className="flex items-center gap-3">
+                <img src="/manuel-lopez.jpeg" alt={t.experience.everis.testimonial.author} className="w-10 h-10 rounded-full object-cover" />
+                <div className="flex-1">
+                  <span className="text-sm font-medium text-foreground block">{t.experience.everis.testimonial.author}</span>
+                  <span className="text-xs text-muted-foreground">{t.experience.everis.testimonial.role}</span>
+                </div>
+                <a
+                  href="https://www.linkedin.com/in/manuellopezalcazar/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-primary hover:underline flex items-center gap-1"
+                >
+                  <Linkedin className="w-3 h-3" />
+                </a>
+              </footer>
+            </blockquote>
           </AnimatedSection>
         </div>
       </section>
@@ -1437,6 +1506,69 @@ function App() {
                 </svg>
                 {t.projects.githubLink.split('/').pop()}
               </a>
+            </div>
+          </AnimatedSection>
+
+          {/* SA Playbook - Premium Card */}
+          <AnimatedSection delay={0.05} className="mb-8">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-[#B8860B]/15 dark:from-[#FCB400]/15 via-[#B8860B]/5 dark:via-[#FCB400]/5 to-transparent border border-[#B8860B]/30 dark:border-[#FCB400]/30 hover:border-[#B8860B]/50 dark:hover:border-[#FCB400]/50 transition-all duration-300 group relative overflow-hidden">
+              {/* Subtle glow effect */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#FCB400]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 relative">
+                <div className="flex-1 flex flex-col">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center shrink-0">
+                      <Terminal className="w-6 h-6 text-[#B8860B] dark:text-[#FCB400]" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Lock className="w-3 h-3 text-[#B8860B] dark:text-[#FCB400]" />
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">{t.projects.saPlaybook.badge}</span>
+                    </div>
+                  </div>
+                  <h4 className="font-display text-2xl font-bold mb-1">{t.projects.saPlaybook.title}</h4>
+                  <p className="text-sm text-[#B8860B] dark:text-[#FCB400] font-medium mb-4">{t.projects.saPlaybook.tagline}</p>
+                  <p className="text-muted-foreground mb-6">{t.projects.saPlaybook.desc}</p>
+
+                  {/* Tech badges */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {['Claude Code', 'Airtable', 'Shopify', 'Make.com', 'Bash', 'MCP'].map((tech) => (
+                      <span key={tech} className="px-2 py-1 rounded-md text-xs bg-[#B8860B]/10 dark:bg-[#FCB400]/10 text-[#B8860B] dark:text-[#FCB400] border border-[#B8860B]/20 dark:border-[#FCB400]/20">{tech}</span>
+                    ))}
+                  </div>
+
+                  <ul className="text-sm text-muted-foreground space-y-2">
+                    {t.projects.saPlaybook.features.map((item, i) => {
+                      const icons: Record<string, React.ReactNode> = {
+                        zap: <Zap className="w-4 h-4" />,
+                        shield: <Shield className="w-4 h-4" />,
+                        fileText: <FileText className="w-4 h-4" />,
+                        git: <GitBranch className="w-4 h-4" />
+                      }
+                      return (
+                        <li key={i} className="flex items-start gap-3">
+                          <span className="text-[#B8860B] dark:text-[#FCB400] mt-0.5">{icons[item.icon]}</span>
+                          <span>{item.text}</span>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                  <a href="#contact" className="inline-flex items-center gap-2 text-xs font-medium italic mt-auto pt-6 text-[#B8860B] dark:text-[#FCB400] hover:opacity-80 transition-opacity">
+                    <Lock className="w-3 h-3" />
+                    {t.projects.saPlaybook.footer}
+                  </a>
+                </div>
+
+                {/* Right side - visual element */}
+                <div className="hidden lg:flex flex-col items-center justify-center p-6 rounded-xl bg-[#B8860B]/5 dark:bg-[#FCB400]/5 border border-[#B8860B]/10 dark:border-[#FCB400]/10 min-w-[180px]">
+                  <div className="text-4xl mb-3 opacity-80">
+                    <svg viewBox="0 0 24 24" className="w-16 h-16 text-[#B8860B] dark:text-[#FCB400]" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path d="M4 17l6-6-6-6M12 19h8" />
+                    </svg>
+                  </div>
+                  <span className="text-xs text-[#B8860B] dark:text-[#FCB400] font-medium text-center">Systems Thinking<br/>for SAs</span>
+                </div>
+              </div>
             </div>
           </AnimatedSection>
 
@@ -1591,6 +1723,29 @@ function App() {
                           </p>
                         </div>
                       </div>
+                      {/* Testimonial if exists */}
+                      {'testimonial' in item && item.testimonial && (
+                        <blockquote className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                          <p className="text-xs text-muted-foreground italic mb-3">
+                            "{item.testimonial.quote}"
+                          </p>
+                          <footer className="flex items-center gap-2">
+                            <img src={item.testimonial.photo} alt={item.testimonial.author} className="w-8 h-8 rounded-full object-cover" />
+                            <div className="flex-1">
+                              <span className="text-xs font-medium text-foreground block">{item.testimonial.author}</span>
+                              <span className="text-[10px] text-muted-foreground">{item.testimonial.role}</span>
+                            </div>
+                            <a
+                              href={item.testimonial.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline"
+                            >
+                              <Linkedin className="w-3 h-3" />
+                            </a>
+                          </footer>
+                        </blockquote>
+                      )}
                     </div>
                   </AnimatedSection>
                 ))}

@@ -19,13 +19,13 @@ export const translations = {
     email: 'hola@santifer.io',
     role: 'Quitando fricción de lo que importa',
     story: {
-      context: '~16 años construyendo~ mi empresa.',
+      context: '+16 años construyendo+ mi empresa.',
       reflections: ['¿Esto es lo que quería?', '¿Y si no lo intento?'],
       hookParagraphs: [
         ['Un día, vendí el negocio. Compré *claridad.*'],
         [
           'Lo que me apasiona no cabe en una tienda.',
-          '*Construir* ~sistemas que liberan equipos~. Eso escala.',
+          '*Construir* +sistemas que liberan equipos+. Eso escala.',
         ],
       ],
       why: 'En Santifer iRepair automaticé todo lo que pude: desde un agente de IA que atendía el 90% de los clientes hasta un sistema operativo que orquestaba 12 bases de datos.',
@@ -163,12 +163,28 @@ export const translations = {
           link: 'contentdigest.santifer.io',
         },
         {
+          title: 'santifer.io',
+          badge: 'Este Portfolio',
+          badgeBuilding: '',
+          desc: 'CV interactivo con chat IA. Construido con Claudeable, monitorizado con Claude Pulse, animaciones debuggeadas con Claude Eye. LLMOps: Langfuse, 31 evals, prompt caching.',
+          tech: ['React 19', 'TypeScript', 'Claude API', 'Langfuse', 'Vercel Edge'],
+          link: 'github.com/santifer-dev/cv-santiago',
+        },
+        {
           title: 'Claude Pulse',
           badge: 'Open Source',
           badgeBuilding: '',
           desc: 'Plugin SwiftBar para monitorización en tiempo real del uso de Claude Code en macOS. Métricas de consumo, predicción de rate limits, y consejos contextuales.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
           link: 'github.com/santifer-dev/claude-pulse',
+        },
+        {
+          title: 'Claude Eye',
+          badge: 'Open Source',
+          badgeBuilding: '',
+          desc: 'CLI que analiza videos de animaciones web frame por frame con Claude Vision. Detecta desyncs en transiciones CSS y genera reportes con timestamps exactos.',
+          tech: ['Node.js', 'TypeScript', 'Claude Vision', 'FFmpeg'],
+          link: 'github.com/santifer-dev/claude-eye',
         },
         {
           title: 'Claudeable',
@@ -186,22 +202,21 @@ export const translations = {
           tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
           link: 'github.com/santifer-dev/watermark-remover',
         },
-        {
-          title: 'santifer.io',
-          badge: 'Este Portfolio',
-          badgeBuilding: '',
-          desc: 'CV interactivo con chat IA integrado. Implementa prácticas LLMOps de producción: observabilidad con Langfuse, 31 evals automatizados, prompt caching y clasificación de intents.',
-          tech: [
-            'React 19',
-            'TypeScript',
-            'Claude API',
-            'Prompt Caching',
-            'Langfuse',
-            'Vercel Edge',
-          ],
-          link: 'github.com/santifer-dev/cv-santiago',
-        },
       ],
+      saPlaybook: {
+        title: 'SA Playbook',
+        badge: 'Private · On Request',
+        tagline: 'Claude Code + Airtable Gold Partner Stack',
+        desc: 'Sistema de productividad para Solutions Architects que trabajan con múltiples clientes DTC. Contexto instantáneo entre proyectos, guardrails automáticos para producción, y documentación que se genera sola.',
+        features: [
+          { icon: 'zap', text: 'Context switching de 30min a 30seg' },
+          { icon: 'shield', text: 'Guardrails que bloquean operaciones destructivas en prod' },
+          { icon: 'fileText', text: 'SESSION_BRIEF auto-generado al abrir proyecto' },
+          { icon: 'git', text: 'ADRs y logging completo de operaciones' },
+        ],
+        footer: 'Disponible bajo petición para oportunidades relevantes',
+        cta: 'Solicitar acceso',
+      },
     },
     claudeCode: {
       title: 'Claude Code Power User',
@@ -259,6 +274,10 @@ export const translations = {
               icon: 'receipt',
               text: 'Contabilidad automatizada: conciliación bancaria, facturas y gastos',
             },
+            {
+              icon: 'calendarCheck',
+              text: 'Cita previa online con verificación de stock: confirma cita o genera pedido urgente',
+            },
           ],
           footer: 'Walkthrough de arquitectura disponible selectivamente',
         },
@@ -299,8 +318,8 @@ export const translations = {
           metric: '10+ h / mes',
         },
         reservas: {
-          title: 'Reservas',
-          desc: 'YouCanBookMe + webhook custom + WhatsApp notifications',
+          title: 'Cita Previa + Stock',
+          desc: 'YCBM → Airtable webhook (stock check) → WhatsApp',
           metric: '90% auto',
         },
         crm: {
@@ -313,6 +332,11 @@ export const translations = {
         role: 'Consultor en Airtable & Operaciones E-commerce',
         period: '2024 - 2025 · Cosméticos D2C · Shopify',
         desc: 'Diseño de Airtable como Sistema Operativo interno: inventario, pedidos y tareas. Workshops de co-diseño con operaciones. Análisis de integraciones Airtable ↔ Shopify.',
+        testimonial: {
+          quote: 'Su experiencia y conocimiento fueron claves para estructurar nuestros datos de manera ordenada... Lo que nos está permitiendo dedicar menos tiempo a labores burocráticas y más a labores realmente productivas.',
+          author: 'Juan Sabaté',
+          role: 'co-CEO @ LICO Cosmetics',
+        },
       },
       everis: {
         role: 'Coordinador de Pruebas (8 testers) & Analista de Software',
@@ -320,6 +344,11 @@ export const translations = {
         tesauro: {
           title: 'Tesauro de Codificación Médica Auto-aprendizaje',
           desc: 'Motor RL basado en grafos con feedback loops automáticos. Enlace entre desarrollo, consultoría y otras áreas. Sistema pionero pre-LLMs.',
+        },
+        testimonial: {
+          quote: 'Demostró una ilusión enorme y ganas de hacerlo bien... Consiguió no conformarse con su posición de partida y esa inquietud le hizo progresar a pasos agigantados. Comprometido, valioso, leal y sobre todo, con mucha actitud.',
+          author: 'Manuel López Alcázar',
+          role: 'Socio @ KPMG (fue mi supervisor en Everis)',
         },
       },
     },
@@ -367,6 +396,13 @@ export const translations = {
           org: 'BIGSEO',
           title: 'Master en SEO',
           desc: 'SEO técnico, contenido y analítica',
+          testimonial: {
+            quote: 'Su compromiso y evolución durante la formación fue formidable. Ha demostrado no solo sus conocimientos en SEO sino también una capacidad brillante de unir grupos y ganarse el aprecio de todos sus compañeros.',
+            author: 'Javier Martínez García',
+            role: 'CMO @ BIGSEO & BIG School',
+            photo: '/javier-martinez.jpeg',
+            linkedin: 'https://www.linkedin.com/in/javiermark/',
+          },
         },
         {
           year: '2001 - 2009',
@@ -453,13 +489,13 @@ export const translations = {
     email: 'hi@santifer.io',
     role: 'Removing friction from what matters',
     story: {
-      context: '~16 years building~ my company.',
+      context: '+16 years building+ my company.',
       reflections: ['Is this what I wanted?', "What if I don't try?"],
       hookParagraphs: [
         ['One day, I sold the business. I bought *clarity.*'],
         [
           "What I'm passionate about doesn't fit in a store.",
-          '*Building* ~systems that free teams~. That scales.',
+          '*Building* +systems that free teams+. That scales.',
         ],
       ],
       why: 'At Santifer iRepair I automated everything I could: from an AI agent that handled 90% of customers to an operating system orchestrating 12 databases.',
@@ -597,12 +633,28 @@ export const translations = {
           link: 'contentdigest.santifer.io',
         },
         {
+          title: 'santifer.io',
+          badge: 'This Portfolio',
+          badgeBuilding: '',
+          desc: 'Interactive CV with AI chat. Built with Claudeable, monitored with Claude Pulse, animations debugged with Claude Eye. LLMOps: Langfuse, 31 evals, prompt caching.',
+          tech: ['React 19', 'TypeScript', 'Claude API', 'Langfuse', 'Vercel Edge'],
+          link: 'github.com/santifer-dev/cv-santiago',
+        },
+        {
           title: 'Claude Pulse',
           badge: 'Open Source',
           badgeBuilding: '',
           desc: 'SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics, rate limit predictions, and context-aware tips.',
           tech: ['Bash', 'SwiftBar', 'Anthropic API', 'jq'],
           link: 'github.com/santifer-dev/claude-pulse',
+        },
+        {
+          title: 'Claude Eye',
+          badge: 'Open Source',
+          badgeBuilding: '',
+          desc: 'CLI that analyzes web animation videos frame-by-frame using Claude Vision. Detects CSS transition desyncs and generates reports with exact timestamps.',
+          tech: ['Node.js', 'TypeScript', 'Claude Vision', 'FFmpeg'],
+          link: 'github.com/santifer-dev/claude-eye',
         },
         {
           title: 'Claudeable',
@@ -620,22 +672,21 @@ export const translations = {
           tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
           link: 'github.com/santifer-dev/watermark-remover',
         },
-        {
-          title: 'santifer.io',
-          badge: 'This Portfolio',
-          badgeBuilding: '',
-          desc: 'Interactive CV with integrated AI chat. Implements production LLMOps practices: Langfuse observability, 31 automated evals, prompt caching and intent classification.',
-          tech: [
-            'React 19',
-            'TypeScript',
-            'Claude API',
-            'Prompt Caching',
-            'Langfuse',
-            'Vercel Edge',
-          ],
-          link: 'github.com/santifer-dev/cv-santiago',
-        },
       ],
+      saPlaybook: {
+        title: 'SA Playbook',
+        badge: 'Private · On Request',
+        tagline: 'Claude Code + Airtable Gold Partner Stack',
+        desc: 'Productivity system for Solutions Architects managing multiple DTC clients. Instant context switching between projects, automatic guardrails for production, and self-generating documentation.',
+        features: [
+          { icon: 'zap', text: 'Context switching from 30min to 30sec' },
+          { icon: 'shield', text: 'Guardrails blocking destructive ops in prod' },
+          { icon: 'fileText', text: 'Auto-generated SESSION_BRIEF on project open' },
+          { icon: 'git', text: 'Full ADRs and operation logging' },
+        ],
+        footer: 'Available on request for relevant opportunities',
+        cta: 'Request access',
+      },
     },
     claudeCode: {
       title: 'Claude Code Power User',
@@ -689,6 +740,10 @@ export const translations = {
               icon: 'receipt',
               text: 'Automated accounting: bank reconciliation, invoices and expenses',
             },
+            {
+              icon: 'calendarCheck',
+              text: 'Online booking with stock check: confirms appointment or triggers urgent order',
+            },
           ],
           footer: 'Architecture walkthrough available selectively',
         },
@@ -729,8 +784,8 @@ export const translations = {
           metric: '10+ h / mo',
         },
         reservas: {
-          title: 'Bookings',
-          desc: 'YouCanBookMe + custom webhook + WhatsApp notifications',
+          title: 'Booking + Stock',
+          desc: 'YCBM → Airtable webhook (stock check) → WhatsApp',
           metric: '90% auto',
         },
         crm: {
@@ -743,6 +798,11 @@ export const translations = {
         role: 'Airtable & E-commerce Operations Consultant',
         period: '2024 - 2025 · D2C Cosmetics · Shopify',
         desc: 'Designed Airtable as internal Operating System: inventory, orders, and tasks. Co-design workshops with operations. Airtable ↔ Shopify integration analysis.',
+        testimonial: {
+          quote: 'His expertise was key to structuring our data in an organized way... Allowing us to spend less time on bureaucratic tasks and more on truly productive work.',
+          author: 'Juan Sabaté',
+          role: 'co-CEO @ LICO Cosmetics',
+        },
       },
       everis: {
         role: 'Test Coordinator (8 testers) & Software Analyst',
@@ -750,6 +810,11 @@ export const translations = {
         tesauro: {
           title: 'Self-learning Medical Coding Thesaurus',
           desc: 'Graph-based RL engine with automatic feedback loops. Liaison between dev, consulting, and project areas. Pioneer system pre-LLMs.',
+        },
+        testimonial: {
+          quote: 'He showed enormous enthusiasm and drive to do well... He refused to settle for his starting position, and that restlessness made him progress by leaps and bounds. Committed, valuable, loyal and above all, with great attitude.',
+          author: 'Manuel López Alcázar',
+          role: 'Partner @ KPMG (was my supervisor at Everis)',
         },
       },
     },
@@ -797,6 +862,13 @@ export const translations = {
           org: 'BIGSEO',
           title: 'Master in SEO',
           desc: 'Technical SEO, content and analytics',
+          testimonial: {
+            quote: 'His commitment and evolution during the training was remarkable. He demonstrated not only his SEO knowledge but also a brilliant ability to unite groups and earn the appreciation of all his classmates.',
+            author: 'Javier Martínez García',
+            role: 'CMO @ BIGSEO & BIG School',
+            photo: '/javier-martinez.jpeg',
+            linkedin: 'https://www.linkedin.com/in/javiermark/',
+          },
         },
         {
           year: '2001 - 2009',
