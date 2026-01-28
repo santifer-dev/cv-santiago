@@ -12,6 +12,7 @@
 ## Features
 
 - **AI Chatbot "Santi"** — Claude API with streaming SSE, answers as me in first person
+- **Story Section Animations** — 3-type highlight system with synchronized transitions
 - **i18n ES/EN** — URL-based routing (`/` Spanish, `/en` English)
 - **Mobile-first** — iOS keyboard handling, responsive design
 - **Edge Functions** — Vercel Edge runtime for low latency
@@ -103,6 +104,18 @@ Built with Claude Code — when you know what you want and can describe it with 
 
 ---
 
+## Claude Code Ecosystem
+
+This project is part of a suite of tools built with Claude Code:
+
+| Project | Description | Link |
+|---------|-------------|------|
+| **Claudable** | Meta-project with skills, MCPs, and templates for professional web development | [GitHub](https://github.com/santifer-dev/claudable) |
+| **Claude Eye** | CLI tool for debugging CSS animations using Claude Vision (frame-by-frame analysis) | [GitHub](https://github.com/santifer-dev/claude-eye) |
+| **Claude Pulse** | Real-time AI coding assistant status and notifications | [GitHub](https://github.com/santifer-dev/claude-pulse) |
+
+---
+
 ## About Me
 
 **Santiago Fernández de Valderrama**
@@ -127,6 +140,7 @@ I build AI-powered products that solve real business problems. 10+ years turning
 ## Funcionalidades
 
 - **Chatbot IA "Santi"** — Claude API con streaming SSE, responde como yo en primera persona
+- **Animaciones Story Section** — Sistema de 3 tipos de highlights con transiciones sincronizadas
 - **i18n ES/EN** — Routing por URL (`/` español, `/en` inglés)
 - **Mobile-first** — Manejo de teclado iOS, diseño responsive
 - **Edge Functions** — Vercel Edge runtime para baja latencia
@@ -215,6 +229,18 @@ Este proyecto demuestra:
 - **Dominio del stack moderno** — React 19, Tailwind v4, Vercel Edge
 
 Construido con Claude Code — cuando sabes lo que quieres y puedes describirlo con precisión técnica, la velocidad de ejecución es brutal.
+
+---
+
+## Ecosistema Claude Code
+
+Este proyecto forma parte de un conjunto de herramientas construidas con Claude Code:
+
+| Proyecto | Descripción | Enlace |
+|----------|-------------|--------|
+| **Claudable** | Metaproyecto con skills, MCPs y templates para desarrollo web profesional | [GitHub](https://github.com/santifer-dev/claudable) |
+| **Claude Eye** | CLI para debugging de animaciones CSS usando Claude Vision (análisis frame-by-frame) | [GitHub](https://github.com/santifer-dev/claude-eye) |
+| **Claude Pulse** | Estado y notificaciones en tiempo real del asistente de código IA | [GitHub](https://github.com/santifer-dev/claude-pulse) |
 
 ---
 
