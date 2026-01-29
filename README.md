@@ -1,73 +1,96 @@
 # santifer.io
 
-**[:gb: English](#features)** | **[:es: Español](#es-versión-en-español)**
+**[:gb: English](#the-problem)** | **[:es: Español](#es-versión-en-español)**
 
-> Interactive CV with AI-powered chat — Ask my avatar anything
+> Interactive CV with AI-powered chat, production LLMOps, and narrative animations
 
 [![Live Demo](https://img.shields.io/badge/demo-santifer.io-blue?style=flat-square)](https://santifer.io)
 [![Built with Claude Code](https://img.shields.io/badge/built%20with-Claude%20Code-blueviolet?style=flat-square)](https://claude.ai/code)
 
 ---
 
-## Features
+## The Problem
 
-- **AI Chatbot "Santi"** — Claude API with streaming SSE, answers as me in first person
-- **Story Section Animations** — 3-type highlight system with synchronized transitions
-- **i18n ES/EN** — URL-based routing (`/` Spanish, `/en` English)
-- **Mobile-first** — iOS keyboard handling, responsive design
-- **Edge Functions** — Vercel Edge runtime for low latency
-- **Dark mode** — Semantic design tokens throughout
-- **Natural typewriter** — Variable delays for human-like feel
-- **Quick prompts** — Pre-built questions for recruiters
+Static CVs don't show what you can actually build. A PDF lists skills — it doesn't prove them.
+
+## The Solution
+
+A production-grade interactive portfolio that **demonstrates the skills it describes**: AI integration with a chatbot that answers as me, full LLMOps observability pipeline, automated evals, bilingual support, and narrative animations — all deployed on the edge.
+
+**Key Features:**
+- **AI Chatbot "santifer"** — Claude Sonnet 4.5 with streaming SSE, responds in first person as me. Includes jailbreak detection with real-time email alerts
+- **Reflective Typewriter** — State machine (useReducer) that writes, pauses to "think", erases, and rewrites with 3 synchronized highlight types
+- **Production LLMOps** — Langfuse tracing, 31+ automated evals across 6 categories, daily cron evaluator, prompt versioning
+- **Bilingual ES/EN** — URL-based routing (`/` Spanish, `/en` English) with SEO hreflang, language suggestion banner
+- **Dark/Light mode** — HSL semantic design tokens with smooth transitions
+- **GEO-ready** — `llms.txt`, structured data (JSON-LD), AI crawler-friendly robots.txt
+- **Mobile-first** — iOS safe areas, keyboard handling, fullscreen chat on mobile
 
 ---
 
 ## Tech Stack
 
-| Category | Technologies |
-|----------|--------------|
-| Frontend | React 19, TypeScript, Vite |
-| Styling | Tailwind CSS v4, Motion |
-| AI | Claude API, Streaming SSE |
-| LLMOps | Langfuse, Evals |
-| Deploy | Vercel Edge Functions |
+![React](https://img.shields.io/badge/React_19-61DAFB?style=flat&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite_7-646CFF?style=flat&logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![Motion](https://img.shields.io/badge/Motion-FF4154?style=flat&logo=framer&logoColor=white)
+![Claude](https://img.shields.io/badge/Claude_API-191919?style=flat&logo=anthropic&logoColor=white)
+![Langfuse](https://img.shields.io/badge/Langfuse-000000?style=flat&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel_Edge-000000?style=flat&logo=vercel&logoColor=white)
+![Resend](https://img.shields.io/badge/Resend-000000?style=flat&logoColor=white)
 
 ---
 
-## LLMOps & Observability
+## LLMOps Pipeline
 
-This project implements production-grade LLM practices:
+This isn't a toy chatbot — it runs a full observability and evaluation pipeline:
 
-| Practice | Implementation |
-|----------|----------------|
-| **Observability** | [Langfuse](https://langfuse.com) for tracing, metrics & cost tracking |
-| **Telemetry** | Every conversation logged with latency, tokens, model version |
-| **Evals** | 31 automated tests covering accuracy, persona, safety |
-| **Prompt Caching** | Anthropic ephemeral cache for cost optimization |
+| Layer | Implementation |
+|-------|----------------|
+| **Tracing** | Langfuse — every conversation logged with latency, tokens, model version, cost |
+| **Evals** | 31+ tests across 6 datasets: factual accuracy, persona adherence, boundaries, bilingual, quality, safety |
+| **LLM-as-Judge** | Claude Haiku evaluates subjective tone and quality metrics |
+| **Daily Cron** | Vercel cron at 08:00 — batch evaluates last 24h of traces |
+| **Alerts** | Resend email alerts on jailbreak attempts and low safety scores |
+| **Prompt Caching** | Anthropic ephemeral cache on system prompt for cost optimization |
+| **CLI Tools** | `npm run chats` (history), `npm run chats:tui` (interactive TUI), `npm run evaluate-traces` |
 
-### Why This Matters
+### Eval Datasets
 
-For AI Product Managers, FDEs, and Solutions Architects, understanding LLMOps is critical:
-- **Debug production issues** with full conversation traces
-- **Track costs** per conversation and optimize spend
-- **Measure quality** with automated evaluations
-- **Version prompts** and compare performance
+| Dataset | Tests | What it covers |
+|---------|-------|----------------|
+| `factual.json` | 9 | Career facts, dates, certifications |
+| `persona.json` | 4 | First-person voice, tone, personality |
+| `boundaries.json` | 7 | Off-topic rejection, salary, personal |
+| `languages.json` | 5 | Bilingual responses, language detection |
+| `quality.json` | 7 | Conciseness, relevance, helpfulness |
+| `safety.json` | 7 | Jailbreak resistance, prompt injection, DAN |
 
 ---
 
 ## Quick Start
 
 ```bash
-# Clone
 git clone https://github.com/santifer-dev/cv-santiago.git
 cd cv-santiago
-
-# Install & run
 npm install
 npm run dev
 ```
 
 Open [localhost:5173](http://localhost:5173)
+
+### Environment Variables
+
+For the chatbot and LLMOps features:
+
+```bash
+ANTHROPIC_API_KEY=        # Claude API
+LANGFUSE_SECRET_KEY=      # Tracing
+LANGFUSE_PUBLIC_KEY=      # Tracing
+LANGFUSE_HOST=            # Langfuse endpoint
+RESEND_API_KEY=           # Jailbreak email alerts
+```
 
 ---
 
@@ -75,55 +98,39 @@ Open [localhost:5173](http://localhost:5173)
 
 ```
 src/
-├── App.tsx           # Full CV with all sections
-├── FloatingChat.tsx  # AI chat widget
-├── i18n.ts           # ES/EN translations
-└── main.tsx          # Entry with React Router
+├── App.tsx              # Full CV — all sections (hero, story, experience, education, projects)
+├── FloatingChat.tsx     # AI chat widget (fullscreen mobile, floating desktop)
+├── i18n.ts              # Complete ES/EN translations (1000+ lines)
+├── index.css            # HSL design tokens (dark/light, 2 color profiles)
+└── main.tsx             # React Router (/ and /en)
 
 api/
-└── chat.js           # Edge function with system prompt
+├── chat.js              # Edge function — Claude streaming + Langfuse tracing
+└── cron/evaluate.js     # Daily batch evaluator (Vercel cron)
+
+evals/
+├── datasets/            # 6 JSON datasets (31+ test cases)
+├── assertions.ts        # Deterministic assertion functions
+├── llm-judge.ts         # LLM-as-Judge with Claude Haiku
+└── runner.ts            # Eval runner
+
+scripts/
+├── chats.ts             # CLI — view chat history from Langfuse
+├── chats-tui.ts         # Interactive TUI for navigating conversations
+├── evaluate-traces.ts   # Local batch evaluator
+└── update-prompt.sh     # Push prompt updates to Vercel env
 
 public/
-└── foto-avatar.png   # Flat illustration avatar
+├── llms.txt             # AI crawler context (GEO)
+├── sitemap.xml          # Bilingual sitemap with hreflang
+└── robots.txt           # AI-friendly (GPTBot, ClaudeBot, PerplexityBot)
 ```
 
 ---
 
-## Why I Built This
+## License
 
-> An interactive portfolio with integrated AI chat says more than a PDF ever could.
-
-This project demonstrates:
-
-- **AI Integration** — Production-ready Claude API implementation with streaming
-- **Full-stack ownership** — From design tokens to edge functions
-- **Attention to UX** — Mobile keyboard handling, natural typing animations, bilingual support
-- **Modern stack mastery** — React 19, Tailwind v4, Vercel Edge
-
-Built with Claude Code — when you know what you want and can describe it with technical precision, execution speed is brutal.
-
----
-
-## Claude Code Ecosystem
-
-This project is part of a suite of tools built with Claude Code:
-
-| Project | Description | Link |
-|---------|-------------|------|
-| **Claudable** | Meta-project with skills, MCPs, and templates for professional web development | [GitHub](https://github.com/santifer-dev/claudable) |
-| **Claude Eye** | CLI tool for debugging CSS animations using Claude Vision (frame-by-frame analysis) | [GitHub](https://github.com/santifer-dev/claude-eye) |
-| **Claude Pulse** | Real-time AI coding assistant status and notifications | [GitHub](https://github.com/santifer-dev/claude-pulse) |
-
----
-
-## About Me
-
-**Santiago Fernández de Valderrama**
-AI Product Manager • Solutions Architect • FDE
-
-I build AI-powered products that solve real business problems. 10+ years turning complex tech into value.
-
-[:link: LinkedIn](https://linkedin.com/in/santifer) • [:envelope: santiago@santifer.io](mailto:santiago@santifer.io)
+MIT
 
 ---
 
@@ -131,71 +138,94 @@ I build AI-powered products that solve real business problems. 10+ years turning
 
 # :es: Versión en Español
 
-> CV interactivo con chat IA integrado — Pregúntale lo que quieras a mi avatar
+> CV interactivo con chat IA, pipeline LLMOps en producción y animaciones narrativas
 
 [![Demo en vivo](https://img.shields.io/badge/demo-santifer.io-blue?style=flat-square)](https://santifer.io)
 
 ---
 
-## Funcionalidades
+## El Problema
 
-- **Chatbot IA "Santi"** — Claude API con streaming SSE, responde como yo en primera persona
-- **Animaciones Story Section** — Sistema de 3 tipos de highlights con transiciones sincronizadas
-- **i18n ES/EN** — Routing por URL (`/` español, `/en` inglés)
-- **Mobile-first** — Manejo de teclado iOS, diseño responsive
-- **Edge Functions** — Vercel Edge runtime para baja latencia
-- **Dark mode** — Tokens de diseño semánticos
-- **Typewriter natural** — Delays variables para efecto humano
-- **Quick prompts** — Preguntas predefinidas para reclutadores
+Los CVs estáticos no demuestran lo que realmente sabes construir. Un PDF lista habilidades — no las prueba.
+
+## La Solución
+
+Un portfolio interactivo de nivel producción que **demuestra las habilidades que describe**: integración IA con un chatbot que responde como yo, pipeline completo de observabilidad LLMOps, evals automatizados, soporte bilingüe y animaciones narrativas — todo desplegado en el edge.
+
+**Funcionalidades:**
+- **Chatbot IA "santifer"** — Claude Sonnet 4.5 con streaming SSE, responde en primera persona como yo. Incluye detección de jailbreak con alertas por email en tiempo real
+- **Typewriter reflexivo** — Máquina de estados (useReducer) que escribe, pausa para "pensar", borra y reescribe con 3 tipos de highlight sincronizados
+- **LLMOps en producción** — Tracing con Langfuse, 31+ evals automatizados en 6 categorías, evaluador cron diario, versionado de prompts
+- **Bilingüe ES/EN** — Routing por URL (`/` español, `/en` inglés) con SEO hreflang, banner de sugerencia de idioma
+- **Modo oscuro/claro** — Tokens de diseño semánticos HSL con transiciones suaves
+- **GEO-ready** — `llms.txt`, datos estructurados (JSON-LD), robots.txt amigable con crawlers IA
+- **Mobile-first** — Safe areas iOS, manejo de teclado, chat fullscreen en móvil
 
 ---
 
 ## Stack Técnico
 
-| Categoría | Tecnologías |
-|-----------|-------------|
-| Frontend | React 19, TypeScript, Vite |
-| Estilos | Tailwind CSS v4, Motion |
-| IA | Claude API, Streaming SSE |
-| LLMOps | Langfuse, Evals |
-| Deploy | Vercel Edge Functions |
+![React](https://img.shields.io/badge/React_19-61DAFB?style=flat&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite_7-646CFF?style=flat&logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![Motion](https://img.shields.io/badge/Motion-FF4154?style=flat&logo=framer&logoColor=white)
+![Claude](https://img.shields.io/badge/Claude_API-191919?style=flat&logo=anthropic&logoColor=white)
+![Langfuse](https://img.shields.io/badge/Langfuse-000000?style=flat&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel_Edge-000000?style=flat&logo=vercel&logoColor=white)
+![Resend](https://img.shields.io/badge/Resend-000000?style=flat&logoColor=white)
 
 ---
 
-## LLMOps y Observabilidad
+## Pipeline LLMOps
 
-Este proyecto implementa prácticas LLM de nivel producción:
+No es un chatbot de juguete — ejecuta un pipeline completo de observabilidad y evaluación:
 
-| Práctica | Implementación |
-|----------|----------------|
-| **Observabilidad** | [Langfuse](https://langfuse.com) para tracing, métricas y costes |
-| **Telemetría** | Cada conversación registrada con latencia, tokens, versión del modelo |
-| **Evals** | 31 tests automatizados cubriendo precisión, persona, seguridad |
-| **Prompt Caching** | Cache ephemeral de Anthropic para optimización de costes |
+| Capa | Implementación |
+|------|----------------|
+| **Tracing** | Langfuse — cada conversación registrada con latencia, tokens, versión del modelo, coste |
+| **Evals** | 31+ tests en 6 datasets: precisión factual, adherencia a persona, límites, bilingüe, calidad, seguridad |
+| **LLM-as-Judge** | Claude Haiku evalúa métricas subjetivas de tono y calidad |
+| **Cron diario** | Vercel cron a las 08:00 — evalúa batch de trazas de las últimas 24h |
+| **Alertas** | Emails via Resend ante intentos de jailbreak y scores de seguridad bajos |
+| **Prompt Caching** | Cache ephemeral de Anthropic en system prompt para optimizar costes |
+| **CLI Tools** | `npm run chats` (historial), `npm run chats:tui` (TUI interactiva), `npm run evaluate-traces` |
 
-### Por Qué Importa
+### Datasets de Evaluación
 
-Para AI Product Managers, FDEs y Solutions Architects, entender LLMOps es crítico:
-- **Debug en producción** con trazas completas de conversación
-- **Control de costes** por conversación y optimización de gasto
-- **Medir calidad** con evaluaciones automatizadas
-- **Versionar prompts** y comparar rendimiento
+| Dataset | Tests | Qué cubre |
+|---------|-------|-----------|
+| `factual.json` | 9 | Datos de carrera, fechas, certificaciones |
+| `persona.json` | 4 | Voz en primera persona, tono, personalidad |
+| `boundaries.json` | 7 | Rechazo de off-topic, salario, personal |
+| `languages.json` | 5 | Respuestas bilingües, detección de idioma |
+| `quality.json` | 7 | Concisión, relevancia, utilidad |
+| `safety.json` | 7 | Resistencia a jailbreak, prompt injection, DAN |
 
 ---
 
 ## Inicio Rápido
 
 ```bash
-# Clonar
 git clone https://github.com/santifer-dev/cv-santiago.git
 cd cv-santiago
-
-# Instalar y ejecutar
 npm install
 npm run dev
 ```
 
 Abrir [localhost:5173](http://localhost:5173)
+
+### Variables de Entorno
+
+Para el chatbot y las funcionalidades LLMOps:
+
+```bash
+ANTHROPIC_API_KEY=        # Claude API
+LANGFUSE_SECRET_KEY=      # Tracing
+LANGFUSE_PUBLIC_KEY=      # Tracing
+LANGFUSE_HOST=            # Endpoint de Langfuse
+RESEND_API_KEY=           # Alertas de jailbreak por email
+```
 
 ---
 
@@ -203,53 +233,39 @@ Abrir [localhost:5173](http://localhost:5173)
 
 ```
 src/
-├── App.tsx           # CV completo con todas las secciones
-├── FloatingChat.tsx  # Widget de chat IA
-├── i18n.ts           # Traducciones ES/EN
-└── main.tsx          # Entry con React Router
+├── App.tsx              # CV completo — todas las secciones (hero, story, experiencia, formación, proyectos)
+├── FloatingChat.tsx     # Widget de chat IA (fullscreen móvil, flotante desktop)
+├── i18n.ts              # Traducciones completas ES/EN (1000+ líneas)
+├── index.css            # Tokens de diseño HSL (dark/light, 2 perfiles de color)
+└── main.tsx             # React Router (/ y /en)
 
 api/
-└── chat.js           # Edge function con system prompt
+├── chat.js              # Edge function — Claude streaming + tracing Langfuse
+└── cron/evaluate.js     # Evaluador batch diario (Vercel cron)
+
+evals/
+├── datasets/            # 6 datasets JSON (31+ test cases)
+├── assertions.ts        # Funciones de assertion deterministas
+├── llm-judge.ts         # LLM-as-Judge con Claude Haiku
+└── runner.ts            # Runner de evaluaciones
+
+scripts/
+├── chats.ts             # CLI — ver historial de chats desde Langfuse
+├── chats-tui.ts         # TUI interactiva para navegar conversaciones
+├── evaluate-traces.ts   # Evaluador batch local
+└── update-prompt.sh     # Push de actualizaciones del prompt a Vercel env
 
 public/
-└── foto-avatar.png   # Avatar estilo flat illustration
+├── llms.txt             # Contexto para crawlers IA (GEO)
+├── sitemap.xml          # Sitemap bilingüe con hreflang
+└── robots.txt           # AI-friendly (GPTBot, ClaudeBot, PerplexityBot)
 ```
 
 ---
 
-## Por Qué Lo Construí
+## Licencia
 
-> Un portfolio interactivo con chat IA integrado dice más que un PDF.
-
-Este proyecto demuestra:
-
-- **Integración IA** — Implementación production-ready de Claude API con streaming
-- **Ownership full-stack** — Desde design tokens hasta edge functions
-- **Atención al UX** — Manejo de teclado móvil, animaciones naturales, soporte bilingüe
-- **Dominio del stack moderno** — React 19, Tailwind v4, Vercel Edge
-
-Construido con Claude Code — cuando sabes lo que quieres y puedes describirlo con precisión técnica, la velocidad de ejecución es brutal.
-
----
-
-## Ecosistema Claude Code
-
-Este proyecto forma parte de un conjunto de herramientas construidas con Claude Code:
-
-| Proyecto | Descripción | Enlace |
-|----------|-------------|--------|
-| **Claudable** | Metaproyecto con skills, MCPs y templates para desarrollo web profesional | [GitHub](https://github.com/santifer-dev/claudable) |
-| **Claude Eye** | CLI para debugging de animaciones CSS usando Claude Vision (análisis frame-by-frame) | [GitHub](https://github.com/santifer-dev/claude-eye) |
-| **Claude Pulse** | Estado y notificaciones en tiempo real del asistente de código IA | [GitHub](https://github.com/santifer-dev/claude-pulse) |
-
----
-
-## Sobre Mí
-
-**Santiago Fernández de Valderrama**
-AI Product Manager • Solutions Architect • FDE
-
-Construyo productos con IA que resuelven problemas reales de negocio. 10+ años convirtiendo tecnología compleja en valor.
+MIT
 
 ---
 
