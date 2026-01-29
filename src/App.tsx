@@ -1436,7 +1436,7 @@ function App() {
                         <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
                       </svg>
                     </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold">Source of Truth</span>
+                    <span className="badge px-3 py-1 bg-gold/20 text-gold">Source of Truth</span>
                   </div>
                   <h4 className="font-display text-2xl font-bold mb-4">{t.experience.santifer.businessOS.title}</h4>
                   <p className="text-muted-foreground mb-6">{t.experience.santifer.businessOS.desc}</p>
@@ -1482,7 +1482,7 @@ function App() {
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Bot className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary">{t.experience.santifer.jacobo.badge}</span>
+                  <span className="badge px-3 py-1 bg-primary/20 text-primary">{t.experience.santifer.jacobo.badge}</span>
                 </div>
                 <h4 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition-colors">{t.experience.santifer.jacobo.title}</h4>
                 <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.jacobo.desc}</p>
@@ -1514,7 +1514,7 @@ function App() {
                   <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
                     <Layout className="w-6 h-6 text-accent" />
                   </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-accent/20 text-accent">{t.experience.santifer.webSeo.badge}</span>
+                  <span className="badge px-3 py-1 bg-accent/20 text-accent">{t.experience.santifer.webSeo.badge}</span>
                 </div>
                 <h4 className="font-display text-xl font-bold mb-2 group-hover:text-accent transition-colors">{t.experience.santifer.webSeo.title}</h4>
                 <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.webSeo.desc}</p>
@@ -1734,7 +1734,7 @@ function App() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Lock className="w-3 h-3 text-gold" />
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold">{t.projects.saPlaybook.badge}</span>
+                      <span className="badge px-3 py-1 bg-gold/20 text-gold">{t.projects.saPlaybook.badge}</span>
                     </div>
                   </div>
                   <h4 className="font-display text-2xl font-bold mb-1">{t.projects.saPlaybook.title}</h4>
@@ -1841,7 +1841,7 @@ function App() {
                       isTool ? 'group-hover:text-tool' : 'group-hover:text-primary'
                     }`}>{project.title}</h3>
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-center ${
+                      <span className={`badge px-2 py-0.5 ${
                         isTool
                           ? 'bg-tool/10 text-tool'
                           : isHighlight
@@ -1849,7 +1849,7 @@ function App() {
                           : 'bg-primary/10 text-primary'
                       }`}>{project.badge}</span>
                       {project.badgeBuilding && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium text-center bg-green-500/10 text-green-500 flex items-center gap-1.5">
+                        <span className="badge px-2 py-0.5 bg-green-500/10 text-green-500 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-dot"></span>
                           {project.badgeBuilding}
                         </span>
@@ -1940,7 +1940,7 @@ function App() {
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-display font-bold">{t.claudeCode.title}</h3>
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent">{t.claudeCode.badge}</span>
+                    <span className="badge px-2 py-0.5 bg-accent/20 text-accent">{t.claudeCode.badge}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{t.claudeCode.desc}</p>
                 </div>
