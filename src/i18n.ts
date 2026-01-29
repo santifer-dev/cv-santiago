@@ -17,9 +17,9 @@ export const translations = {
   es: {
     greeting: 'Hola, soy',
     email: 'hola@santifer.io',
-    role: 'Quitando fricción de lo que importa',
+    role: 'Convierto trabajo manual en sistemas reutilizables.',
     story: {
-      context: '+15 años construyendo+ un negocio desde cero.',
+      context: '+15 años construyendo+ todo desde cero.',
       reflections: ['Esto ya lo sé hacer.', 'Hay algo más grande.'],
       hookParagraphs: [
         ['Un día, vendí el negocio. Compré *claridad.*'],
@@ -47,14 +47,7 @@ export const translations = {
       ],
       skipButton: 'Saltar intro',
     },
-    taglines: [
-      '*Quitando* fricción de lo que *importa*.',
-      '*Descubriendo* los límites de la IA.',
-      'Fundador. Ahora *escalando* impacto.',
-      'De la ambigüedad al *producto*.',
-      '*Construyo* agentes que trabajan solos.',
-      'Si se repite, lo *automatizo*.',
-    ],
+    taglines: [] as readonly string[],
     location: 'Sevilla, ES · EU / USA remoto',
     roles: [
       'AI Product Manager',
@@ -168,7 +161,13 @@ export const translations = {
           badge: 'Este Portfolio',
           badgeBuilding: '',
           desc: 'CV interactivo con chat IA. Construido con **Claudeable**, monitorizado con **Claude Pulse**, animaciones debuggeadas con **Claude Eye**. LLMOps: Langfuse, 31 evals, prompt caching.',
-          tech: ['React 19', 'TypeScript', 'Claude API', 'Langfuse', 'Vercel Edge'],
+          tech: [
+            'React 19',
+            'TypeScript',
+            'Claude API',
+            'Langfuse',
+            'Vercel Edge',
+          ],
           link: 'github.com/santifer-dev/cv-santiago',
         },
         {
@@ -217,8 +216,14 @@ export const translations = {
         desc: 'Sistema de productividad para Solutions Architects que trabajan con múltiples clientes DTC. Contexto instantáneo entre proyectos, guardrails automáticos para producción, y documentación que se genera sola.',
         features: [
           { icon: 'zap', text: 'Context switching de 30min a 30seg' },
-          { icon: 'shield', text: 'Guardrails que bloquean operaciones destructivas en prod' },
-          { icon: 'fileText', text: 'SESSION_BRIEF auto-generado al abrir proyecto' },
+          {
+            icon: 'shield',
+            text: 'Guardrails que bloquean operaciones destructivas en prod',
+          },
+          {
+            icon: 'fileText',
+            text: 'SESSION_BRIEF auto-generado al abrir proyecto',
+          },
           { icon: 'git', text: 'ADRs y logging completo de operaciones' },
         ],
         footer: 'Disponible bajo petición para oportunidades relevantes',
@@ -293,11 +298,26 @@ export const translations = {
           badge: '~90% autoservicio',
           desc: 'Voz (ElevenLabs) + WhatsApp (n8n / WATI) + Aircall cloud PBX. Orquestación de sub-agentes especializados vía tool calling.',
           items: [
-            { icon: 'network', text: 'Router principal: clasifica intent y delega a sub-agentes' },
-            { icon: 'calendar', text: 'Sub-agente Citas: consulta slots, reserva, confirma vía WhatsApp' },
-            { icon: 'percent', text: 'Sub-agente Descuentos: calcula promociones según historial cliente' },
-            { icon: 'package', text: 'Sub-agente Pedidos: valida stock, crea orden, notifica ETA' },
-            { icon: 'userCheck', text: 'HITL handoff: escala a humano con contexto completo' },
+            {
+              icon: 'network',
+              text: 'Router principal: clasifica intent y delega a sub-agentes',
+            },
+            {
+              icon: 'calendar',
+              text: 'Sub-agente Citas: consulta slots, reserva, confirma vía WhatsApp',
+            },
+            {
+              icon: 'percent',
+              text: 'Sub-agente Descuentos: calcula promociones según historial cliente',
+            },
+            {
+              icon: 'package',
+              text: 'Sub-agente Pedidos: valida stock, crea orden, notifica ETA',
+            },
+            {
+              icon: 'userCheck',
+              text: 'HITL handoff: escala a humano con contexto completo',
+            },
           ],
           soldWith: 'Playbook disponible bajo petición',
         },
@@ -306,10 +326,22 @@ export const translations = {
           badge: 'Única en el sector en España',
           desc: '100% custom-made (2023). Headless CMS en Airtable como fuente de verdad, integrado con ERP, generando web en Astro con SEO programático.',
           items: [
-            { icon: 'fileText', text: 'Páginas por modelo / reparación generadas automáticamente' },
-            { icon: 'image', text: 'Fotos antes / después + reseñas internas / externas desde ERP' },
-            { icon: 'trendingUp', text: 'Volumen de búsquedas vía DataForSEO por taxonomía' },
-            { icon: 'gitBranch', text: 'Decisión automatizada: indexable (SEO) vs solo UX' },
+            {
+              icon: 'fileText',
+              text: 'Páginas por modelo / reparación generadas automáticamente',
+            },
+            {
+              icon: 'image',
+              text: 'Fotos antes / después + reseñas internas / externas desde ERP',
+            },
+            {
+              icon: 'trendingUp',
+              text: 'Volumen de búsquedas vía DataForSEO por taxonomía',
+            },
+            {
+              icon: 'gitBranch',
+              text: 'Decisión automatizada: indexable (SEO) vs solo UX',
+            },
             { icon: 'bot', text: 'Optimización de crawl budget' },
           ],
           codeAvailable: 'Código disponible bajo petición',
@@ -345,7 +377,8 @@ export const translations = {
         period: '2024 - 2025 · Cosméticos D2C · Shopify',
         desc: 'Diseño de Airtable como Sistema Operativo interno: inventario, pedidos y tareas. Workshops de co-diseño con operaciones. Análisis de integraciones Airtable ↔ Shopify.',
         testimonial: {
-          quote: 'Su experiencia y conocimiento fueron claves para estructurar nuestros datos de manera ordenada... Lo que nos está permitiendo dedicar menos tiempo a labores burocráticas y más a labores realmente productivas.',
+          quote:
+            'Su experiencia y conocimiento fueron claves para estructurar nuestros datos de manera ordenada... Lo que nos está permitiendo dedicar menos tiempo a labores burocráticas y más a labores realmente productivas.',
           author: 'Juan Sabaté',
           role: 'co-CEO @ LICO Cosmetics',
         },
@@ -358,7 +391,8 @@ export const translations = {
           desc: 'Motor RL basado en grafos con feedback loops automáticos. Enlace entre desarrollo, consultoría y otras áreas. Sistema pionero pre-LLMs.',
         },
         testimonial: {
-          quote: 'Demostró una ilusión enorme y ganas de hacerlo bien... Consiguió no conformarse con su posición de partida y esa inquietud le hizo progresar a pasos agigantados. Comprometido, valioso, leal y sobre todo, con mucha actitud.',
+          quote:
+            'Demostró una ilusión enorme y ganas de hacerlo bien... Consiguió no conformarse con su posición de partida y esa inquietud le hizo progresar a pasos agigantados. Comprometido, valioso, leal y sobre todo, con mucha actitud.',
           author: 'Manuel López Alcázar',
           role: 'Socio @ KPMG (fue mi supervisor en Everis)',
         },
@@ -367,7 +401,7 @@ export const translations = {
     speaking: {
       title: 'Enseñando',
       slides: 'Slides',
-      comingSoon: 'Próximamente.',
+      comingSoon: 'Próximamente',
       items: [
         {
           year: '2026',
@@ -421,7 +455,8 @@ export const translations = {
           title: 'Master en SEO',
           desc: 'SEO técnico, contenido y analítica',
           testimonial: {
-            quote: 'Su compromiso y evolución durante la formación fue formidable. Ha demostrado no solo sus conocimientos en SEO sino también una capacidad brillante de unir grupos y ganarse el aprecio de todos sus compañeros.',
+            quote:
+              'Su compromiso y evolución durante la formación fue formidable. Ha demostrado no solo sus conocimientos en SEO sino también una capacidad brillante de unir grupos y ganarse el aprecio de todos sus compañeros.',
             author: 'Javier Martínez García',
             role: 'CMO @ BIGSEO & BIG School',
             photo: '/javier-martinez.jpeg',
@@ -511,20 +546,19 @@ export const translations = {
   en: {
     greeting: "Hi, I'm",
     email: 'hi@santifer.io',
-    role: 'Removing friction from what matters',
+    role: 'I turn manual work into reusable systems.',
     story: {
-      context: '+15 years building+ a business from scratch.',
+      context: '+15 years building+ everything from scratch.',
       reflections: ["I've mastered this.", "There's something bigger."],
       hookParagraphs: [
-        ['One day, I sold it. I bought *clarity.*'],
+        ['One day, I sold my business. I bought *clarity.*'],
         [
           "What drives me doesn't fit on a shelf.",
-          '*Building* +systems that unblock teams+. That scale.',
+          '*Building* +systems that unblock teams+. And it scales.',
         ],
       ],
       why: 'At Santifer iRepair I automated everything I could: from an AI agent that handled 90% of customers to an operating system orchestrating 12 databases.',
-      seeking:
-        "Now I want to do it at scale — where impact compounds.",
+      seeking: 'Now I want to do it at scale — where impact compounds.',
       nav: [
         { icon: 'briefcase', label: 'My path', href: '#experience' },
         { icon: 'folder', label: 'What I build', href: '#projects' },
@@ -541,14 +575,7 @@ export const translations = {
       ],
       skipButton: 'Skip intro',
     },
-    taglines: [
-      '*Removing* friction from what *matters*.',
-      "*Discovering* AI's limits.",
-      'Founder. Now *scaling* impact.',
-      'From ambiguity to *product*.',
-      'I *build* agents that work on their own.',
-      'If it repeats, I *automate* it.',
-    ],
+    taglines: [] as readonly string[],
     location: 'Seville, ES · EU / USA remote',
     roles: [
       'AI Product Manager',
@@ -662,7 +689,13 @@ export const translations = {
           badge: 'This Portfolio',
           badgeBuilding: '',
           desc: 'Interactive CV with AI chat. Built with **Claudeable**, monitored with **Claude Pulse**, animations debugged with **Claude Eye**. LLMOps: Langfuse, 31 evals, prompt caching.',
-          tech: ['React 19', 'TypeScript', 'Claude API', 'Langfuse', 'Vercel Edge'],
+          tech: [
+            'React 19',
+            'TypeScript',
+            'Claude API',
+            'Langfuse',
+            'Vercel Edge',
+          ],
           link: 'github.com/santifer-dev/cv-santiago',
         },
         {
@@ -711,8 +744,14 @@ export const translations = {
         desc: 'Productivity system for Solutions Architects managing multiple DTC clients. Instant context switching between projects, automatic guardrails for production, and self-generating documentation.',
         features: [
           { icon: 'zap', text: 'Context switching from 30min to 30sec' },
-          { icon: 'shield', text: 'Guardrails blocking destructive ops in prod' },
-          { icon: 'fileText', text: 'Auto-generated SESSION_BRIEF on project open' },
+          {
+            icon: 'shield',
+            text: 'Guardrails blocking destructive ops in prod',
+          },
+          {
+            icon: 'fileText',
+            text: 'Auto-generated SESSION_BRIEF on project open',
+          },
           { icon: 'git', text: 'Full ADRs and operation logging' },
         ],
         footer: 'Available on request for relevant opportunities',
@@ -783,11 +822,26 @@ export const translations = {
           badge: '~90% self-service',
           desc: 'Voice (ElevenLabs) + WhatsApp (n8n / WATI) + Aircall cloud PBX. Sub-agent orchestration via tool calling.',
           items: [
-            { icon: 'network', text: 'Main router: classifies intent and delegates to sub-agents' },
-            { icon: 'calendar', text: 'Appointments sub-agent: checks slots, books, confirms via WhatsApp' },
-            { icon: 'percent', text: 'Discounts sub-agent: calculates promos based on customer history' },
-            { icon: 'package', text: 'Orders sub-agent: validates stock, creates order, notifies ETA' },
-            { icon: 'userCheck', text: 'HITL handoff: escalates to human with full context' },
+            {
+              icon: 'network',
+              text: 'Main router: classifies intent and delegates to sub-agents',
+            },
+            {
+              icon: 'calendar',
+              text: 'Appointments sub-agent: checks slots, books, confirms via WhatsApp',
+            },
+            {
+              icon: 'percent',
+              text: 'Discounts sub-agent: calculates promos based on customer history',
+            },
+            {
+              icon: 'package',
+              text: 'Orders sub-agent: validates stock, creates order, notifies ETA',
+            },
+            {
+              icon: 'userCheck',
+              text: 'HITL handoff: escalates to human with full context',
+            },
           ],
           soldWith: 'Playbook available on request',
         },
@@ -796,10 +850,22 @@ export const translations = {
           badge: 'Only one in sector in Spain',
           desc: '100% custom-made (2023). Headless CMS in Airtable as source of truth, integrated with ERP, generating Astro website with programmatic SEO.',
           items: [
-            { icon: 'fileText', text: 'Pages per model / repair auto-generated' },
-            { icon: 'image', text: 'Before / after photos + internal / external reviews from ERP' },
-            { icon: 'trendingUp', text: 'Search volume via DataForSEO by taxonomy' },
-            { icon: 'gitBranch', text: 'Automated decision: indexable (SEO) vs UX-only' },
+            {
+              icon: 'fileText',
+              text: 'Pages per model / repair auto-generated',
+            },
+            {
+              icon: 'image',
+              text: 'Before / after photos + internal / external reviews from ERP',
+            },
+            {
+              icon: 'trendingUp',
+              text: 'Search volume via DataForSEO by taxonomy',
+            },
+            {
+              icon: 'gitBranch',
+              text: 'Automated decision: indexable (SEO) vs UX-only',
+            },
             { icon: 'bot', text: 'Crawl budget optimization' },
           ],
           codeAvailable: 'Source code available on request',
@@ -835,7 +901,8 @@ export const translations = {
         period: '2024 - 2025 · D2C Cosmetics · Shopify',
         desc: 'Designed Airtable as internal Operating System: inventory, orders, and tasks. Co-design workshops with operations. Airtable ↔ Shopify integration analysis.',
         testimonial: {
-          quote: 'His expertise was key to structuring our data properly — so we spend less time on admin and more on work that actually moves the needle.',
+          quote:
+            'His expertise was key to structuring our data properly — so we spend less time on admin and more on work that actually moves the needle.',
           author: 'Juan Sabaté',
           role: 'co-CEO @ LICO Cosmetics',
         },
@@ -848,7 +915,8 @@ export const translations = {
           desc: 'Graph-based RL engine with automatic feedback loops. Liaison between dev, consulting, and project areas. Pioneer system pre-LLMs.',
         },
         testimonial: {
-          quote: 'Huge enthusiasm and drive from day one. He refused to settle for his starting role — that restlessness pushed him to grow fast. Committed, reliable, and above all, someone with real attitude.',
+          quote:
+            'Huge enthusiasm and drive from day one. He refused to settle for his starting role — that restlessness pushed him to grow fast. Committed, reliable, and above all, someone with real attitude.',
           author: 'Manuel López Alcázar',
           role: 'Partner @ KPMG (was my supervisor at Everis)',
         },
@@ -911,7 +979,8 @@ export const translations = {
           title: 'Master in SEO',
           desc: 'Technical SEO, content and analytics',
           testimonial: {
-            quote: 'Santiago stood out — not just for his SEO skills, but for how he brought the cohort together. Everyone respected him by the end.',
+            quote:
+              'Santiago stood out — not just for his SEO skills, but for how he brought the cohort together. Everyone respected him by the end.',
             author: 'Javier Martínez García',
             role: 'CMO @ BIGSEO & BIG School',
             photo: '/javier-martinez.jpeg',

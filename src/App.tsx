@@ -1339,12 +1339,9 @@ function App() {
               <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
                 {t.greeting} <span className="text-gradient-theme">@santifer</span>
               </h1>
-              <NaturalTypewriter
-                key={lang}
-                phrases={t.taglines}
-                className="text-xl md:text-2xl text-muted-foreground mb-6 block min-h-[3.5rem] md:min-h-[2.5rem]"
-                pauseBetween={2500}
-              />
+              <p className="text-xl md:text-2xl text-muted-foreground mb-6">
+                {t.role}
+              </p>
 
               <div className="flex flex-wrap justify-center md:justify-start gap-3">
                 <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm font-medium text-primary">AI Product Manager</span>
