@@ -1193,7 +1193,10 @@ function App() {
                 {/* Inner border */}
                 <div className="absolute inset-2 rounded-full bg-gradient-theme-50 p-[2px]">
                   <div className="w-full h-full rounded-full overflow-hidden">
-                    <img src="/foto-avatar.png" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" />
+                    <picture>
+                      <source srcSet="/foto-avatar.webp" type="image/webp" />
+                      <img src="/foto-avatar.png" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" width={192} height={192} fetchPriority="high" />
+                    </picture>
                   </div>
                 </div>
               </div>
@@ -1275,7 +1278,10 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#888] shrink-0">
-                    <img src="/logo-santifer.jpg" alt="Santifer iRepair" className="w-full h-full object-cover" />
+                    <picture>
+                      <source srcSet="/logo-santifer.webp" type="image/webp" />
+                      <img src="/logo-santifer.jpg" alt="Santifer iRepair" className="w-full h-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                    </picture>
                   </div>
                   <h3 className="font-display text-2xl font-bold">Santifer iRepair</h3>
                 </div>
@@ -1481,7 +1487,10 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F3EE] flex items-center justify-center shrink-0">
-                    <img src="/logo-lico.png" alt="LICO Cosmetics" className="w-full h-full object-contain p-1" />
+                    <picture>
+                      <source srcSet="/logo-lico.webp" type="image/webp" />
+                      <img src="/logo-lico.png" alt="LICO Cosmetics" className="w-full h-full object-contain p-1" width={40} height={40} loading="lazy" decoding="async" />
+                    </picture>
                   </div>
                   <h3 className="font-display text-2xl font-bold">LICO Cosmetics</h3>
                 </div>
@@ -1500,7 +1509,10 @@ function App() {
                   "{t.experience.lico.testimonial.quote}"
                 </p>
                 <footer className="flex items-center gap-3">
-                  <img src="/juan-sabate.jpeg" alt={t.experience.lico.testimonial.author} className="w-10 h-10 rounded-full object-cover" />
+                  <picture>
+                    <source srcSet="/juan-sabate.webp" type="image/webp" />
+                    <img src="/juan-sabate.jpeg" alt={t.experience.lico.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                  </picture>
                   <div className="flex-1">
                     <span className="text-sm font-medium text-foreground block">{t.experience.lico.testimonial.author}</span>
                     <span className="text-xs text-muted-foreground">{t.experience.lico.testimonial.role}</span>
@@ -1524,7 +1536,10 @@ function App() {
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-2">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shrink-0 p-1.5">
-                    <img src="/logo-everis.jpg" alt="Everis" className="w-full h-full object-contain" />
+                    <picture>
+                      <source srcSet="/logo-everis.webp" type="image/webp" />
+                      <img src="/logo-everis.jpg" alt="Everis" className="w-full h-full object-contain" width={40} height={40} loading="lazy" decoding="async" />
+                    </picture>
                   </div>
                   <h3 className="font-display text-2xl font-bold">Everis (NTT DATA)</h3>
                 </div>
@@ -1550,7 +1565,10 @@ function App() {
                 "{t.experience.everis.testimonial.quote}"
               </p>
               <footer className="flex items-center gap-3">
-                <img src="/manuel-lopez.jpeg" alt={t.experience.everis.testimonial.author} className="w-10 h-10 rounded-full object-cover" />
+                <picture>
+                  <source srcSet="/manuel-lopez.webp" type="image/webp" />
+                  <img src="/manuel-lopez.jpeg" alt={t.experience.everis.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                </picture>
                 <div className="flex-1">
                   <span className="text-sm font-medium text-foreground block">{t.experience.everis.testimonial.author}</span>
                   <span className="text-xs text-muted-foreground">{t.experience.everis.testimonial.role}</span>
@@ -1935,7 +1953,10 @@ function App() {
                             "{item.testimonial.quote}"
                           </p>
                           <footer className="flex items-center gap-2">
-                            <img src={item.testimonial.photo} alt={item.testimonial.author} className="w-8 h-8 rounded-full object-cover" />
+                            <picture>
+                              <source srcSet={item.testimonial.photo.replace(/\.(png|jpg|jpeg)$/i, '.webp')} type="image/webp" />
+                              <img src={item.testimonial.photo} alt={item.testimonial.author} className="w-8 h-8 rounded-full object-cover" width={32} height={32} loading="lazy" decoding="async" />
+                            </picture>
                             <div className="flex-1">
                               <span className="text-xs font-medium text-foreground block">{item.testimonial.author}</span>
                               <span className="text-[10px] text-muted-foreground">{item.testimonial.role}</span>
