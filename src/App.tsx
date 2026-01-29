@@ -1836,11 +1836,11 @@ function App() {
                       : 'bg-card border border-border hover:border-primary/30'
                   }`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                  <div className="flex items-start justify-between mb-3">
                     <h3 className={`font-display text-lg font-bold transition-colors ${
                       isTool ? 'group-hover:text-tool' : 'group-hover:text-primary'
                     }`}>{project.title}</h3>
-                    <div className="flex items-center gap-2 self-center sm:self-auto">
+                    <div className="flex items-center gap-2">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         isTool
                           ? 'bg-tool/10 text-tool'
