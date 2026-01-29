@@ -1841,7 +1841,7 @@ function App() {
                       isTool ? 'group-hover:text-tool' : 'group-hover:text-primary'
                     }`}>{project.title}</h3>
                     <div className="flex items-center gap-2">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-center ${
                         isTool
                           ? 'bg-tool/10 text-tool'
                           : isHighlight
@@ -1849,7 +1849,7 @@ function App() {
                           : 'bg-primary/10 text-primary'
                       }`}>{project.badge}</span>
                       {project.badgeBuilding && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-500 flex items-center gap-1.5">
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium text-center bg-green-500/10 text-green-500 flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-dot"></span>
                           {project.badgeBuilding}
                         </span>
