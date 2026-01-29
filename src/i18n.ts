@@ -367,7 +367,7 @@ export const translations = {
     speaking: {
       title: 'Enseñando',
       slides: 'Slides',
-      comingSoon: 'Próximamente más.',
+      comingSoon: 'Próximamente.',
       items: [
         {
           year: '2026',
