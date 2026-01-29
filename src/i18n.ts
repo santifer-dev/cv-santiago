@@ -212,7 +212,7 @@ export const translations = {
       ],
       saPlaybook: {
         title: 'SA Playbook',
-        badge: 'Private · On Request',
+        badge: 'Privado · Bajo petición',
         tagline: 'Claude Code + Airtable Gold Partner Stack',
         desc: 'Sistema de productividad para Solutions Architects que trabajan con múltiples clientes DTC. Contexto instantáneo entre proyectos, guardrails automáticos para producción, y documentación que se genera sola.',
         features: [
