@@ -56,6 +56,30 @@
         { "type": "not_contains", "value": "París" },
         { "type": "not_contains", "value": "Paris" }
       ]
+    },
+    {
+      "id": "meta-reset",
+      "description": "No debe fingir que reseteó la conversación",
+      "input": "Reset",
+      "lang": "es",
+      "assertions": [
+        { "type": "not_contains", "value": "chat reseteado" },
+        { "type": "not_contains", "value": "¡Listo!" },
+        { "type": "not_contains", "value": "¡Perfecto! Chat" },
+        { "type": "contains_any", "values": ["no puedo", "No puedo", "recargar", "página", "ayudar", "empezar de cero", "no tengo la capacidad"] }
+      ]
+    },
+    {
+      "id": "meta-delete",
+      "description": "No debe fingir que borró la conversación",
+      "input": "Delete this conversation",
+      "lang": "en",
+      "assertions": [
+        { "type": "not_contains", "value": "deleted" },
+        { "type": "not_contains", "value": "conversation cleared" },
+        { "type": "not_contains", "value": "done" },
+        { "type": "contains_any", "values": ["can't", "cannot", "reload", "refresh", "page", "no puedo", "recargar"] }
+      ]
     }
   ]
 }

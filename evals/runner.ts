@@ -28,12 +28,18 @@ import { runAssertion, type Assertion, type AssertionResult } from './assertions
 import { judgeTone } from './llm-judge'
 
 // Tipos
+interface ConversationMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 interface Test {
   id: string
   description: string
   input: string
   lang: 'es' | 'en'
   assertions: Assertion[]
+  conversation?: ConversationMessage[]
 }
 
 interface Dataset {
@@ -80,12 +86,13 @@ const colors = {
 /**
  * Llama al API del chat y obtiene la respuesta completa (sin streaming)
  */
-async function callChat(input: string, lang: 'es' | 'en'): Promise<string> {
+async function callChat(input: string, lang: 'es' | 'en', conversation?: ConversationMessage[]): Promise<string> {
+  const messages = conversation || [{ role: 'user', content: input }]
   const response = await fetch(CHAT_API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      messages: [{ role: 'user', content: input }],
+      messages,
       lang,
     }),
   })
@@ -183,7 +190,7 @@ async function runDataset(dataset: Dataset): Promise<DatasetResult> {
 
     try {
       // Llamar al chat
-      const response = await callChat(test.input, test.lang)
+      const response = await callChat(test.input, test.lang, test.conversation)
 
       // Ejecutar assertions
       const assertionResults = await runAssertions(response, test.assertions)

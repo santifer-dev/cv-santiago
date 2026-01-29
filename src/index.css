@@ -34,6 +34,10 @@
     /* Gradient colors for chat/buttons */
     --gradient-from: 187 86% 53%; /* cyan-400 */
     --gradient-to: 270 91% 65%;   /* purple-500 */
+    /* Semantic accent colors */
+    --gold: 43 76% 38%;
+    --success: 142 72% 29%;
+    --tool: 187 72% 48%;
   }
 
   .dark {
@@ -50,6 +54,10 @@
     --card-foreground: 0 0% 93%;
     --gradient-from: 187 86% 53%;
     --gradient-to: 270 91% 65%;
+    /* Semantic accent colors */
+    --gold: 45 97% 49%;
+    --success: 142 71% 45%;
+    --tool: 187 92% 50%;
   }
 
   /* ========== PROFILE: WARM - Orange/Teal ========== */
@@ -67,6 +75,10 @@
     --card-foreground: 20 20% 10%;
     --gradient-from: 24 85% 58%;   /* Bright orange */
     --gradient-to: 181 100% 32%;   /* Teal */
+    /* Semantic accent colors */
+    --gold: 43 76% 38%;
+    --success: 142 72% 29%;
+    --tool: 22 78% 50%;
   }
 
   .theme-warm.dark {
@@ -83,6 +95,10 @@
     --card-foreground: 30 20% 90%;
     --gradient-from: 24 90% 55%;   /* Orange */
     --gradient-to: 181 85% 38%;    /* Teal */
+    /* Semantic accent colors */
+    --gold: 45 97% 49%;
+    --success: 142 71% 45%;
+    --tool: 24 90% 55%;
   }
 
   * {
@@ -181,6 +197,36 @@
   .border-primary\/50 { border-color: hsl(var(--primary) / 0.5); }
   .border-accent\/20 { border-color: hsl(var(--accent) / 0.2); }
   .border-accent\/30 { border-color: hsl(var(--accent) / 0.3); }
+
+  /* Gold semantic color utilities */
+  .text-gold { color: hsl(var(--gold)); }
+  .bg-gold\/5 { background-color: hsl(var(--gold) / 0.05); }
+  .bg-gold\/10 { background-color: hsl(var(--gold) / 0.1); }
+  .bg-gold\/15 { background-color: hsl(var(--gold) / 0.15); }
+  .bg-gold\/20 { background-color: hsl(var(--gold) / 0.2); }
+  .border-gold\/10 { border-color: hsl(var(--gold) / 0.1); }
+  .border-gold\/20 { border-color: hsl(var(--gold) / 0.2); }
+  .border-gold\/30 { border-color: hsl(var(--gold) / 0.3); }
+  .border-gold\/50 { border-color: hsl(var(--gold) / 0.5); }
+  .from-gold\/5 { --tw-gradient-from: hsl(var(--gold) / 0.05); }
+  .from-gold\/15 { --tw-gradient-from: hsl(var(--gold) / 0.15); }
+  .via-gold\/5 { --tw-gradient-via: hsl(var(--gold) / 0.05); }
+  .to-gold\/5 { --tw-gradient-to: hsl(var(--gold) / 0.05); }
+
+  /* Success semantic color utilities */
+  .text-success { color: hsl(var(--success)); }
+  .bg-success\/5 { background-color: hsl(var(--success) / 0.05); }
+  .bg-success\/10 { background-color: hsl(var(--success) / 0.1); }
+  .border-success\/30 { border-color: hsl(var(--success) / 0.3); }
+  .border-success\/50 { border-color: hsl(var(--success) / 0.5); }
+  .from-success\/10 { --tw-gradient-from: hsl(var(--success) / 0.1); }
+  .to-success\/5 { --tw-gradient-to: hsl(var(--success) / 0.05); }
+
+  /* Tool semantic color utilities */
+  .text-tool { color: hsl(var(--tool)); }
+  .bg-tool\/10 { background-color: hsl(var(--tool) / 0.1); }
+  .border-tool\/30 { border-color: hsl(var(--tool) / 0.3); }
+  .border-tool\/50 { border-color: hsl(var(--tool) / 0.5); }
 
   .from-primary { --tw-gradient-from: hsl(var(--primary)); }
   .from-primary\/10 { --tw-gradient-from: hsl(var(--primary) / 0.1); }

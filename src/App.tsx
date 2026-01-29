@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Mic, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer } from 'lucide-react'
+import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -77,15 +77,25 @@ function parseHighlights(text: string): ParsedHighlights {
       i += 2
     }
     // Check for + (Tipo C: gradiente solo en encendido final)
+    // Si +digit (ej: +15), mostrar como "15+" (convención internacional)
     else if (text[i] === '+') {
+      const nextIsDigit = /\d/.test(text[i + 1] || '')
       const start = clean.length
-      i++
+      i++ // skip opening +
+      if (nextIsDigit) {
+        // Leer dígitos primero, luego añadir + después (15+ en vez de +15)
+        while (i < text.length && /\d/.test(text[i])) {
+          clean += text[i]
+          i++
+        }
+        clean += '+'
+      }
       while (i < text.length && text[i] !== '+') {
         clean += text[i]
         i++
       }
       finalRanges.push([start, clean.length])
-      i++
+      i++ // skip closing +
     }
     // Check for single * (Tipo B: gradiente solo durante typewriter)
     else if (text[i] === '*') {
@@ -480,7 +490,9 @@ function ReflectiveTypewriter({
   dimmed = false,
   finalReveal = false,
   revealed = false,
-  onComplete
+  onComplete,
+  skipRef,
+  onStart
 }: {
   context: string
   reflections: readonly string[]
@@ -490,6 +502,8 @@ function ReflectiveTypewriter({
   finalReveal?: boolean
   revealed?: boolean
   onComplete?: () => void
+  skipRef?: React.MutableRefObject<(() => void) | null>
+  onStart?: () => void
 }) {
   const [state, dispatch] = useReducer(typewriterReducer, initialTypewriterState)
   const { phase, displayText, contextComplete, currentReflection, completedHookLines, currentHookParagraph, currentHookLine } = state
@@ -529,6 +543,11 @@ function ReflectiveTypewriter({
     onComplete?.()
   }, [allHookLinesComplete, onComplete])
 
+  // Expose skipToComplete to parent via ref
+  useEffect(() => {
+    if (skipRef) skipRef.current = skipToComplete
+  }, [skipRef, skipToComplete])
+
   // Check sessionStorage on mount - skip if already seen
   useEffect(() => {
     const seen = sessionStorage.getItem(STORY_SEEN_KEY)
@@ -554,8 +573,9 @@ function ReflectiveTypewriter({
   useEffect(() => {
     if (isInView && phase === 'idle') {
       dispatch({ type: 'START' })
+      onStart?.()
     }
-  }, [isInView, phase])
+  }, [isInView, phase, onStart])
 
   // Click to skip handler
   useEffect(() => {
@@ -750,11 +770,11 @@ function ReflectiveTypewriter({
   return (
     <div
       ref={setRefs}
-      className={`${className} ${phase !== 'complete' && phase !== 'idle' ? 'cursor-pointer' : ''}`}
+      className={`${className} min-h-[7rem] md:min-h-[8rem] ${phase !== 'complete' && phase !== 'idle' ? 'cursor-pointer' : ''}`}
       title={phase !== 'complete' && phase !== 'idle' ? 'Click to skip' : undefined}
     >
       {/* Context line */}
-      <p className="mb-1">
+      <p className="-mb-1">
         {phase === 'context' ? (
           <>
             {renderHighlightedText(displayText, [], {
@@ -817,7 +837,7 @@ function ReflectiveTypewriter({
             if (!textToShow && !isCurrentLine) return null
 
             return (
-              <span key={lIdx} className={lIdx > 0 ? "block mt-0.5" : ""}>
+              <span key={lIdx} className={lIdx > 0 ? "block -mt-1" : ""}>
                 {renderHighlightedText(textToShow, [], {
                   dimmed,
                   finalReveal,
@@ -845,6 +865,10 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
   const [textDimmed, setTextDimmed] = useState(false)
   const [finalReveal, setFinalReveal] = useState(false)  // Tipo C se enciende con gradiente
   const [textRevealed, setTextRevealed] = useState(false) // Resto del texto se enciende
+  const [animationStarted, setAnimationStarted] = useState(false)
+  const [scrollSkipped, setScrollSkipped] = useState(false)
+  const skipRef = useRef<(() => void) | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
 
   // Reset states when language changes
   useEffect(() => {
@@ -860,6 +884,8 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
       setTextDimmed(false)
       setFinalReveal(false)
       setTextRevealed(false)
+      setAnimationStarted(false)
+      setScrollSkipped(false)
     }
   }, [t])
 
@@ -878,7 +904,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
     // Secuencia de animación post-typewriter:
     // 1. Esperar a que Tipo B (Construir) termine de desvanecerse (~2.5s transición)
     // 2. Dimmed: todo se atenúa
-    // 3. FinalReveal: Tipo C se enciende con gradiente (16 años + sistemas)
+    // 3. FinalReveal: Tipo C se enciende con gradiente (+15 años + sistemas)
     // 4. Revealed: resto del texto se enciende, Tipo C MANTIENE gradiente
 
     // Step 1: Dim everything (2500ms - espera a que Tipo B haya perdido gradiente)
@@ -903,51 +929,105 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
     }
   }, [typewriterComplete])
 
+  // Scroll-past-as-skip: si el usuario scrollea pasando la sección, auto-skip
+  useEffect(() => {
+    if (typewriterComplete) return
+    const section = sectionRef.current
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+          setScrollSkipped(true)
+          skipRef.current?.()
+        }
+      },
+      { threshold: 0 }
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [typewriterComplete])
+
   return (
-    <section id="about" className="relative py-16 md:py-24">
+    <section ref={sectionRef} id="about" className="relative py-16 md:py-24">
       {/* Fade de opacidad: transparente arriba → fondo sólido abajo */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none" />
-      <div className="relative max-w-5xl mx-auto px-6">
-        {/* Hook emocional con typewriter reflexivo */}
-        <ReflectiveTypewriter
-          context={t.story.context}
-          reflections={t.story.reflections}
-          hookParagraphs={t.story.hookParagraphs}
-          dimmed={textDimmed}
-          finalReveal={finalReveal}
-          revealed={textRevealed}
-          className="font-display text-lg md:text-2xl leading-relaxed mb-8 text-center max-w-3xl mx-auto"
-          onComplete={() => setTypewriterComplete(true)}
-        />
+      <div className="relative z-10 max-w-5xl mx-auto px-6">
+        {/* Hook emocional con typewriter reflexivo + botón skip */}
+        <div className="relative pb-12">
+          <ReflectiveTypewriter
+            context={t.story.context}
+            reflections={t.story.reflections}
+            hookParagraphs={t.story.hookParagraphs}
+            dimmed={textDimmed}
+            finalReveal={finalReveal}
+            revealed={textRevealed}
+            className="font-display text-lg md:text-2xl leading-relaxed text-center max-w-3xl mx-auto"
+            onComplete={() => setTypewriterComplete(true)}
+            skipRef={skipRef}
+            onStart={() => setAnimationStarted(true)}
+          />
 
-        {/* Contenido que aparece después del typewriter - delays sincronizados con callback */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.6, delay: typewriterComplete ? 0.1 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-center max-w-3xl mx-auto">
-            {t.story.why}
-          </p>
-        </motion.div>
+          {/* Botón skip — posición absoluta debajo del texto, en el padding reservado */}
+          <AnimatePresence>
+            {animationStarted && !typewriterComplete && (
+              <motion.button
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                onClick={() => skipRef.current?.()}
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm text-muted-foreground border border-border/50 bg-card backdrop-blur-sm cursor-pointer hover:bg-primary/10 hover:border-primary/30 hover:text-foreground transition-all duration-200"
+              >
+                <SkipForward className="w-3.5 h-3.5" />
+                {t.story.skipButton}
+              </motion.button>
+            )}
+          </AnimatePresence>
+        </div>
 
+        {/* Contenido que aparece después del typewriter - expansión suave (instantánea si scroll-skip) */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.6, delay: typewriterComplete ? 0.3 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
+          initial={{ height: 0, opacity: 0 }}
+          animate={typewriterComplete
+            ? { height: 'auto', opacity: 1 }
+            : { height: 0, opacity: 0 }
+          }
+          transition={scrollSkipped
+            ? { duration: 0 }
+            : {
+                height: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+                opacity: { duration: 0.4, delay: 0.1 }
+              }
+          }
+          style={{ overflow: 'hidden' }}
         >
-          <p className="text-base md:text-lg text-foreground font-medium mt-4 text-center max-w-3xl mx-auto">
-            {t.story.seeking}
-          </p>
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, delay: typewriterComplete ? 0.1 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-center max-w-3xl mx-auto">
+              {t.story.why}
+            </p>
+          </motion.div>
 
-        {/* Burbujas de navegación - delays sincronizados */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
-          transition={{ duration: 0.6, delay: typewriterComplete ? 0.5 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="flex flex-wrap justify-center gap-3 mt-10 mb-12"
-        >
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, delay: typewriterComplete ? 0.3 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <p className="text-base md:text-lg text-foreground font-medium mt-4 text-center max-w-3xl mx-auto">
+              {t.story.seeking}
+            </p>
+          </motion.div>
+
+          {/* Burbujas de navegación - delays sincronizados */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={typewriterComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, delay: typewriterComplete ? 0.5 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="flex flex-wrap justify-center gap-3 mt-10 mb-12"
+          >
           {t.story.nav.map((item) => {
             const icons: Record<string, React.ReactNode> = {
               briefcase: <Briefcase className="w-4 h-4" />,
@@ -968,8 +1048,8 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
                 href={item.href}
                 onClick={handleClick}
                 className={isHighlight
-                  ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:opacity-90 transition-all duration-300 text-sm font-medium shadow-lg shadow-primary/25"
-                  : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-300 text-sm font-medium"
+                  ? "flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme text-white border border-transparent hover:brightness-110 hover:shadow-xl hover:shadow-primary/30 active:brightness-95 transition-all duration-200 text-sm font-medium shadow-lg shadow-primary/25"
+                  : "flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 text-sm font-medium"
                 }
               >
                 {icons[item.icon]}
@@ -977,6 +1057,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
               </a>
             )
           })}
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -1090,7 +1171,7 @@ function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: (
       <span className="text-sm text-foreground">{message}</span>
       <button
         onClick={handleSwitch}
-        className="px-3 py-1 text-sm font-medium rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+        className="px-3 py-1 text-sm font-medium rounded-full bg-primary text-primary-foreground hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
       >
         {switchLabel}
       </button>
@@ -1159,7 +1240,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-300">
+    <div className="min-h-screen bg-background transition-colors duration-200">
       {/* Language suggestion banner */}
       <AnimatePresence>
         <LanguageBanner
@@ -1174,7 +1255,7 @@ function App() {
         <motion.button
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 400, damping: 17 }}
           onClick={toggleLang}
@@ -1194,8 +1275,8 @@ function App() {
         <motion.button
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.1, rotate: 15 }}
-          whileTap={{ scale: 0.95, rotate: -15 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 400, damping: 17 }}
           onClick={() => setIsDark(!isDark)}
           className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
@@ -1344,18 +1425,18 @@ function App() {
 
           {/* Business OS - Full Width Hero Card */}
           <AnimatedSection delay={0.1} className="mb-8">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-[#B8860B]/15 dark:from-[#FCB400]/15 via-[#B8860B]/5 dark:via-[#FCB400]/5 to-transparent border border-[#B8860B]/30 dark:border-[#FCB400]/30 hover:border-[#B8860B]/50 dark:hover:border-[#FCB400]/50 transition-all duration-300 group">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-all duration-200 group">
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center shrink-0">
                       <svg viewBox="0 0 200 170" className="w-6 h-6">
                         <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
                         <path fill="#18BFFF" d="M105.312 88.46v65.617c0 3.12 3.147 5.258 6.048 4.108l73.806-28.648a4.42 4.42 0 0 0 2.79-4.108V59.813c0-3.121-3.147-5.258-6.048-4.108l-73.806 28.648a4.42 4.42 0 0 0-2.79 4.108"/>
                         <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
                       </svg>
                     </div>
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">Source of Truth</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold">Source of Truth</span>
                   </div>
                   <h4 className="font-display text-2xl font-bold mb-4">{t.experience.santifer.businessOS.title}</h4>
                   <p className="text-muted-foreground mb-6">{t.experience.santifer.businessOS.desc}</p>
@@ -1372,18 +1453,18 @@ function App() {
                       }
                       return (
                         <li key={i} className="flex items-start gap-3">
-                          <span className="text-[#B8860B] dark:text-[#FCB400] mt-0.5">{icons[item.icon]}</span>
+                          <span className="text-gold mt-0.5">{icons[item.icon]}</span>
                           <span>{item.text}</span>
                         </li>
                       )
                     })}
                   </ul>
-                  <a href="#contact" className="block text-xs font-medium italic mt-auto pt-4 text-[#B8860B] dark:text-[#FCB400] hover:opacity-80 transition-opacity">{t.experience.santifer.businessOS.footer}</a>
+                  <a href="#contact" className="block text-xs font-medium italic mt-auto pt-4 text-gold hover:underline transition-colors duration-200">{t.experience.santifer.businessOS.footer}</a>
                 </div>
                 <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2 lg:gap-3 mt-4 lg:mt-0">
                   {t.experience.santifer.businessOS.metrics.map((metric, i) => (
-                    <div key={i} className="text-center p-2 lg:p-4 rounded-xl bg-background/50 border border-[#B8860B]/20 dark:border-[#FCB400]/20">
-                      <div className="font-display text-lg lg:text-2xl font-bold text-[#B8860B] dark:text-[#FCB400]">{metric.value}</div>
+                    <div key={i} className="text-center p-2 lg:p-4 rounded-xl bg-background/50 border border-gold/20">
+                      <div className="font-display text-lg lg:text-2xl font-bold text-gold">{metric.value}</div>
                       <div className="text-[10px] lg:text-xs text-muted-foreground leading-tight">{metric.label}</div>
                     </div>
                   ))}
@@ -1396,7 +1477,7 @@ function App() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {/* Large card - AI Agent */}
             <AnimatedSection delay={0.15} className="col-span-2 row-span-2">
-              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 hover:border-primary/40 transition-all duration-300 group flex flex-col">
+              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 hover:border-primary/40 transition-all duration-200 group flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Bot className="w-6 h-6 text-primary" />
@@ -1428,7 +1509,7 @@ function App() {
 
             {/* Large card - Web Programática + SEO */}
             <AnimatedSection delay={0.2} className="col-span-2 row-span-2">
-              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20 hover:border-accent/40 transition-all duration-300 group flex flex-col">
+              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20 hover:border-accent/40 transition-all duration-200 group flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
                     <Layout className="w-6 h-6 text-accent" />
@@ -1460,10 +1541,10 @@ function App() {
 
             {/* EXIT 2025 - Verde Success para destacar logro/credibilidad */}
             <AnimatedSection delay={0.25} className="col-span-2">
-              <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-[#16A34A]/10 dark:from-[#22C55E]/10 to-[#16A34A]/5 dark:to-[#22C55E]/5 border border-[#16A34A]/30 dark:border-[#22C55E]/30 hover:border-[#16A34A]/50 dark:hover:border-[#22C55E]/50 transition-all duration-300">
+              <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-success/10 to-success/5 border border-success/30 hover:border-success/50 transition-all duration-200">
                 <div className="flex items-center gap-3 mb-2">
-                  <Zap className="w-5 h-5 text-[#16A34A] dark:text-[#22C55E]" />
-                  <span className="font-display font-bold text-[#16A34A] dark:text-[#22C55E]">{t.experience.santifer.exit}</span>
+                  <Zap className="w-5 h-5 text-success" />
+                  <span className="font-display font-bold text-success">{t.experience.santifer.exit}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.exitDesc}</p>
               </div>
@@ -1471,7 +1552,7 @@ function App() {
 
             {/* ERP card */}
             <AnimatedSection delay={0.3}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Database className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.erp.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.erp.desc}</p>
@@ -1481,7 +1562,7 @@ function App() {
 
             {/* GPTs card */}
             <AnimatedSection delay={0.35}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Bot className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.gpts.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.gpts.desc}</p>
@@ -1491,7 +1572,7 @@ function App() {
 
             {/* Reservas card */}
             <AnimatedSection delay={0.4}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Timer className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.reservas.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
@@ -1501,7 +1582,7 @@ function App() {
 
             {/* CRM card */}
             <AnimatedSection delay={0.45}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Users className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.crm.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.crm.desc}</p>
@@ -1511,7 +1592,7 @@ function App() {
 
             {/* GenAI Marketing card */}
             <AnimatedSection delay={0.5}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Sparkles className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.genAI.title}</p>
                 <p className="text-xs text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
@@ -1641,29 +1722,29 @@ function App() {
 
           {/* SA Playbook - Premium Card */}
           <AnimatedSection delay={0.05} className="mb-8">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-[#B8860B]/15 dark:from-[#FCB400]/15 via-[#B8860B]/5 dark:via-[#FCB400]/5 to-transparent border border-[#B8860B]/30 dark:border-[#FCB400]/30 hover:border-[#B8860B]/50 dark:hover:border-[#FCB400]/50 transition-all duration-300 group relative overflow-hidden">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-all duration-200 group relative overflow-hidden">
               {/* Subtle glow effect */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#FCB400]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-gold/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 relative">
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-[#B8860B]/20 dark:bg-[#FCB400]/20 flex items-center justify-center shrink-0">
-                      <Terminal className="w-6 h-6 text-[#B8860B] dark:text-[#FCB400]" />
+                    <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center shrink-0">
+                      <Terminal className="w-6 h-6 text-gold" />
                     </div>
                     <div className="flex items-center gap-2">
-                      <Lock className="w-3 h-3 text-[#B8860B] dark:text-[#FCB400]" />
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-[#B8860B]/20 dark:bg-[#FCB400]/20 text-[#B8860B] dark:text-[#FCB400]">{t.projects.saPlaybook.badge}</span>
+                      <Lock className="w-3 h-3 text-gold" />
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold">{t.projects.saPlaybook.badge}</span>
                     </div>
                   </div>
                   <h4 className="font-display text-2xl font-bold mb-1">{t.projects.saPlaybook.title}</h4>
-                  <p className="text-sm text-[#B8860B] dark:text-[#FCB400] font-medium mb-4">{t.projects.saPlaybook.tagline}</p>
+                  <p className="text-sm text-gold font-medium mb-4">{t.projects.saPlaybook.tagline}</p>
                   <p className="text-muted-foreground mb-6">{t.projects.saPlaybook.desc}</p>
 
                   {/* Tech badges */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {['Claude Code', 'Airtable', 'Shopify', 'Make.com', 'Bash', 'MCP'].map((tech) => (
-                      <span key={tech} className="px-2 py-1 rounded-md text-xs bg-[#B8860B]/10 dark:bg-[#FCB400]/10 text-[#B8860B] dark:text-[#FCB400] border border-[#B8860B]/20 dark:border-[#FCB400]/20">{tech}</span>
+                      <span key={tech} className="px-2 py-1 rounded-md text-xs bg-gold/10 text-gold border border-gold/20">{tech}</span>
                     ))}
                   </div>
 
@@ -1677,26 +1758,26 @@ function App() {
                       }
                       return (
                         <li key={i} className="flex items-start gap-3">
-                          <span className="text-[#B8860B] dark:text-[#FCB400] mt-0.5">{icons[item.icon]}</span>
+                          <span className="text-gold mt-0.5">{icons[item.icon]}</span>
                           <span>{item.text}</span>
                         </li>
                       )
                     })}
                   </ul>
-                  <a href="#contact" className="inline-flex items-center gap-2 text-xs font-medium italic mt-auto pt-6 text-[#B8860B] dark:text-[#FCB400] hover:opacity-80 transition-opacity">
+                  <a href="#contact" className="inline-flex items-center gap-2 text-xs font-medium italic mt-auto pt-6 text-gold hover:underline transition-colors duration-200">
                     <Lock className="w-3 h-3" />
                     {t.projects.saPlaybook.footer}
                   </a>
                 </div>
 
                 {/* Right side - visual element */}
-                <div className="hidden lg:flex flex-col items-center justify-center p-6 rounded-xl bg-[#B8860B]/5 dark:bg-[#FCB400]/5 border border-[#B8860B]/10 dark:border-[#FCB400]/10 min-w-[180px]">
+                <div className="hidden lg:flex flex-col items-center justify-center p-6 rounded-xl bg-gold/5 border border-gold/10 min-w-[180px]">
                   <div className="text-4xl mb-3 opacity-80">
-                    <svg viewBox="0 0 24 24" className="w-16 h-16 text-[#B8860B] dark:text-[#FCB400]" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <svg viewBox="0 0 24 24" className="w-16 h-16 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M4 17l6-6-6-6M12 19h8" />
                     </svg>
                   </div>
-                  <span className="text-xs text-[#B8860B] dark:text-[#FCB400] font-medium text-center">Systems Thinking<br/>for SAs</span>
+                  <span className="text-xs text-gold font-medium text-center">Systems Thinking<br/>for SAs</span>
                 </div>
               </div>
             </div>
@@ -1730,7 +1811,7 @@ function App() {
             // Helper para parsear **bold** a elementos con estilo
             const parseBold = (text: string): React.ReactNode[] => {
               return text.split(/\*\*(.*?)\*\*/g).map((part, i) =>
-                i % 2 === 1 ? <strong key={i} className="text-cyan-500 font-semibold">{part}</strong> : part
+                i % 2 === 1 ? <strong key={i} className="text-tool font-semibold">{part}</strong> : part
               )
             }
 
@@ -1747,22 +1828,22 @@ function App() {
               return (
                 <div
                   ref={cardRef}
-                  className={`h-full p-6 rounded-2xl transition-all duration-300 flex flex-col ${hasHover ? 'group' : ''} ${
+                  className={`h-full p-6 rounded-2xl transition-all duration-200 flex flex-col ${hasHover ? 'group' : ''} ${
                     isHighlight
                       ? 'bg-gradient-to-br from-accent/5 to-transparent border-2 border-accent/50 hover:border-accent/70'
                       : isTool
-                      ? `bg-card border border-cyan-500/30 ${hasHover ? 'hover:border-cyan-500/50' : ''}`
+                      ? `bg-card border border-tool/30 ${hasHover ? 'hover:border-tool/50' : ''}`
                       : 'bg-card border border-border hover:border-primary/30'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
                     <h3 className={`font-display text-lg font-bold transition-colors ${
-                      isTool ? 'group-hover:text-cyan-500' : 'group-hover:text-primary'
+                      isTool ? 'group-hover:text-tool' : 'group-hover:text-primary'
                     }`}>{project.title}</h3>
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         isTool
-                          ? 'bg-cyan-500/10 text-cyan-500'
+                          ? 'bg-tool/10 text-tool'
                           : isHighlight
                           ? 'bg-accent/20 text-accent'
                           : 'bg-primary/10 text-primary'
@@ -1782,7 +1863,7 @@ function App() {
                     {project.tech.map((tech) => (
                       <span key={tech} className={`px-2 py-1 rounded-md text-xs ${
                         isTool
-                          ? 'bg-cyan-500/10 text-cyan-400'
+                          ? 'bg-tool/10 text-tool'
                           : 'bg-muted text-muted-foreground'
                       }`}>{tech}</span>
                     ))}
@@ -1793,7 +1874,7 @@ function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`inline-flex items-center gap-2 text-xs mt-auto ${
-                        isTool ? 'text-cyan-500 hover:text-cyan-400' : 'text-primary'
+                        isTool ? 'text-tool hover:text-tool' : 'text-primary'
                       } hover:underline`}
                     >
                       {project.link.includes('github.com') ? (
@@ -1869,42 +1950,62 @@ function App() {
         </div>
       </section>
 
-      {/* Speaking */}
+      {/* Sharing */}
       <section id="speaking" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Mic className="w-5 h-5 text-primary" />
+                <Sparkles className="w-5 h-5 text-primary" />
               </div>
               {t.speaking.title}
             </h2>
           </AnimatedSection>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {t.speaking.items.map((talk, i) => (
+            {t.speaking.items.map((talk: { year: string; event: string; eventUrl: string; title: string; desc: string; pdf: string; featured: boolean }, i: number) => (
               <AnimatedSection key={i} delay={0.1 + i * 0.1}>
-                <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group h-full flex flex-col">
-                  <span className="text-xs text-primary font-medium">
-                    {talk.year} · {talk.eventUrl ? (
-                      <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                        {talk.event} <ExternalLink className="w-3 h-3 inline" />
+                {talk.featured ? (
+                  <div className="relative rounded-2xl p-[1.5px] bg-gradient-theme h-full">
+                    <div className="p-6 rounded-[calc(1rem-1.5px)] bg-card h-full flex flex-col">
+                      <span className="text-xs text-primary font-medium">
+                        {talk.year} · {talk.eventUrl ? (
+                          <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                            {talk.event} <ExternalLink className="w-3 h-3 inline" />
+                          </a>
+                        ) : talk.event}
+                      </span>
+                      <h3 className="font-display font-bold mt-2 text-gradient-theme">{talk.title}</h3>
+                      <p className="text-sm text-muted-foreground mt-2 flex-1">{talk.desc}</p>
+                      <span className="mt-4 inline-flex items-center gap-2 text-xs text-muted-foreground/60">
+                        <Lock className="w-3.5 h-3.5" />
+                        {t.speaking.comingSoon}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 group h-full flex flex-col">
+                    <span className="text-xs text-primary font-medium">
+                      {talk.year} · {talk.eventUrl ? (
+                        <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                          {talk.event} <ExternalLink className="w-3 h-3 inline" />
+                        </a>
+                      ) : talk.event}
+                    </span>
+                    <h3 className="font-display font-bold mt-2 group-hover:text-primary transition-colors">{talk.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-2 flex-1">{talk.desc}</p>
+                    {talk.pdf && (
+                      <a
+                        href={talk.pdf}
+                        download
+                        className="mt-4 inline-flex items-center gap-2 text-xs text-primary hover:underline"
+                      >
+                        <Download className="w-4 h-4" />
+                        {t.speaking.slides}
                       </a>
-                    ) : talk.event}
-                  </span>
-                  <h3 className="font-display font-bold mt-2 group-hover:text-primary transition-colors">{talk.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-2 flex-1">{talk.desc}</p>
-                  {talk.pdf && (
-                    <a
-                      href={talk.pdf}
-                      download
-                      className="mt-4 inline-flex items-center gap-2 text-xs text-primary hover:underline"
-                    >
-                      <Download className="w-4 h-4" />
-                      {t.speaking.slides}
-                    </a>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </AnimatedSection>
             ))}
           </div>
@@ -1929,7 +2030,7 @@ function App() {
               <div className="space-y-4">
                 {t.education.items.map((item, i) => (
                   <AnimatedSection key={i} delay={0.1 + i * 0.1}>
-                    <div className="p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-300 group">
+                    <div className="p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 group">
                       <div className="flex items-start justify-between">
                         <div>
                           <span className="text-xs text-primary font-medium">{item.year} · {item.org}</span>
@@ -2001,7 +2102,7 @@ function App() {
                       href={cert.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-accent/30 transition-all duration-300 group cursor-pointer"
+                      className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-accent/30 transition-all duration-200 group cursor-pointer"
                     >
                       <span className="text-sm font-mono text-accent font-medium">{cert.year}</span>
                       <div className="flex-1">
@@ -2095,7 +2196,7 @@ function App() {
             <div className="flex flex-wrap justify-center gap-4">
               <a
                 href={`mailto:${t.email}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-medium hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
               >
                 <Mail className="w-4 h-4" />
                 {t.cta.contact}
@@ -2104,7 +2205,7 @@ function App() {
                 href="https://linkedin.com/in/santifer/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:border-primary/50 transition-all duration-300 hover:bg-primary/5"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:border-primary/50 transition-all duration-200 hover:bg-primary/5"
               >
                 <Linkedin className="w-4 h-4" />
                 LinkedIn

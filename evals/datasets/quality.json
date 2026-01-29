@@ -47,6 +47,31 @@
       "assertions": [
         { "type": "llm_judge", "criteria": "El tono es profesional pero cercano, transmite confianza sin ser arrogante, y se siente auténtico (no como un chatbot genérico)" }
       ]
+    },
+    {
+      "id": "response-variation",
+      "description": "La segunda respuesta a la misma pregunta debe variar",
+      "input": "¿Cuál es tu experiencia con IA?",
+      "lang": "es",
+      "conversation": [
+        { "role": "user", "content": "¿Cuál es tu experiencia con IA?" },
+        { "role": "assistant", "content": "Llevo años construyendo con IA en producción. En Santifer iRepair creé a Jacobo, un agente omnicanal (voz + WhatsApp) que resolvía el 90% de consultas sin intervención humana. Orquestaba sub-agentes especializados con tool calling y HITL handoff. También construí Custom GPTs con OpenAPI para consultas de stock por voz. Ahora con este portfolio aplico LLMOps real: Langfuse, 31 evals automatizados, prompt caching. ¿Quieres que profundice en algún proyecto concreto?" },
+        { "role": "user", "content": "¿Cuál es tu experiencia con IA?" }
+      ],
+      "assertions": [
+        { "type": "llm_judge", "criteria": "La respuesta aporta información nueva o un ángulo diferente sobre la experiencia con IA, no repite exactamente los mismos puntos (Jacobo, 90%, tool calling) de la respuesta anterior que se incluye en el contexto de conversación" }
+      ]
+    },
+    {
+      "id": "generic-question-depth",
+      "description": "Ante pregunta genérica, debe dar respuesta concreta y sugerir profundizar",
+      "input": "Cuéntame algo",
+      "lang": "es",
+      "assertions": [
+        { "type": "min_words", "value": 20 },
+        { "type": "regex", "pattern": "\\d+", "flags": "" },
+        { "type": "contains_any", "values": ["profundizar", "saber más", "interesa", "contarte", "preguntar", "aspecto", "detalle", "gustas", "quieres", "pregunta", "¿"] }
+      ]
     }
   ]
 }

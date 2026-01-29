@@ -17,7 +17,11 @@ function classifyIntent(text) {
     'ignore', 'pretend', 'roleplay', 'act as', 'you are now',
     'forget', 'disregard', 'bypass', 'override', 'jailbreak',
     'dan', 'developer mode', 'evil', 'malicious', 'hack',
-    'prompt', 'system prompt', 'instructions', 'ignore previous'
+    'prompt', 'system prompt', 'instructions', 'ignore previous',
+    'protocolo de defensa', 'olvida todo', 'nueva personalidad',
+    'reset your', 'reveal your', 'show me your rules',
+    'your objective', 'your orders', 'tus órdenes', 'tus reglas',
+    'cuáles son tus instrucciones', 'rules configured', 'reglas configuradas'
   ]
   if (jailbreakPatterns.some(p => lower.includes(p))) {
     tags.push('jailbreak-attempt')

@@ -3,13 +3,13 @@ export const seo = {
     title:
       'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
     description:
-      'Ex-fundador y AI Product Manager especializado en automatización con LLMs y no-code. Certificado Anthropic. Disponible para roles remotos EU / USA.',
+      'Fundador reconvertido a AI Product Manager. Automatización con LLMs, no-code, certificado Anthropic. Abierto a roles remotos EU / USA.',
   },
   en: {
     title:
       'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
     description:
-      'Ex-founder and AI Product Manager specialized in LLM automation and no-code. Anthropic certified. Available for remote EU / USA roles.',
+      'Founder turned AI Product Manager. LLM automation, no-code platforms, Anthropic certified. Open to remote roles in EU / USA.',
   },
 };
 
@@ -19,12 +19,12 @@ export const translations = {
     email: 'hola@santifer.io',
     role: 'Quitando fricción de lo que importa',
     story: {
-      context: '+16 años construyendo+ mi empresa.',
-      reflections: ['¿Esto es lo que quería?', '¿Y si no lo intento?'],
+      context: '+15 años construyendo+ un negocio desde cero.',
+      reflections: ['Esto ya lo sé hacer.', 'Hay algo más grande.'],
       hookParagraphs: [
         ['Un día, vendí el negocio. Compré *claridad.*'],
         [
-          'Lo que me apasiona no cabe en una tienda.',
+          'Lo que me mueve no cabe en una tienda.',
           '*Construir* +sistemas que liberan equipos+. Eso escala.',
         ],
       ],
@@ -45,11 +45,12 @@ export const translations = {
         'Forward-Deployed',
         'Reliability & Ops',
       ],
+      skipButton: 'Saltar intro',
     },
     taglines: [
       '*Quitando* fricción de lo que *importa*.',
       '*Descubriendo* los límites de la IA.',
-      'Ex-fundador. Ahora *escalando* impacto.',
+      'Fundador. Ahora *escalando* impacto.',
       'De la ambigüedad al *producto*.',
       '*Construyo* agentes que trabajan solos.',
       'Si se repite, lo *automatizo*.',
@@ -62,11 +63,11 @@ export const translations = {
     ],
     summary: {
       title: 'Resumen Profesional',
-      p1: 'Ex-fundador y constructor de productos especializado en',
+      p1: 'Fundador y constructor de productos enfocado en',
       p1Highlight: 'automatización impulsada por IA',
       p1End:
-        'y plataformas no / low-code. Después de escalar y vender mi negocio (venta en funcionamiento, 2025), ahora me enfoco en roles donde el impacto escala: convertir objetivos empresariales ambiguos en productos y flujos de trabajo seguros, medibles y listos para empresas.',
-      p2: 'Opero con propiedad end-to-end a través de',
+        'y plataformas no / low-code. Tras escalar y vender mi negocio (venta en funcionamiento, 2025), me enfoco en roles donde el impacto se multiplica: convertir objetivos difusos en productos y workflows seguros, medibles y listos para producción.',
+      p2: 'Propiedad end-to-end a través de',
       p2Highlight: 'descubrimiento → priorización → entrega → adopción',
       p2End: ', colaborando estrechamente con stakeholders e ingeniería.',
       cards: [
@@ -239,12 +240,12 @@ export const translations = {
           'Construí, escalé y vendí el negocio como venta en funcionamiento',
         highlights: [
           'Reparación de móviles, tablets y smartwatches — +30,000 reparaciones',
-          'Lideré transformación end-to-end de operaciones de servicio',
+          'Transformé de arriba a abajo las operaciones de servicio',
           'Productivicé workflows con validación, manejo de errores y reintentos',
           'Documenté SOPs y entrené al personal para adopción',
           'Cerré el loop Problema → Solución → Autoservicio para ~90% de clientes',
           'Experiencia directa front-of-house (2009-2015) y reparación técnica (2009-2019)',
-          'Filosofía: automatizar todo lo posible—para el cliente y para procesos internos—para maximizar el valor entregado',
+          'Filosofía: si se repite, se automatiza — para el cliente y para el equipo',
         ],
         businessOS: {
           title: 'Business Operating System',
@@ -364,9 +365,19 @@ export const translations = {
       },
     },
     speaking: {
-      title: 'Ponencias',
+      title: 'Enseñando',
       slides: 'Slides',
+      comingSoon: 'More coming soon.',
       items: [
+        {
+          year: '2026',
+          event: 'Marily Nika AI PM Bootcamp',
+          eventUrl: 'https://maven.com/marily-nika/ai-pm-bootcamp',
+          title: 'Teaching Fellow',
+          desc: 'Enseñando a AI product managers a construir y lanzar — no solo definir.',
+          pdf: '',
+          featured: true,
+        },
         {
           year: '2025',
           event: 'Marily Nika AI PM Bootcamp',
@@ -374,6 +385,7 @@ export const translations = {
           title: "No-Code: The AI PM's Secret Weapon",
           desc: 'Community session de 1h sobre no-code (Zapier, Make, n8n, Airtable) como superpoder del AI PM para validar y entregar más rápido.',
           pdf: '/slides/No-Code-The-AI-PMs-Secret-Weapon.pdf',
+          featured: false,
         },
         {
           year: '2025',
@@ -382,6 +394,7 @@ export const translations = {
           title: 'Hiperautomatiza tu Pyme',
           desc: 'Taller sobre hiperautomatización para pymes: orquestación, RPA, IA y gobernanza. Caso práctico: Santifer iRepair.',
           pdf: '/slides/Hiperautomatiza tu Pyme (SFVA).pdf',
+          featured: false,
         },
       ],
     },
@@ -491,7 +504,7 @@ export const translations = {
     },
     cta: {
       title: '¿Hablamos?',
-      desc: 'Busco un rol senior remoto en EU / USA para liderar cambios de proceso, mejorar la experiencia y eficiencia del equipo, y entregar resultados con métricas claras.',
+      desc: 'Busco un rol senior remoto (EU / USA) donde pueda liderar producto, desbloquear equipos con automatización y entregar resultados que se puedan medir.',
       contact: 'Contactar',
     },
   },
@@ -500,18 +513,18 @@ export const translations = {
     email: 'hi@santifer.io',
     role: 'Removing friction from what matters',
     story: {
-      context: '+16 years building+ my company.',
-      reflections: ['Is this what I wanted?', "What if I don't try?"],
+      context: '+15 years building+ a business from scratch.',
+      reflections: ["I've mastered this.", "There's something bigger."],
       hookParagraphs: [
-        ['One day, I sold the business. I bought *clarity.*'],
+        ['One day, I sold it. I bought *clarity.*'],
         [
-          "What I'm passionate about doesn't fit in a store.",
-          '*Building* +systems that free teams+. That scales.',
+          "What drives me doesn't fit on a shelf.",
+          '*Building* +systems that unblock teams+. That scale.',
         ],
       ],
       why: 'At Santifer iRepair I automated everything I could: from an AI agent that handled 90% of customers to an operating system orchestrating 12 databases.',
       seeking:
-        "Now I'm looking to do that at scale—in companies where impact multiplies.",
+        "Now I want to do it at scale — where impact compounds.",
       nav: [
         { icon: 'briefcase', label: 'My path', href: '#experience' },
         { icon: 'folder', label: 'What I build', href: '#projects' },
@@ -526,11 +539,12 @@ export const translations = {
         'Forward-Deployed',
         'Reliability & Ops',
       ],
+      skipButton: 'Skip intro',
     },
     taglines: [
       '*Removing* friction from what *matters*.',
       "*Discovering* AI's limits.",
-      'Ex-founder. Now *scaling* impact.',
+      'Founder. Now *scaling* impact.',
       'From ambiguity to *product*.',
       'I *build* agents that work on their own.',
       'If it repeats, I *automate* it.',
@@ -543,11 +557,11 @@ export const translations = {
     ],
     summary: {
       title: 'Professional Summary',
-      p1: 'Former founder and product builder specialized in',
+      p1: 'Founder and product builder focused on',
       p1Highlight: 'AI-powered automation',
       p1End:
-        'and no / low-code platforms. After scaling and selling my business (going-concern sale, 2025), I now focus on roles where impact scales: turning ambiguous business goals into secure, measurable, enterprise-ready products and workflows.',
-      p2: 'I operate with end-to-end ownership across',
+        'and no / low-code platforms. After scaling and selling my business (going-concern sale, 2025), I focus on roles where impact compounds: turning ambiguous business goals into secure, measurable, enterprise-ready products and workflows.',
+      p2: 'End-to-end ownership across',
       p2Highlight: 'discovery → prioritization → delivery → adoption',
       p2End: ', collaborating closely with stakeholders and engineering.',
       cards: [
@@ -561,7 +575,7 @@ export const translations = {
         },
         {
           title: 'Technical Fluency',
-          desc: 'APIs, LLM / agent workflows, orchestration and automation',
+          desc: 'APIs, LLM / agent workflows, orchestration, and automation',
         },
       ],
     },
@@ -685,7 +699,7 @@ export const translations = {
           title: 'Watermark Remover',
           badge: 'Open Source',
           badgeBuilding: '',
-          desc: 'Python CLI to remove watermarks from images using AI. Automatic detection with YOLO and LaMa inpainting for realistic reconstruction.',
+          desc: 'Python CLI to remove watermarks from images using AI. Automatic detection with YOLO and LaMa inpainting for clean, realistic results.',
           tech: ['Python', 'YOLO', 'LaMa', 'OpenCV'],
           link: 'github.com/santifer-dev/watermark-remover',
         },
@@ -716,15 +730,15 @@ export const translations = {
         role: 'Founder & Product Lead (AI Automation)',
         period: '2009 - 2025 · Retail / Services B2B-B2C',
         exit: 'Exit 2025',
-        exitDesc: 'Built, scaled and sold the business as a going concern',
+        exitDesc: 'Built, scaled, and sold the business as a going concern',
         highlights: [
           'Mobile, tablet and smartwatch repairs — +30,000 repairs completed',
-          'Owned end-to-end transformation across service operations',
+          'Drove full automation transformation across service operations',
           'Productionized workflows with validation checks, error handling, retries',
           'Documented SOPs and trained staff for adoption',
           'Closed the Problem → Solution → Self-service loop for ~90% of customers',
           'Direct front-of-house experience (2009-2015) and hands-on repairs (2009-2019)',
-          'Philosophy: automate everything possible—for the customer and for internal processes—to maximize value delivered',
+          'Philosophy: if it repeats, automate it — for the customer and for the team',
         ],
         businessOS: {
           title: 'Business Operating System',
@@ -821,7 +835,7 @@ export const translations = {
         period: '2024 - 2025 · D2C Cosmetics · Shopify',
         desc: 'Designed Airtable as internal Operating System: inventory, orders, and tasks. Co-design workshops with operations. Airtable ↔ Shopify integration analysis.',
         testimonial: {
-          quote: 'His expertise was key to structuring our data in an organized way... Allowing us to spend less time on bureaucratic tasks and more on truly productive work.',
+          quote: 'His expertise was key to structuring our data properly — so we spend less time on admin and more on work that actually moves the needle.',
           author: 'Juan Sabaté',
           role: 'co-CEO @ LICO Cosmetics',
         },
@@ -834,16 +848,26 @@ export const translations = {
           desc: 'Graph-based RL engine with automatic feedback loops. Liaison between dev, consulting, and project areas. Pioneer system pre-LLMs.',
         },
         testimonial: {
-          quote: 'He showed enormous enthusiasm and drive to do well... He refused to settle for his starting position, and that restlessness made him progress by leaps and bounds. Committed, valuable, loyal and above all, with great attitude.',
+          quote: 'Huge enthusiasm and drive from day one. He refused to settle for his starting role — that restlessness pushed him to grow fast. Committed, reliable, and above all, someone with real attitude.',
           author: 'Manuel López Alcázar',
           role: 'Partner @ KPMG (was my supervisor at Everis)',
         },
       },
     },
     speaking: {
-      title: 'Speaking',
+      title: 'Sharing',
       slides: 'Slides',
+      comingSoon: 'More coming soon.',
       items: [
+        {
+          year: '2026',
+          event: 'Marily Nika AI PM Bootcamp',
+          eventUrl: 'https://maven.com/marily-nika/ai-pm-bootcamp',
+          title: 'Teaching Fellow',
+          desc: 'Teaching AI product managers to build and ship — not just define.',
+          pdf: '',
+          featured: true,
+        },
         {
           year: '2025',
           event: 'Marily Nika AI PM Bootcamp',
@@ -851,6 +875,7 @@ export const translations = {
           title: "No-Code: The AI PM's Secret Weapon",
           desc: '1h community session on no-code (Zapier, Make, n8n, Airtable) as an AI PM superpower to validate and deliver faster.',
           pdf: '/slides/No-Code-The-AI-PMs-Secret-Weapon.pdf',
+          featured: false,
         },
         {
           year: '2025',
@@ -859,6 +884,7 @@ export const translations = {
           title: 'Hiperautomatiza tu Pyme',
           desc: 'Workshop on hyperautomation for SMEs: orchestration, RPA, AI and governance. Case study: Santifer iRepair.',
           pdf: '/slides/Hiperautomatiza tu Pyme (SFVA).pdf',
+          featured: false,
         },
       ],
     },
@@ -877,7 +903,7 @@ export const translations = {
           year: '2024',
           org: 'BIGSEO',
           title: 'Master in Artificial Intelligence',
-          desc: 'Generative AI applied to business',
+          desc: 'Applied GenAI for business',
         },
         {
           year: '2023',
@@ -885,7 +911,7 @@ export const translations = {
           title: 'Master in SEO',
           desc: 'Technical SEO, content and analytics',
           testimonial: {
-            quote: 'His commitment and evolution during the training was remarkable. He demonstrated not only his SEO knowledge but also a brilliant ability to unite groups and earn the appreciation of all his classmates.',
+            quote: 'Santiago stood out — not just for his SEO skills, but for how he brought the cohort together. Everyone respected him by the end.',
             author: 'Javier Martínez García',
             role: 'CMO @ BIGSEO & BIG School',
             photo: '/javier-martinez.jpeg',
@@ -953,7 +979,7 @@ export const translations = {
       spanish: 'Spanish',
       native: 'Native',
       english: 'English',
-      professional: 'Professional fluency',
+      professional: 'Professional proficiency',
       technical: 'Technical Skills',
       soft: 'Soft Skills',
       softSkills: [
@@ -967,8 +993,8 @@ export const translations = {
       ],
     },
     cta: {
-      title: "Let's talk?",
-      desc: 'Looking for a senior remote role in EU / USA to lead process changes, improve team experience and efficiency, and deliver results with clear metrics.',
+      title: "Let's talk",
+      desc: 'Looking for a senior remote role (EU / USA) where I can own product delivery, unblock teams through automation, and ship results you can measure.',
       contact: 'Contact',
     },
   },

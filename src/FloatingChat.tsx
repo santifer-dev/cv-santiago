@@ -24,10 +24,10 @@ interface FloatingChatProps {
 const texts = {
   es: {
     placeholder: 'Escribe tu pregunta...',
-    title: 'Santi',
+    title: 'santifer',
     subtitle: 'Pregúntame sobre mi experiencia',
     greeting:
-      '¡Hola! Soy Santi, el avatar de Santiago. Estoy aquí para contarte sobre mi experiencia, proyectos y habilidades. ¿Qué te gustaría saber?',
+      '¡Hola! Soy **santifer**, el avatar de Santiago. Pregúntame lo que quieras — experiencia, proyectos, lo que me mueve.',
     error: 'Error al enviar. Inténtalo de nuevo.',
     prompts: [
       {
@@ -55,10 +55,10 @@ const texts = {
   },
   en: {
     placeholder: 'Type your question...',
-    title: 'Santi',
+    title: 'santifer',
     subtitle: 'Ask me about my experience',
     greeting:
-      "Hi! I'm Santi, Santiago's avatar. I'm here to tell you about my experience, projects, and skills. What would you like to know?",
+      "Hi! I'm **santifer**, Santiago's avatar. Ask me anything — experience, projects, what makes him tick.",
     error: 'Error sending. Please try again.',
     prompts: [
       {
@@ -289,7 +289,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
       <motion.button
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
         onClick={() => setIsOpen(!isOpen)}
@@ -324,7 +324,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
               {/* Avatar */}
               <img
                 src="/chatbot-avatar.png"
-                alt="Chat con Santi"
+                alt="Chat con santifer"
                 className="w-full h-full rounded-full object-cover"
               />
               {/* Pulse ring animation */}
@@ -374,7 +374,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
               <div className="flex items-center gap-3">
                 <img
                   src="/chatbot-avatar.png"
-                  alt="Santi avatar"
+                  alt="santifer avatar"
                   className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
                 />
                 <div>
@@ -475,7 +475,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                     <button
                       key={i}
                       onClick={() => handlePromptClick(prompt.query)}
-                      className={`flex items-center gap-1.5 rounded-full font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 active:bg-primary/30 transition-all duration-300 ${
+                      className={`flex items-center gap-1.5 rounded-full font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 active:bg-primary/30 transition-all duration-200 ${
                         isMobile
                           ? 'px-4 py-2.5 text-sm min-h-[44px]'
                           : 'px-3 py-1.5 text-xs'
@@ -502,7 +502,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                     </p>
                     <a
                       href={`mailto:${lang === 'es' ? 'hola@santifer.io' : 'hi@santifer.io'}`}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme-r text-white text-sm font-medium hover:opacity-90 transition-opacity"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme-r text-white text-sm font-medium hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
                     >
                       <Mail className="w-4 h-4" />
                       {lang === 'es' ? 'hola@santifer.io' : 'hi@santifer.io'}
@@ -528,7 +528,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                     <span
                       className={`text-muted-foreground ${isMobile ? 'text-sm' : 'text-xs'}`}
                     >
-                      {lang === 'en' ? 'Santi is typing...' : 'Santi está escribiendo...'}
+                      {lang === 'en' ? 'santifer is typing...' : 'santifer está escribiendo...'}
                     </span>
                   </div>
                 </motion.div>

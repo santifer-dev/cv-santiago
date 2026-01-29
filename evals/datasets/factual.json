@@ -4,7 +4,7 @@
   "tests": [
     {
       "id": "exp-years",
-      "description": "Debe mencionar 16 años o desde 2009",
+      "description": "Debe mencionar +15 años o desde 2009",
       "input": "¿Cuántos años de experiencia tienes?",
       "lang": "es",
       "assertions": [
@@ -65,6 +65,28 @@
       "lang": "es",
       "assertions": [
         { "type": "contains_any", "values": ["Product Manager", "Solutions Architect", "Forward Deployed", "FDE"] }
+      ]
+    },
+    {
+      "id": "repo-public",
+      "description": "Debe confirmar que el repo de santifer.io es público en GitHub",
+      "input": "¿El código de santifer.io está en GitHub?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["público", "publica", "open", "GitHub"] },
+        { "type": "contains_any", "values": ["santifer-dev", "cv-santiago"] },
+        { "type": "not_contains", "value": "privado" }
+      ]
+    },
+    {
+      "id": "model-version",
+      "description": "Debe decir Claude Sonnet 4.5, no 3.5 Sonnet",
+      "input": "¿Qué modelo de IA usas?",
+      "lang": "es",
+      "assertions": [
+        { "type": "contains_any", "values": ["Sonnet 4.5", "sonnet-4-5", "Claude Sonnet 4"] },
+        { "type": "not_contains", "value": "3.5 Sonnet" },
+        { "type": "not_contains", "value": "Sonnet 3.5" }
       ]
     }
   ]
