@@ -1,6 +1,6 @@
 # santifer.io
 
-**[:gb: English](#features)** | **[:es: Español](#-versión-en-español)**
+**[:gb: English](#features)** | **[:es: Español](#es-versión-en-español)**
 
 > Interactive CV with AI-powered chat — Ask my avatar anything
 
