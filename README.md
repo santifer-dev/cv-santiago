@@ -2,7 +2,7 @@
 
 **[:gb: English](#the-problem)** | **[:es: Español](#es-versión-en-español)**
 
-> Interactive CV with AI-powered chat, production LLMOps, and narrative animations
+> Interactive CV with AI-powered chat, 4-layer prompt injection defense, production LLMOps (39 evals), and narrative animations
 
 [![Live Demo](https://img.shields.io/badge/demo-santifer.io-blue?style=flat-square)](https://santifer.io)
 [![Built with Claude Code](https://img.shields.io/badge/built%20with-Claude%20Code-blueviolet?style=flat-square)](https://claude.ai/code)
@@ -18,9 +18,10 @@ Static CVs don't show what you can actually build. A PDF lists skills — it doe
 A production-grade interactive portfolio that **demonstrates the skills it describes**: AI integration with a chatbot that answers as me, full LLMOps observability pipeline, automated evals, bilingual support, and narrative animations — all deployed on the edge.
 
 **Key Features:**
-- **AI Chatbot "santifer"** — Claude Sonnet 4.5 with streaming SSE, responds in first person as me. Includes jailbreak detection with real-time email alerts
-- **Reflective Typewriter** — State machine (useReducer) that writes, pauses to "think", erases, and rewrites with 3 synchronized highlight types
-- **Production LLMOps** — Langfuse tracing, 31+ automated evals across 6 categories, daily cron evaluator, prompt versioning
+- **AI Chatbot "santifer"** — Claude Sonnet 4.5 with streaming SSE, responds in first person as me. 4-layer prompt injection defense: input classification, system prompt rules, output fingerprint filtering, and per-request canary tokens. Real-time jailbreak email alerts
+- **Reflective Typewriter** — State machine (useReducer) that writes, pauses to "think", erases, and rewrites with 3 synchronized highlight types and per-word gradient wrapping
+- **Production LLMOps** — Langfuse tracing, 39 automated evals across 6 categories, daily cron evaluator, prompt caching
+- **AI-augmented SDLC** — Design with constraints and threat modeling, implement via small PRs with AI pair programming, validate with evals + observability + cost control
 - **Bilingual ES/EN** — URL-based routing (`/` Spanish, `/en` English) with SEO hreflang, language suggestion banner
 - **Dark/Light mode** — HSL semantic design tokens with smooth transitions
 - **GEO-ready** — `llms.txt`, structured data (JSON-LD), AI crawler-friendly robots.txt
@@ -49,10 +50,11 @@ This isn't a toy chatbot — it runs a full observability and evaluation pipelin
 | Layer | Implementation |
 |-------|----------------|
 | **Tracing** | Langfuse — every conversation logged with latency, tokens, model version, cost |
-| **Evals** | 31+ tests across 6 datasets: factual accuracy, persona adherence, boundaries, bilingual, quality, safety |
+| **Evals** | 39 tests across 6 datasets: factual accuracy, persona adherence, boundaries, bilingual, quality, safety |
 | **LLM-as-Judge** | Claude Haiku evaluates subjective tone and quality metrics |
 | **Daily Cron** | Vercel cron at 08:00 — batch evaluates last 24h of traces |
-| **Alerts** | Resend email alerts on jailbreak attempts and low safety scores |
+| **Prompt Injection Defense** | 4 layers: input keyword classification, system prompt rules, output fingerprint filtering, per-request canary tokens. Mid-stream leak replacement via SSE |
+| **Alerts** | Resend email alerts on jailbreak attempts, prompt leaks, and low safety scores |
 | **Prompt Caching** | Anthropic ephemeral cache on system prompt for cost optimization |
 | **CLI Tools** | `npm run chats` (history), `npm run chats:tui` (interactive TUI), `npm run evaluate-traces` |
 
@@ -105,11 +107,11 @@ src/
 └── main.tsx             # React Router (/ and /en)
 
 api/
-├── chat.js              # Edge function — Claude streaming + Langfuse tracing
+├── chat.js              # Edge function — Claude streaming + Langfuse tracing + 4-layer defense
 └── cron/evaluate.js     # Daily batch evaluator (Vercel cron)
 
 evals/
-├── datasets/            # 6 JSON datasets (31+ test cases)
+├── datasets/            # 6 JSON datasets (39 test cases)
 ├── assertions.ts        # Deterministic assertion functions
 ├── llm-judge.ts         # LLM-as-Judge with Claude Haiku
 └── runner.ts            # Eval runner
@@ -138,7 +140,7 @@ MIT
 
 # :es: Versión en Español
 
-> CV interactivo con chat IA, pipeline LLMOps en producción y animaciones narrativas
+> CV interactivo con chat IA, defensa anti-inyección en 4 capas, pipeline LLMOps en producción (39 evals) y animaciones narrativas
 
 [![Demo en vivo](https://img.shields.io/badge/demo-santifer.io-blue?style=flat-square)](https://santifer.io)
 
@@ -153,9 +155,10 @@ Los CVs estáticos no demuestran lo que realmente sabes construir. Un PDF lista 
 Un portfolio interactivo de nivel producción que **demuestra las habilidades que describe**: integración IA con un chatbot que responde como yo, pipeline completo de observabilidad LLMOps, evals automatizados, soporte bilingüe y animaciones narrativas — todo desplegado en el edge.
 
 **Funcionalidades:**
-- **Chatbot IA "santifer"** — Claude Sonnet 4.5 con streaming SSE, responde en primera persona como yo. Incluye detección de jailbreak con alertas por email en tiempo real
-- **Typewriter reflexivo** — Máquina de estados (useReducer) que escribe, pausa para "pensar", borra y reescribe con 3 tipos de highlight sincronizados
-- **LLMOps en producción** — Tracing con Langfuse, 31+ evals automatizados en 6 categorías, evaluador cron diario, versionado de prompts
+- **Chatbot IA "santifer"** — Claude Sonnet 4.5 con streaming SSE, responde en primera persona como yo. Defensa anti-inyección en 4 capas: clasificación de input, reglas de system prompt, filtrado de fingerprints en output y canary tokens por request. Alertas de jailbreak por email en tiempo real
+- **Typewriter reflexivo** — Máquina de estados (useReducer) que escribe, pausa para "pensar", borra y reescribe con 3 tipos de highlight sincronizados y wrapping de gradientes per-word
+- **LLMOps en producción** — Tracing con Langfuse, 39 evals automatizados en 6 categorías, evaluador cron diario, prompt caching
+- **SDLC aumentado con IA** — Diseño con constraints y threat modeling, implementación con PRs pequeños y AI pair programming, validación con evals + observabilidad + control de coste
 - **Bilingüe ES/EN** — Routing por URL (`/` español, `/en` inglés) con SEO hreflang, banner de sugerencia de idioma
 - **Modo oscuro/claro** — Tokens de diseño semánticos HSL con transiciones suaves
 - **GEO-ready** — `llms.txt`, datos estructurados (JSON-LD), robots.txt amigable con crawlers IA
@@ -184,10 +187,11 @@ No es un chatbot de juguete — ejecuta un pipeline completo de observabilidad y
 | Capa | Implementación |
 |------|----------------|
 | **Tracing** | Langfuse — cada conversación registrada con latencia, tokens, versión del modelo, coste |
-| **Evals** | 31+ tests en 6 datasets: precisión factual, adherencia a persona, límites, bilingüe, calidad, seguridad |
+| **Evals** | 39 tests en 6 datasets: precisión factual, adherencia a persona, límites, bilingüe, calidad, seguridad |
 | **LLM-as-Judge** | Claude Haiku evalúa métricas subjetivas de tono y calidad |
 | **Cron diario** | Vercel cron a las 08:00 — evalúa batch de trazas de las últimas 24h |
-| **Alertas** | Emails via Resend ante intentos de jailbreak y scores de seguridad bajos |
+| **Defensa anti-inyección** | 4 capas: clasificación de keywords en input, reglas de system prompt, filtrado de fingerprints en output, canary tokens por request. Reemplazo mid-stream vía SSE |
+| **Alertas** | Emails via Resend ante intentos de jailbreak, fugas de prompt y scores de seguridad bajos |
 | **Prompt Caching** | Cache ephemeral de Anthropic en system prompt para optimizar costes |
 | **CLI Tools** | `npm run chats` (historial), `npm run chats:tui` (TUI interactiva), `npm run evaluate-traces` |
 
@@ -240,11 +244,11 @@ src/
 └── main.tsx             # React Router (/ y /en)
 
 api/
-├── chat.js              # Edge function — Claude streaming + tracing Langfuse
+├── chat.js              # Edge function — Claude streaming + tracing Langfuse + defensa 4 capas
 └── cron/evaluate.js     # Evaluador batch diario (Vercel cron)
 
 evals/
-├── datasets/            # 6 datasets JSON (31+ test cases)
+├── datasets/            # 6 datasets JSON (39 test cases)
 ├── assertions.ts        # Funciones de assertion deterministas
 ├── llm-judge.ts         # LLM-as-Judge con Claude Haiku
 └── runner.ts            # Runner de evaluaciones
