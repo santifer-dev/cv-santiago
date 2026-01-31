@@ -45,6 +45,10 @@ Built an AI agent achieving **~90% customer self-service rate**:
 - **Forward-Deployed Delivery:** Stakeholder workshops, workflow mapping, rapid prototyping
 - **Reliability & Ops:** Monitoring, event logs, error handling, retries, SOPs
 
+## Development Methodology
+
+AI-augmented SDLC: design with clear constraints and threat modeling, implement via small PRs with AI pair programming, validate with eval sets + observability + cost control. Agentic development capabilities are gated with allowlists, HITL confirmations, and monitoring.
+
 ## Tech Stack
 
 ### AI/LLM

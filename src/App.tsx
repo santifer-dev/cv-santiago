@@ -185,6 +185,46 @@ function renderHighlightedText(
   let currentType: HighlightType = charTypes[0]
   let currentStart = 0
 
+  // Per-word inline-grid so highlighted text can wrap naturally on narrow screens.
+  // Each word shows its slice of the full-phrase gradient via background-size/position.
+  const pushHighlightWords = (
+    seg: string, baseKey: number, showGradient: boolean, normalOpacity: string
+  ) => {
+    const gOp = showGradient ? 'opacity-100' : 'opacity-0'
+    const totalLen = seg.length
+    let charPos = 0
+    seg.split(/( +)/).forEach((word, wIdx) => {
+      if (!word) return
+      if (/^ +$/.test(word)) {
+        parts.push(<span key={`${baseKey}s${wIdx}`}>{word}</span>)
+        charPos += word.length
+      } else {
+        const wordFrac = word.length / totalLen
+        const startFrac = charPos / totalLen
+        // Continuous gradient: size spans full phrase, position shows this word's slice
+        const bgSize = wordFrac >= 1 ? 100 : 100 / wordFrac
+        const bgPos = wordFrac >= 1 ? 0 : startFrac * 100 / (1 - wordFrac)
+        parts.push(
+          <span key={`${baseKey}w${wIdx}`} className="inline-grid">
+            <span
+              className={`col-start-1 row-start-1 font-medium transition-opacity ${timing} ${gOp}`}
+              style={{
+                backgroundImage: 'linear-gradient(to right, hsl(var(--gradient-from)), hsl(var(--gradient-to)))',
+                backgroundSize: `${bgSize}% 100%`,
+                backgroundPosition: `${bgPos}% 0`,
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >{word}</span>
+            <span className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${normalOpacity}`}>{word}</span>
+          </span>
+        )
+        charPos += word.length
+      }
+    })
+  }
+
   for (let i = 1; i <= text.length; i++) {
     const type = i < text.length ? charTypes[i] : null
     if (type !== currentType || i === text.length) {
@@ -203,69 +243,19 @@ function renderHighlightedText(
           )
         } else if (currentType === 'typewriter') {
           // Tipo B: gradiente SOLO durante typewriter (highlightsActive), luego texto normal
-          // Después del typewriter, se comporta IGUAL que texto normal (usa isTextLowOpacity)
           const showGradient = highlightsActive
-          parts.push(
-            <span key={currentStart} className="inline-grid">
-              <span
-                className={`col-start-1 row-start-1 text-gradient-theme font-medium transition-opacity ${timing} ${
-                  showGradient ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                {segment}
-              </span>
-              <span
-                className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${
-                  showGradient ? 'opacity-0' : isTextLowOpacity ? 'opacity-15' : 'opacity-100'
-                }`}
-              >
-                {segment}
-              </span>
-            </span>
-          )
+          pushHighlightWords(segment, currentStart, showGradient,
+            showGradient ? 'opacity-0' : isTextLowOpacity ? 'opacity-15' : 'opacity-100')
         } else if (currentType === 'final') {
           // Tipo C: normal durante typewriter, gradiente en encendido final (finalReveal)
-          // Usa isFinalLowOpacity - se enciende ANTES que el resto
           const showGradient = finalReveal
-          parts.push(
-            <span key={currentStart} className="inline-grid">
-              <span
-                className={`col-start-1 row-start-1 text-gradient-theme font-medium transition-opacity ${timing} ${
-                  showGradient ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                {segment}
-              </span>
-              <span
-                className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${
-                  showGradient ? 'opacity-0' : isFinalLowOpacity ? 'opacity-15' : 'opacity-100'
-                }`}
-              >
-                {segment}
-              </span>
-            </span>
-          )
+          pushHighlightWords(segment, currentStart, showGradient,
+            showGradient ? 'opacity-0' : isFinalLowOpacity ? 'opacity-15' : 'opacity-100')
         } else {
           // permanent: siempre gradiente (mientras no esté revealed)
           const showGradient = !revealed
-          parts.push(
-            <span key={currentStart} className="inline-grid">
-              <span
-                className={`col-start-1 row-start-1 text-gradient-theme font-medium transition-opacity ${timing} ${
-                  showGradient ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                {segment}
-              </span>
-              <span
-                className={`col-start-1 row-start-1 text-muted-foreground transition-opacity ${timing} ${
-                  showGradient ? 'opacity-0' : 'opacity-100'
-                }`}
-              >
-                {segment}
-              </span>
-            </span>
-          )
+          pushHighlightWords(segment, currentStart, showGradient,
+            showGradient ? 'opacity-0' : 'opacity-100')
         }
       }
       currentStart = i
@@ -651,7 +641,7 @@ function ReflectiveTypewriter({
       title={phase !== 'complete' && phase !== 'idle' ? 'Click to skip' : undefined}
     >
       {/* Context line */}
-      <p className="-mb-1">
+      <span className="md:block md:-mb-1">
         {phase === 'context' ? (
           <>
             {renderHighlightedText(displayText, [], {
@@ -681,7 +671,7 @@ function ReflectiveTypewriter({
             )}
           </>
         ) : null}
-      </p>
+      </span>{' '}
 
       {/* Reflection line (becomes the hook line) */}
       {(phase === 'reflection' || phase === 'pause-before-delete' || phase === 'deleting') && (
@@ -692,46 +682,54 @@ function ReflectiveTypewriter({
       )}
 
       {/* Hook paragraphs */}
-      {(phase === 'hook' || phase === 'complete') && hookParagraphs.map((paragraph, pIdx) => (
-        <p key={pIdx} className={pIdx === 0 ? "mb-4" : "mb-1 last:mb-0"}>
-          {paragraph.map((_, lIdx) => {
-            const parsed = getHookParsed(pIdx, lIdx)
-            const isCurrentLine = pIdx === currentHookParagraph && lIdx === currentHookLine
-            const isCompleted = completedHookLines[pIdx]?.[lIdx] !== undefined
+      {/* Hook paragraphs: pIdx=0 inline on mobile (flows with context), block on desktop */}
+      {(phase === 'hook' || phase === 'complete') && hookParagraphs.map((paragraph, pIdx) => {
+        const Tag = pIdx === 0 ? 'span' : 'p'
+        const wrapperClass = pIdx === 0
+          ? "md:block md:mb-4"
+          : "mt-4 md:mt-0"
+        return (
+          <Tag key={pIdx} className={wrapperClass}>
+            {paragraph.map((_, lIdx) => {
+              const parsed = getHookParsed(pIdx, lIdx)
+              const isCurrentLine = pIdx === currentHookParagraph && lIdx === currentHookLine
+              const isCompleted = completedHookLines[pIdx]?.[lIdx] !== undefined
 
-            // Unificar renderizado para permitir transiciones CSS suaves
-            // El texto a mostrar: completado > actual (displayText) > vacío
-            const textToShow = isCompleted
-              ? completedHookLines[pIdx][lIdx]
-              : (isCurrentLine && phase === 'hook')
-                ? displayText
-                : ''
+              // Unificar renderizado para permitir transiciones CSS suaves
+              // El texto a mostrar: completado > actual (displayText) > vacío
+              const textToShow = isCompleted
+                ? completedHookLines[pIdx][lIdx]
+                : (isCurrentLine && phase === 'hook')
+                  ? displayText
+                  : ''
 
-            // Tipo B highlights activos SOLO mientras se escribe esta línea
-            const highlightsActive = isCurrentLine && phase === 'hook'
+              // Tipo B highlights activos SOLO mientras se escribe esta línea
+              const highlightsActive = isCurrentLine && phase === 'hook'
 
-            // Solo renderizar si hay texto o es la línea actual
-            if (!textToShow && !isCurrentLine) return null
+              // Solo renderizar si hay texto o es la línea actual
+              if (!textToShow && !isCurrentLine) return null
 
-            return (
-              <span key={lIdx} className={lIdx > 0 ? "block -mt-1" : ""}>
-                {renderHighlightedText(textToShow, [], {
-                  dimmed,
-                  finalReveal,
-                  revealed,
-                  typewriterRanges: parsed.typewriterRanges,
-                  finalRanges: parsed.finalRanges,
-                  permanentRanges: parsed.permanentRanges,
-                  highlightsActive,
-                })}
-                {isCurrentLine && phase === 'hook' && showCursor && (
-                  <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>
-                )}
-              </span>
-            )
-          })}
-        </p>
-      ))}
+              return (
+                <span key={lIdx} className={lIdx > 0 ? "md:block md:-mt-1" : ""}>
+                  {lIdx > 0 && <span className="md:hidden"> </span>}
+                  {renderHighlightedText(textToShow, [], {
+                    dimmed,
+                    finalReveal,
+                    revealed,
+                    typewriterRanges: parsed.typewriterRanges,
+                    finalRanges: parsed.finalRanges,
+                    permanentRanges: parsed.permanentRanges,
+                    highlightsActive,
+                  })}
+                  {isCurrentLine && phase === 'hook' && showCursor && (
+                    <span className="ml-0.5 inline-block text-primary" style={{ animation: 'blink 0.6s step-end infinite' }}>|</span>
+                  )}
+                </span>
+              )
+            })}
+          </Tag>
+        )
+      })}
     </div>
   )
 }

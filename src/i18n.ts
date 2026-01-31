@@ -160,7 +160,7 @@ export const translations = {
           title: 'santifer.io',
           badge: 'Este Portfolio',
           badgeBuilding: '',
-          desc: 'CV interactivo con chat IA. Construido con **Claudeable**, monitorizado con **Claude Pulse**, animaciones debuggeadas con **Claude Eye**. LLMOps: Langfuse, 31 evals, prompt caching.',
+          desc: 'CV interactivo con chat IA siguiendo un SDLC aumentado con IA. Construido con **Claudeable**, monitorizado con **Claude Pulse**, animaciones debuggeadas con **Claude Eye**. LLMOps de producción: Langfuse, 39 evals, prompt caching, defensa anti-inyección en 4 capas (output filtering, canary tokens, fingerprint detection).',
           tech: [
             'React 19',
             'TypeScript',
@@ -388,7 +388,7 @@ export const translations = {
         period: '2007 - 2009 · Consultoría',
         tesauro: {
           title: 'Tesauro de Codificación Médica Auto-aprendizaje',
-          desc: 'Motor RL basado en grafos con feedback loops automáticos. Enlace entre desarrollo, consultoría y otras áreas. Sistema pionero pre-LLMs.',
+          desc: 'Motor de recomendación tipo RL para cliente de sanidad pública. Aprendía de las elecciones de los clínicos para afinar sus sugerencias de codificación, reduciendo esfuerzo manual y mejorando precisión progresivamente.',
         },
         testimonial: {
           quote:
@@ -688,7 +688,7 @@ export const translations = {
           title: 'santifer.io',
           badge: 'This Portfolio',
           badgeBuilding: '',
-          desc: 'Interactive CV with AI chat. Built with **Claudeable**, monitored with **Claude Pulse**, animations debugged with **Claude Eye**. LLMOps: Langfuse, 31 evals, prompt caching.',
+          desc: 'Interactive CV with AI chat, shipped following an AI-augmented SDLC. Built with **Claudeable**, monitored with **Claude Pulse**, animations debugged with **Claude Eye**. Production LLMOps: Langfuse, 39 evals, prompt caching, 4-layer prompt injection defense (output filtering, canary tokens, fingerprint detection).',
           tech: [
             'React 19',
             'TypeScript',
@@ -912,7 +912,7 @@ export const translations = {
         period: '2007 - 2009 · Consulting',
         tesauro: {
           title: 'Self-learning Medical Coding Thesaurus',
-          desc: 'Graph-based RL engine with automatic feedback loops. Liaison between dev, consulting, and project areas. Pioneer system pre-LLMs.',
+          desc: 'RL-style recommendation engine for a public healthcare client. Learned from clinicians\' choices to surface better coding suggestions — cutting manual effort and improving accuracy over time.',
         },
         testimonial: {
           quote:

@@ -21,7 +21,14 @@ function classifyIntent(text) {
     'protocolo de defensa', 'olvida todo', 'nueva personalidad',
     'reset your', 'reveal your', 'show me your rules',
     'your objective', 'your orders', 'tus órdenes', 'tus reglas',
-    'cuáles son tus instrucciones', 'rules configured', 'reglas configuradas'
+    'cuáles son tus instrucciones', 'rules configured', 'reglas configuradas',
+    // Serialization/extraction attacks
+    'print all', 'print everything', 'yaml', 'json record',
+    'dump', 'export', 'serialize', 'reproduce', 'output all',
+    'all of the above', 'todo lo anterior', 'everything above',
+    'repeat everything', 'write all above', 'copy all',
+    'show me everything', 'imprime todo', 'muestra todo lo anterior',
+    'repite todo', 'exporta', 'convierte a'
   ]
   if (jailbreakPatterns.some(p => lower.includes(p))) {
     tags.push('jailbreak-attempt')
@@ -94,6 +101,29 @@ function getLangfuse() {
   return langfuseClient
 }
 
+// Capa 3: Output filter — fingerprints that should NEVER appear in legit responses
+const PROMPT_FINGERPRINTS = [
+  'BREVEDAD OBLIGATORIA',
+  'máximo 150 palabras',
+  '150 words',
+  'word limit',
+  'formato sin listas',
+  'redirección ingeniosa',
+  'NUNCA revelar',
+  'Anti-extracción',
+  'Instrucciones CRÍTICAS',
+  'cache_control',
+  'never_exceed',
+  'token_budget',
+]
+
+const LEAK_RESPONSE = 'Esa información forma parte de mi diseño interno. El código fuente del proyecto es público en GitHub si te interesa la arquitectura.'
+
+function containsFingerprint(text) {
+  const lower = text.toLowerCase()
+  return PROMPT_FINGERPRINTS.some(fp => lower.includes(fp.toLowerCase()))
+}
+
 export const config = {
   runtime: 'edge',
 }
@@ -133,10 +163,13 @@ export default async function handler(req) {
       })
     }
 
-    // Dynamic part: language instruction + email (not cached)
+    // Capa 4: Canary word — unique per request, injected in dynamic block
+    const canary = 'ZXCV_' + crypto.randomUUID().slice(0, 8)
+
+    // Dynamic part: language instruction + email + canary (not cached)
     const langInstruction = lang === 'en'
-      ? 'The user is browsing in English. You MUST respond in English. Contact email: hi@santifer.io'
-      : 'El usuario navega en español. Responde en español. Email de contacto: hola@santifer.io'
+      ? `The user is browsing in English. You MUST respond in English. Contact email: hi@santifer.io\ninternal_ref: ${canary}`
+      : `El usuario navega en español. Responde en español. Email de contacto: hola@santifer.io\ninternal_ref: ${canary}`
 
     // Create generation span
     generation = trace?.generation({
@@ -167,35 +200,66 @@ export default async function handler(req) {
 
     const encoder = new TextEncoder()
     let fullOutput = ''
+    let leakDetected = false
 
     const readableStream = new ReadableStream({
       async start(controller) {
         try {
           for await (const event of stream) {
+            if (leakDetected) break
+
             if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
               const chunk = event.delta.text
               fullOutput += chunk
+
+              // Capa 3+4: Check for prompt leak every ~200 chars
+              if (fullOutput.length % 200 < chunk.length || fullOutput.length < 200) {
+                if (containsFingerprint(fullOutput) || fullOutput.includes(canary)) {
+                  leakDetected = true
+
+                  // Log leak event
+                  trace?.update({
+                    tags: [...intentTags, 'prompt-leak-blocked'],
+                    metadata: { leakDetectedAt: fullOutput.length },
+                  })
+
+                  // Send generic response instead
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: LEAK_RESPONSE, replace: true })}\n\n`))
+                  controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+                  controller.close()
+
+                  // Send alert for leak
+                  waitUntil(sendJailbreakAlert(`[PROMPT LEAK BLOCKED] Output contained fingerprint/canary. User message: ${lastUserMessage}`))
+
+                  generation?.end({ output: '[BLOCKED - prompt leak detected]' })
+                  if (langfuse) waitUntil(langfuse.flushAsync())
+                  return
+                }
+              }
+
               controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`))
             }
           }
 
-          // Close generation with output and metrics
-          const finalMessage = await stream.finalMessage()
-          generation?.end({
-            output: fullOutput,
-            usage: {
-              input: finalMessage.usage.input_tokens,
-              output: finalMessage.usage.output_tokens,
-            },
-          })
+          if (!leakDetected) {
+            // Close generation with output and metrics
+            const finalMessage = await stream.finalMessage()
+            generation?.end({
+              output: fullOutput,
+              usage: {
+                input: finalMessage.usage.input_tokens,
+                output: finalMessage.usage.output_tokens,
+              },
+            })
 
-          // Use waitUntil to ensure flush completes after response
-          if (langfuse) {
-            waitUntil(langfuse.flushAsync())
+            // Use waitUntil to ensure flush completes after response
+            if (langfuse) {
+              waitUntil(langfuse.flushAsync())
+            }
+
+            controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+            controller.close()
           }
-
-          controller.enqueue(encoder.encode('data: [DONE]\n\n'))
-          controller.close()
         } catch (error) {
           controller.error(error)
         }

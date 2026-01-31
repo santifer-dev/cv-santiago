@@ -238,7 +238,12 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
             try {
               const data = JSON.parse(line.slice(6));
               if (data.text) {
-                fullText += data.text;
+                // If replace flag is set (e.g. prompt leak blocked), replace all accumulated text
+                if (data.replace) {
+                  fullText = data.text;
+                } else {
+                  fullText += data.text;
+                }
                 // Update with accumulated text to avoid race conditions
                 const currentText = fullText;
                 setMessages((prev) => {

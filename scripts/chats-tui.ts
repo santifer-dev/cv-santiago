@@ -198,7 +198,15 @@ function traceToPlainText(trace: Trace, index: number): string {
   return lines.join('\n');
 }
 
-async function exportAllChats(traces: Trace[], jailbreakOnly: boolean, days: number): Promise<string> {
+async function fetchAllTraceDetails(traces: Trace[]): Promise<(Trace | null)[]> {
+  const details: (Trace | null)[] = [];
+  for (let i = 0; i < traces.length; i++) {
+    details[i] = await fetchTraceDetail(traces[i].id);
+  }
+  return details;
+}
+
+async function exportAllChats(traces: Trace[], traceDetails: (Trace | null)[], jailbreakOnly: boolean, days: number): Promise<string> {
   const logsDir = path.join(process.cwd(), 'logs');
   if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir, { recursive: true });
@@ -224,8 +232,8 @@ async function exportAllChats(traces: Trace[], jailbreakOnly: boolean, days: num
 
   let content = header;
 
-  for (let i = 0; i < traces.length; i++) {
-    const detail = await fetchTraceDetail(traces[i].id);
+  for (let i = 0; i < traceDetails.length; i++) {
+    const detail = traceDetails[i];
     if (detail) {
       content += traceToPlainText(detail, i);
     }
@@ -347,14 +355,14 @@ async function main() {
     process.exit(0);
   }
 
-  // Export all chats to txt
-  process.stdout.write(`${DIM}Exportando conversaciones a logs/...${RESET}\n`);
-  const exportPath = await exportAllChats(traces, jailbreakOnly, days);
-  process.stdout.write(`${GREEN}✅ Guardado: ${exportPath}${RESET}\n`);
+  // Fetch all trace details once
+  process.stdout.write(`${DIM}Descargando ${traces.length} conversaciones...${RESET}\n`);
+  traceDetails = await fetchAllTraceDetails(traces);
 
-  // Prefetch first trace
-  process.stdout.write(`${DIM}Cargando TUI...${RESET}\n`);
-  traceDetails[0] = await fetchTraceDetail(traces[0].id);
+  // Export all chats to txt (reusing cached details)
+  process.stdout.write(`${DIM}Exportando a logs/...${RESET}\n`);
+  const exportPath = await exportAllChats(traces, traceDetails, jailbreakOnly, days);
+  process.stdout.write(`${GREEN}✅ Guardado: ${exportPath}${RESET}\n`);
 
   let currentIndex = 0;
   let scrollOffset = 0;
@@ -476,14 +484,6 @@ async function main() {
   // Initial render
   await render();
 
-  // Prefetch next traces in background
-  (async () => {
-    for (let i = 1; i < Math.min(5, traces.length); i++) {
-      if (!traceDetails[i]) {
-        traceDetails[i] = await fetchTraceDetail(traces[i].id);
-      }
-    }
-  })();
 }
 
 main().catch(err => {
