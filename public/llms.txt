@@ -41,9 +41,9 @@ Built an AI agent achieving **~90% customer self-service rate**:
 - **AI Product Discovery:** Problem definition, AI PRDs, roadmap & prioritization
 - **Solution Architecture:** Requirements, system design, APIs/webhooks, OpenAPI specs
 - **Agentic Workflows:** LLM agents, tool use/function calling, HITL handoff, voice + messaging
-- **LLMOps Foundations:** Eval loops, monitoring/telemetry, cost/latency trade-offs
+- **LLMOps & Reliability:** Observability, evals, error handling, retries, SOPs, cost/latency trade-offs
 - **Forward-Deployed Delivery:** Stakeholder workshops, workflow mapping, rapid prototyping
-- **Reliability & Ops:** Monitoring, event logs, error handling, retries, SOPs
+- **Technical Communication:** Thought leadership, workshops, technical writing with real traction
 
 ## Development Methodology
 
@@ -132,6 +132,11 @@ Claude Code meta-project for professional web development. Custom skills, templa
 
 ### santifer.io (This Portfolio)
 Interactive CV with integrated AI chat. The chatbot answers questions about experience and skills with real-time streaming.
+
+## LinkedIn (Technical Content with Real Engagement)
+
+- Post about chatbot security (260+ reactions, 35+ comments): how I detected a hack attempt in 3 seconds with Langfuse
+- Post about Santifer iRepair exit (65+ reactions): 16-year narrative of building and the decision to sell
 
 ## Soft Skills
 

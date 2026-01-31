@@ -94,16 +94,16 @@ export const translations = {
           desc: 'Agentes LLM, tool use, traspaso HITL, voz + mensajería',
         },
         {
-          title: 'LLMOps Foundations',
-          desc: 'Observabilidad, evals, telemetría, trade-offs coste / latencia',
+          title: 'LLMOps & Reliability',
+          desc: 'Observabilidad, evals, error handling, reintentos, SOPs, trade-offs coste / latencia',
         },
         {
           title: 'Forward-Deployed Delivery',
           desc: 'Workshops con stakeholders, mapeo de workflows, prototipado rápido',
         },
         {
-          title: 'Reliability & Ops',
-          desc: 'Monitoreo, event logs, error handling, reintentos, SOPs',
+          title: 'Comunicación Técnica',
+          desc: 'Thought leadership, talleres, writing técnico con tracción real',
         },
       ],
     },
@@ -398,8 +398,26 @@ export const translations = {
         },
       },
     },
+    linkedinPosts: {
+      title: 'Escribiendo',
+      cta: 'Leer en LinkedIn',
+      items: [
+        {
+          hook: 'Alguien acaba de intentar hackear mi chatbot. Y me enteré en 3 segundos.',
+          reactions: '260+',
+          comments: '35+',
+          url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
+        },
+        {
+          hook: 'Acabo de vender mi empresa, Santifer iRepair, tras 16 años (no me he vuelto loco).',
+          reactions: '65+',
+          comments: '15+',
+          url: 'https://www.linkedin.com/posts/santifer_opentowork-solutionarchitecture-hyperautomation-activity-7376346077542768640-8brZ',
+        },
+      ],
+    },
     speaking: {
-      title: 'Enseñando',
+      title: 'Compartiendo',
       slides: 'Slides',
       comingSoon: 'Próximamente',
       items: [
@@ -622,16 +640,16 @@ export const translations = {
           desc: 'LLM agents, tool use, HITL handoff, voice + messaging',
         },
         {
-          title: 'LLMOps Foundations',
-          desc: 'Observability, evals, telemetry, cost / latency trade-offs',
+          title: 'LLMOps & Reliability',
+          desc: 'Observability, evals, error handling, retries, SOPs, cost / latency trade-offs',
         },
         {
           title: 'Forward-Deployed Delivery',
           desc: 'Stakeholder workshops, workflow mapping, rapid prototyping',
         },
         {
-          title: 'Reliability & Ops',
-          desc: 'Monitoring, event logs, error handling, retries, SOPs',
+          title: 'Technical Communication',
+          desc: 'Thought leadership, workshops, technical writing with real traction',
         },
       ],
     },
@@ -921,6 +939,24 @@ export const translations = {
           role: 'Partner @ KPMG (was my supervisor at Everis)',
         },
       },
+    },
+    linkedinPosts: {
+      title: 'Writing',
+      cta: 'Read on LinkedIn',
+      items: [
+        {
+          hook: 'Someone just tried to hack my chatbot. I found out in 3 seconds.',
+          reactions: '260+',
+          comments: '35+',
+          url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
+        },
+        {
+          hook: "I just sold my company, Santifer iRepair, after 16 years (no, I haven't lost it).",
+          reactions: '65+',
+          comments: '15+',
+          url: 'https://www.linkedin.com/posts/santifer_opentowork-solutionarchitecture-hyperautomation-activity-7376346077542768640-8brZ',
+        },
+      ],
     },
     speaking: {
       title: 'Sharing',

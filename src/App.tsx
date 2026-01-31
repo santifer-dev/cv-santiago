@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward } from 'lucide-react'
+import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import FloatingChat from './FloatingChat'
 
@@ -1840,18 +1840,19 @@ function App() {
         </div>
       </section>
 
-      {/* Sharing */}
+      {/* Sharing — Teaching + LinkedIn */}
       <section id="speaking" className="py-16 md:py-24 bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-display text-2xl font-semibold mb-8 flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary" />
+                <Share2 className="w-5 h-5 text-primary" />
               </div>
               {t.speaking.title}
             </h2>
           </AnimatedSection>
 
+          {/* Teaching / Speaking cards */}
           <div className="grid md:grid-cols-2 gap-6">
             {t.speaking.items.map((talk: { year: string; event: string; eventUrl: string; title: string; desc: string; pdf: string; featured: boolean }, i: number) => (
               <AnimatedSection key={i} delay={0.1 + i * 0.1}>
@@ -1896,6 +1897,47 @@ function App() {
                     )}
                   </div>
                 )}
+              </AnimatedSection>
+            ))}
+          </div>
+
+          {/* Separator */}
+          <div className="my-10 border-t border-border/40" />
+
+          {/* LinkedIn Posts — fake embed cards */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {t.linkedinPosts.items.map((post: { hook: string; reactions: string; comments: string; url: string }, i: number) => (
+              <AnimatedSection key={`li-${i}`} delay={0.2 + i * 0.1}>
+                <a
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-5 rounded-2xl bg-card border border-border/50 border-t-2 border-t-[hsl(var(--linkedin))] hover:border-border transition-colors group h-full"
+                >
+                  <div className="flex gap-3">
+                    <img src="/foto-avatar.webp" alt="" className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start gap-2">
+                        <p className="text-sm text-foreground leading-relaxed">{post.hook}<span className="text-muted-foreground">...</span> <span className="text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] transition-colors">ver más</span></p>
+                        <svg className="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 16 16" fill="hsl(var(--linkedin))"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-border/50 flex items-center gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                      {post.reactions}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      {post.comments}
+                    </span>
+                    <span className="ml-auto text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] group-hover:underline flex items-center gap-1.5 transition-colors">
+                      {t.linkedinPosts.cta}
+                      <ExternalLink className="w-3 h-3" />
+                    </span>
+                  </div>
+                </a>
               </AnimatedSection>
             ))}
           </div>

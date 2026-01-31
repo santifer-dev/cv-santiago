@@ -38,6 +38,7 @@
     --gold: 43 76% 38%;
     --success: 142 72% 29%;
     --tool: 187 72% 48%;
+    --linkedin: 210 91% 40%;       /* #0A66C2 */
   }
 
   .dark {
@@ -58,6 +59,7 @@
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
     --tool: 187 92% 50%;
+    --linkedin: 210 88% 71%;       /* #70B5F9 - lighter for dark bg */
   }
 
   /* ========== PROFILE: WARM - Orange/Teal ========== */
@@ -79,6 +81,7 @@
     --gold: 43 76% 38%;
     --success: 142 72% 29%;
     --tool: 22 78% 50%;
+    --linkedin: 210 91% 40%;
   }
 
   .theme-warm.dark {
@@ -99,6 +102,7 @@
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
     --tool: 24 90% 55%;
+    --linkedin: 210 88% 71%;
   }
 
   * {
