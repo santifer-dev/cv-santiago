@@ -107,7 +107,7 @@ Módulos del Business OS:
 - Claude Eye: CLI que analiza videos de animaciones web frame por frame con Claude Vision. Detecta desyncs en transiciones CSS y genera reportes con timestamps exactos. Útil para debuggear animaciones complejas. (Open Source)
 - Claudeable: Metaproyecto de Claude Code para desarrollo web profesional. Skills personalizados, templates y MCPs preconfigurados para crear webs al nivel de Lovable. (Open Source)
 - Watermark Remover: CLI en Python para eliminar marcas de agua de imágenes con IA. Detección automática con YOLO e inpainting con LaMa para reconstrucción realista. (Open Source)
-- Claude Code Power User: Usuario avanzado de Claude Code como herramienta principal de desarrollo. Construye proyectos completos mediante conversación. Mentalidad high-agency: sabe qué construir y cómo dirigir la IA para lograrlo.
+- Claude Code Power User: Herramienta principal de desarrollo. Custom skills reutilizables (deploy automatizado, traducción técnica, diseño), agentes especializados por proyecto, e integración de MCPs (GitHub, Vercel, etc.). Mentalidad high-agency: sabe qué construir y cómo orquestar la IA para entregarlo.
 - GitHub: github.com/santifer-dev
 
 **Tech Stack:**

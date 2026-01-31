@@ -233,7 +233,7 @@ export const translations = {
     claudeCode: {
       title: 'Claude Code Power User',
       badge: 'High-Agency · AI-Fluency',
-      desc: 'Usuario avanzado de Claude Code como herramienta principal de desarrollo. Construyo proyectos completos mediante conversación, desde plugins de sistema hasta aplicaciones web. Mentalidad high-agency: sé qué construir y cómo dirigir la IA para lograrlo.',
+      desc: 'Herramienta principal de desarrollo. Custom skills reutilizables (deploy automatizado, traducción técnica, diseño), agentes especializados por proyecto, e integración de MCPs (GitHub, Vercel, etc.). Mentalidad high-agency: sé qué construir y cómo orquestar la IA para entregarlo.',
     },
     experience: {
       title: 'Experiencia Laboral',
@@ -761,7 +761,7 @@ export const translations = {
     claudeCode: {
       title: 'Claude Code Power User',
       badge: 'High-Agency · AI-Fluency',
-      desc: 'Advanced Claude Code user as primary development tool. I build complete projects through conversation, from system plugins to web apps. High-agency mindset: I know what to build and how to direct AI to achieve it.',
+      desc: 'Primary dev tool. I build reusable custom skills (automated deploy, tech translation, design systems), configure per-project agents, and wire up MCPs (GitHub, Vercel, etc.). High-agency mindset: I know what to build and how to orchestrate AI to ship it.',
     },
     experience: {
       title: 'Work Experience',
