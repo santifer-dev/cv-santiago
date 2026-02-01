@@ -238,6 +238,8 @@ export const translations = {
     experience: {
       title: 'Experiencia Laboral',
       santifer: {
+        company: 'Santifer iRepair',
+        location: 'Sevilla, España',
         role: 'Fundador & Product Lead (AI Automation)',
         period: '2009 - 2025 · Retail / Servicios B2B-B2C',
         exit: 'Exit 2025',
@@ -373,6 +375,8 @@ export const translations = {
         },
       },
       lico: {
+        company: 'LICO Cosmetics',
+        location: 'Sevilla, España',
         role: 'Consultor en Airtable & Operaciones E-commerce',
         period: '2024 - 2025 · Cosméticos D2C · Shopify',
         desc: 'Diseño de Airtable como Sistema Operativo interno: inventario, pedidos y tareas. Workshops de co-diseño con operaciones. Análisis de integraciones Airtable ↔ Shopify.',
@@ -384,6 +388,7 @@ export const translations = {
         },
       },
       everis: {
+        company: 'Everis (NTT DATA)',
         role: 'Coordinador de Pruebas (8 testers) & Analista de Software',
         period: '2007 - 2009 · Consultoría',
         tesauro: {
@@ -559,6 +564,43 @@ export const translations = {
       title: '¿Hablamos?',
       desc: 'Busco un rol senior remoto (EU / USA) donde pueda liderar producto, desbloquear equipos con automatización y entregar resultados que se puedan medir.',
       contact: 'Contactar',
+    },
+    ui: {
+      languageBanner: '🇬🇧 This site is available in English',
+      languageBannerSwitch: 'Switch',
+      languageToggle: 'ES',
+      typingIndicator: 'santifer está escribiendo...',
+    },
+    chat: {
+      placeholder: 'Escribe tu pregunta...',
+      title: 'santifer',
+      subtitle: 'Pregúntame sobre mi experiencia',
+      greeting:
+        '¡Hola! Soy **santifer**, el avatar de Santiago. Pregúntame lo que quieras — experiencia, proyectos, lo que me mueve.',
+      error: 'Error al enviar. Inténtalo de nuevo.',
+      prompts: [
+        {
+          icon: 'briefcase',
+          label: 'Experiencia con IA',
+          query: '¿Cuál es la experiencia de Santiago con IA y automatización?',
+        },
+        {
+          icon: 'rocket',
+          label: 'Proyectos destacados',
+          query: '¿Cuáles son los proyectos más destacados de Santiago?',
+        },
+        {
+          icon: 'help',
+          label: '¿Por qué contratarle?',
+          query: '¿Por qué debería contratar a Santiago?',
+        },
+        {
+          icon: 'mail',
+          label: 'Contactar',
+          query: '¿Cómo puedo contactar a Santiago?',
+        },
+      ],
+      contactCtaTitle: '¿Te gustaría hablar directamente?',
     },
   },
   en: {
@@ -784,6 +826,8 @@ export const translations = {
     experience: {
       title: 'Work Experience',
       santifer: {
+        company: 'Santifer iRepair',
+        location: 'Seville, Spain',
         role: 'Founder & Product Lead (AI Automation)',
         period: '2009 - 2025 · Retail / Services B2B-B2C',
         exit: 'Exit 2025',
@@ -915,6 +959,8 @@ export const translations = {
         },
       },
       lico: {
+        company: 'LICO Cosmetics',
+        location: 'Seville, Spain',
         role: 'Airtable & E-commerce Operations Consultant',
         period: '2024 - 2025 · D2C Cosmetics · Shopify',
         desc: 'Designed Airtable as internal Operating System: inventory, orders, and tasks. Co-design workshops with operations. Airtable ↔ Shopify integration analysis.',
@@ -926,6 +972,7 @@ export const translations = {
         },
       },
       everis: {
+        company: 'Everis (NTT DATA)',
         role: 'Test Coordinator (8 testers) & Software Analyst',
         period: '2007 - 2009 · Consulting',
         tesauro: {
@@ -1101,6 +1148,43 @@ export const translations = {
       title: "Let's talk",
       desc: 'Looking for a senior remote role (EU / USA) where I can own product delivery, unblock teams through automation, and ship results you can measure.',
       contact: 'Contact',
+    },
+    ui: {
+      languageBanner: '🇪🇸 Este sitio está disponible en español',
+      languageBannerSwitch: 'Cambiar',
+      languageToggle: 'EN',
+      typingIndicator: 'santifer is typing...',
+    },
+    chat: {
+      placeholder: 'Type your question...',
+      title: 'santifer',
+      subtitle: 'Ask me about my experience',
+      greeting:
+        "Hi! I'm **santifer**, Santiago's avatar. Ask me anything — experience, projects, what makes him tick.",
+      error: 'Error sending. Please try again.',
+      prompts: [
+        {
+          icon: 'briefcase',
+          label: 'AI Experience',
+          query: "What is Santiago's experience with AI and automation?",
+        },
+        {
+          icon: 'rocket',
+          label: 'Top Projects',
+          query: "What are Santiago's most notable projects?",
+        },
+        {
+          icon: 'help',
+          label: 'Why hire him?',
+          query: 'Why should I hire Santiago?',
+        },
+        {
+          icon: 'mail',
+          label: 'Contact',
+          query: 'How can I contact Santiago?',
+        },
+      ],
+      contactCtaTitle: 'Want to talk directly?',
     },
   },
 } as const;

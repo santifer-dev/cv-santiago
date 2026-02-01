@@ -1,0 +1,146 @@
+/**
+ * Post-build script: SSR prerender using React's renderToString.
+ *
+ * Renders the actual App component to HTML so the pre-rendered content
+ * matches exactly what React produces. This enables hydrateRoot() on the
+ * client to adopt the existing DOM without replacing it (zero CLS).
+ *
+ * Usage: npx tsx scripts/prerender.tsx  (runs automatically via "npm run build")
+ */
+
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter, Routes, Route } from 'react-router-dom';
+import App from '../src/App.tsx';
+import { seo } from '../src/i18n.ts';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = resolve(__dirname, '..');
+
+// ---------------------------------------------------------------------------
+// SSR render per language
+// ---------------------------------------------------------------------------
+function renderApp(lang: 'es' | 'en'): string {
+  const path = lang === 'en' ? '/en' : '/';
+  return renderToString(
+    <StaticRouter location={path}>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/en" element={<App />} />
+      </Routes>
+    </StaticRouter>
+  );
+}
+
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ---------------------------------------------------------------------------
+// Inject into built HTML
+// ---------------------------------------------------------------------------
+const distDir = resolve(root, 'dist');
+const indexPath = resolve(distDir, 'index.html');
+
+let indexHtml: string;
+try {
+  indexHtml = readFileSync(indexPath, 'utf-8');
+} catch {
+  console.error('Error: dist/index.html not found. Run "vite build" first.');
+  process.exit(1);
+}
+
+// --- ES version (inject into existing index.html) ---
+let esHtml: string;
+try {
+  esHtml = renderApp('es');
+} catch (err) {
+  console.error('[prerender] SSR failed for ES, falling back to empty root:', err);
+  esHtml = '';
+}
+
+const injectedEs = indexHtml.replace(
+  '<div id="root"></div>',
+  `<div id="root">${esHtml}</div>`,
+);
+writeFileSync(indexPath, injectedEs, 'utf-8');
+console.log('[prerender] ES: dist/index.html updated');
+
+// --- EN version (create dist/en/index.html) ---
+let enHtml: string;
+try {
+  enHtml = renderApp('en');
+} catch (err) {
+  console.error('[prerender] SSR failed for EN, falling back to empty root:', err);
+  enHtml = '';
+}
+
+const enSeo = seo.en;
+
+let enPage = indexHtml
+  // Inject EN content into #root
+  .replace('<div id="root"></div>', `<div id="root">${enHtml}</div>`)
+  // Switch to EN lang
+  .replace('<html lang="es">', '<html lang="en">')
+  // Update SEO meta tags
+  .replace(
+    /<title>[^<]*<\/title>/,
+    `<title>${esc(enSeo.title)}</title>`,
+  )
+  .replace(
+    /<meta name="title" content="[^"]*" \/>/,
+    `<meta name="title" content="${esc(enSeo.title)}" />`,
+  )
+  .replace(
+    /<meta name="description" content="[^"]*" \/>/,
+    `<meta name="description" content="${esc(enSeo.description)}" />`,
+  )
+  // Update canonical to /en
+  .replace(
+    /<link rel="canonical" href="[^"]*" \/>/,
+    '<link rel="canonical" href="https://santifer.io/en" />',
+  )
+  // Update OG tags
+  .replace(
+    /<meta property="og:url" content="[^"]*" \/>/,
+    '<meta property="og:url" content="https://santifer.io/en" />',
+  )
+  .replace(
+    /<meta property="og:title" content="[^"]*" \/>/,
+    `<meta property="og:title" content="${esc(enSeo.title)}" />`,
+  )
+  .replace(
+    /<meta property="og:description" content="[^"]*" \/>/,
+    `<meta property="og:description" content="${esc(enSeo.description)}" />`,
+  )
+  .replace(
+    /<meta property="og:locale" content="es_ES" \/>/,
+    '<meta property="og:locale" content="en_US" />',
+  )
+  .replace(
+    /<meta property="og:locale:alternate" content="en_US" \/>/,
+    '<meta property="og:locale:alternate" content="es_ES" />',
+  )
+  // Update Twitter tags
+  .replace(
+    /<meta name="twitter:url" content="[^"]*" \/>/,
+    '<meta name="twitter:url" content="https://santifer.io/en" />',
+  )
+  .replace(
+    /<meta name="twitter:title" content="[^"]*" \/>/,
+    `<meta name="twitter:title" content="${esc(enSeo.title)}" />`,
+  )
+  .replace(
+    /<meta name="twitter:description" content="[^"]*" \/>/,
+    `<meta name="twitter:description" content="${esc(enSeo.description)}" />`,
+  );
+
+const enDir = resolve(distDir, 'en');
+mkdirSync(enDir, { recursive: true });
+writeFileSync(resolve(enDir, 'index.html'), enPage, 'utf-8');
+console.log('[prerender] EN: dist/en/index.html created');
+
+console.log('[prerender] Done.');

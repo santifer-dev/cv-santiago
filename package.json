@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && npx tsx scripts/prerender.ts",
+    "build": "tsc -b && vite build && npx tsx --tsconfig tsconfig.app.json scripts/prerender.tsx",
     "lint": "eslint .",
     "preview": "vite preview",
     "evals": "npx tsx evals/runner.ts",

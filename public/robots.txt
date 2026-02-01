@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /api/
 
 # Crawlers IA (GEO)
 User-agent: GPTBot
@@ -16,7 +17,5 @@ Allow: /
 
 User-agent: Google-Extended
 Allow: /
-
-Disallow: /api/
 
 Sitemap: https://santifer.io/sitemap.xml

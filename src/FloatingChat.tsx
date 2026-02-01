@@ -11,6 +11,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { translations } from './i18n';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -20,67 +21,6 @@ interface Message {
 interface FloatingChatProps {
   lang: 'es' | 'en';
 }
-
-const texts = {
-  es: {
-    placeholder: 'Escribe tu pregunta...',
-    title: 'santifer',
-    subtitle: 'Pregúntame sobre mi experiencia',
-    greeting:
-      '¡Hola! Soy **santifer**, el avatar de Santiago. Pregúntame lo que quieras — experiencia, proyectos, lo que me mueve.',
-    error: 'Error al enviar. Inténtalo de nuevo.',
-    prompts: [
-      {
-        icon: 'briefcase',
-        label: 'Experiencia con IA',
-        query: '¿Cuál es la experiencia de Santiago con IA y automatización?',
-      },
-      {
-        icon: 'rocket',
-        label: 'Proyectos destacados',
-        query: '¿Cuáles son los proyectos más destacados de Santiago?',
-      },
-      {
-        icon: 'help',
-        label: '¿Por qué contratarle?',
-        query: '¿Por qué debería contratar a Santiago?',
-      },
-      {
-        icon: 'mail',
-        label: 'Contactar',
-        query: '¿Cómo puedo contactar a Santiago?',
-      },
-    ],
-    contactCtaTitle: '¿Te gustaría hablar directamente?',
-  },
-  en: {
-    placeholder: 'Type your question...',
-    title: 'santifer',
-    subtitle: 'Ask me about my experience',
-    greeting:
-      "Hi! I'm **santifer**, Santiago's avatar. Ask me anything — experience, projects, what makes him tick.",
-    error: 'Error sending. Please try again.',
-    prompts: [
-      {
-        icon: 'briefcase',
-        label: 'AI Experience',
-        query: "What is Santiago's experience with AI and automation?",
-      },
-      {
-        icon: 'rocket',
-        label: 'Top Projects',
-        query: "What are Santiago's most notable projects?",
-      },
-      {
-        icon: 'help',
-        label: 'Why hire him?',
-        query: 'Why should I hire Santiago?',
-      },
-      { icon: 'mail', label: 'Contact', query: 'How can I contact Santiago?' },
-    ],
-    contactCtaTitle: 'Want to talk directly?',
-  },
-};
 
 const PromptIcon = ({ icon }: { icon: string }) => {
   const icons = {
@@ -113,7 +53,7 @@ function generateSessionId() {
 }
 
 export default function FloatingChat({ lang }: FloatingChatProps) {
-  const t = texts[lang];
+  const t = translations[lang].chat;
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: t.greeting },
@@ -518,11 +458,11 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                       {t.contactCtaTitle}
                     </p>
                     <a
-                      href={`mailto:${lang === 'es' ? 'hola@santifer.io' : 'hi@santifer.io'}`}
+                      href={`mailto:${translations[lang].email}`}
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme-r text-white text-sm font-medium hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
                     >
                       <Mail className="w-4 h-4" />
-                      {lang === 'es' ? 'hola@santifer.io' : 'hi@santifer.io'}
+                      {translations[lang].email}
                     </a>
                   </div>
                 </motion.div>
@@ -545,7 +485,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                     <span
                       className={`text-muted-foreground ${isMobile ? 'text-sm' : 'text-xs'}`}
                     >
-                      {lang === 'en' ? 'santifer is typing...' : 'santifer está escribiendo...'}
+                      {translations[lang].ui.typingIndicator}
                     </span>
                   </div>
                 </motion.div>

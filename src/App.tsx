@@ -20,6 +20,12 @@ function LinkedInLogo({ className = "w-4 h-4" }: { className?: string }) {
   )
 }
 
+function useHydrated() {
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+  return hydrated
+}
+
 function useInView(threshold = 0.1) {
   const [ref, setRef] = useState<HTMLElement | null>(null)
   const [isInView, setIsInView] = useState(false)
@@ -43,11 +49,43 @@ function useInView(threshold = 0.1) {
 }
 
 function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
-  const { ref, isInView } = useInView()
+  const [ref, setRef] = useState<HTMLElement | null>(null)
+  const [isInView, setIsInView] = useState(false)
+  const hydrated = useHydrated()
+  const wasAboveFold = useRef(false)
+
+  useEffect(() => {
+    if (!ref) return
+
+    // Detect if element was visible at hydration time
+    const rect = ref.getBoundingClientRect()
+    if (rect.top < window.innerHeight) {
+      wasAboveFold.current = true
+      setIsInView(true)
+      return // Already visible, no observer needed
+    }
+
+    // Below-fold: observe scroll
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true)
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(ref)
+    return () => observer.disconnect()
+  }, [ref])
+
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
+      ref={setRef}
+      // Pre-hydration: initial={false} → motion preserves DOM state (visible from SSR)
+      // Post-hydration above-fold: initial={false} → already visible, no animation
+      // Post-hydration below-fold: normal animation
+      initial={!hydrated || wasAboveFold.current ? false : { opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
@@ -993,6 +1031,7 @@ function CertLogo({ logo }: { logo: string }) {
 
 // Banner sutil para sugerir cambio de idioma
 function getCookie(name: string): boolean {
+  if (typeof document === 'undefined') return false
   return document.cookie.split('; ').some(c => c === `${name}=true`)
 }
 
@@ -1044,11 +1083,10 @@ function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: (
 
   if (!visible) return null
 
-  const message = lang === 'es'
-    ? '🇬🇧 This site is available in English'
-    : '🇪🇸 Este sitio está disponible en español'
+  const t = translations[lang]
+  const message = t.ui.languageBanner
 
-  const switchLabel = lang === 'es' ? 'Switch' : 'Cambiar'
+  const switchLabel = t.ui.languageBannerSwitch
 
   return (
     <motion.div
@@ -1083,6 +1121,7 @@ function App() {
   const navigate = useNavigate()
   const lang: Lang = location.pathname === '/en' ? 'en' : 'es'
   const t = translations[lang]
+  const hydrated = useHydrated()
 
   const [isDark, setIsDark] = useState(true)
 
@@ -1143,7 +1182,7 @@ function App() {
       {/* Controls */}
       <div className="fixed top-6 right-6 z-50 flex gap-3">
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={hydrated ? { opacity: 0, scale: 0.8 } : false}
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -1159,11 +1198,11 @@ function App() {
             transition={{ duration: 0.3 }}
             className="text-sm font-bold text-primary"
           >
-            {lang === 'es' ? 'ES' : 'EN'}
+            {t.ui.languageToggle}
           </motion.span>
         </motion.button>
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={hydrated ? { opacity: 0, scale: 0.8 } : false}
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -1193,7 +1232,7 @@ function App() {
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
             {/* Photo */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={hydrated ? { opacity: 0, scale: 0.8 } : false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
@@ -1214,7 +1253,7 @@ function App() {
                 </div>
               </div>
               <motion.div
-                initial={{ scale: 0 }}
+                initial={hydrated ? { scale: 0 } : false}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
                 className="absolute -bottom-1 -right-1 w-10 h-10 rounded-full bg-gradient-theme flex items-center justify-center shadow-lg border-2 border-background"
@@ -1224,7 +1263,7 @@ function App() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={hydrated ? { opacity: 0, x: -20 } : false}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-center md:text-left"
@@ -1293,15 +1332,15 @@ function App() {
                   <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#888] shrink-0">
                     <picture>
                       <source srcSet="/logo-santifer.webp" type="image/webp" />
-                      <img src="/logo-santifer.jpg" alt="Santifer iRepair" className="w-full h-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                      <img src="/logo-santifer.jpg" alt={t.experience.santifer.company} className="w-full h-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
                     </picture>
                   </div>
-                  <h3 className="font-display text-2xl font-bold">Santifer iRepair</h3>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.santifer.company}</h3>
                 </div>
                 <a href="https://santiferirepair.es" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline flex items-center gap-1">
                   santiferirepair.es <ExternalLink className="w-3 h-3" />
                 </a>
-                <span className="text-sm text-muted-foreground">{lang === 'es' ? 'Sevilla, España' : 'Seville, Spain'}</span>
+                <span className="text-sm text-muted-foreground">{t.experience.santifer.location}</span>
               </div>
               <p className="text-primary font-medium mb-1">{t.experience.santifer.role}</p>
               <p className="text-sm text-muted-foreground mb-4">{t.experience.santifer.period}</p>
@@ -1502,15 +1541,15 @@ function App() {
                   <div className="w-10 h-10 rounded-xl overflow-hidden bg-[#F5F3EE] flex items-center justify-center shrink-0">
                     <picture>
                       <source srcSet="/logo-lico.webp" type="image/webp" />
-                      <img src="/logo-lico.png" alt="LICO Cosmetics" className="w-full h-full object-contain p-1" width={40} height={40} loading="lazy" decoding="async" />
+                      <img src="/logo-lico.png" alt={t.experience.lico.company} className="w-full h-full object-contain p-1" width={40} height={40} loading="lazy" decoding="async" />
                     </picture>
                   </div>
-                  <h3 className="font-display text-2xl font-bold">LICO Cosmetics</h3>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.lico.company}</h3>
                 </div>
                 <a href="https://licocosmetics.es" target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline flex items-center gap-1">
                   licocosmetics.es <ExternalLink className="w-3 h-3" />
                 </a>
-                <span className="text-sm text-muted-foreground">{lang === 'es' ? 'Sevilla, España' : 'Seville, Spain'}</span>
+                <span className="text-sm text-muted-foreground">{t.experience.lico.location}</span>
               </div>
               <p className="text-accent font-medium mb-1">{t.experience.lico.role}</p>
               <p className="text-sm text-muted-foreground mb-4">{t.experience.lico.period}</p>
@@ -1546,10 +1585,10 @@ function App() {
                   <div className="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shrink-0 p-1.5">
                     <picture>
                       <source srcSet="/logo-everis.webp" type="image/webp" />
-                      <img src="/logo-everis.jpg" alt="Everis" className="w-full h-full object-contain" width={40} height={40} loading="lazy" decoding="async" />
+                      <img src="/logo-everis.jpg" alt={t.experience.everis.company} className="w-full h-full object-contain" width={40} height={40} loading="lazy" decoding="async" />
                     </picture>
                   </div>
-                  <h3 className="font-display text-2xl font-bold">Everis (NTT DATA)</h3>
+                  <h3 className="font-display text-2xl font-bold">{t.experience.everis.company}</h3>
                 </div>
               </div>
               <p className="text-primary font-medium mb-1">{t.experience.everis.role}</p>
