@@ -7,7 +7,7 @@ export const seo = {
   },
   en: {
     title:
-      'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
+      'santifer | AI Product Manager · Solutions Architect · FDE',
     description:
       'Founder turned AI Product Manager. LLM automation, no-code platforms, Anthropic certified. Open to remote roles in EU / USA.',
   },

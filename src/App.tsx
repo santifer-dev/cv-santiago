@@ -1,9 +1,24 @@
-import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useReducer, useRef, lazy, Suspense, Component, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, Linkedin, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
-import FloatingChat from './FloatingChat'
+
+const FloatingChat = lazy(() => import('./FloatingChat'))
+
+class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false }
+  static getDerivedStateFromError() { return { hasError: true } }
+  render() { return this.state.hasError ? null : this.props.children }
+}
+
+function LinkedInLogo({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="currentColor">
+      <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
+    </svg>
+  )
+}
 
 function useInView(threshold = 0.1) {
   const [ref, setRef] = useState<HTMLElement | null>(null)
@@ -1502,29 +1517,24 @@ function App() {
               <p className="text-muted-foreground">{t.experience.lico.desc}</p>
 
               {/* Testimonial */}
-              <blockquote className="mt-6 p-4 rounded-xl bg-accent/5 border border-accent/10">
-                <p className="text-sm text-muted-foreground italic mb-4">
-                  "{t.experience.lico.testimonial.quote}"
-                </p>
-                <footer className="flex items-center gap-3">
-                  <picture>
-                    <source srcSet="/juan-sabate.webp" type="image/webp" />
-                    <img src="/juan-sabate.jpeg" alt={t.experience.lico.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
-                  </picture>
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-foreground block">{t.experience.lico.testimonial.author}</span>
-                    <span className="text-xs text-muted-foreground">{t.experience.lico.testimonial.role}</span>
-                  </div>
-                  <a
-                    href="https://www.linkedin.com/in/juan-sabat%C3%A9-garrach%C3%B3n-b4102b55/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline"
-                  >
-                    <Linkedin className="w-3 h-3" />
-                  </a>
-                </footer>
-              </blockquote>
+              <a href="https://www.linkedin.com/in/santifer/details/recommendations/" target="_blank" rel="noopener noreferrer" className="block group">
+                <blockquote className="mt-6 p-4 rounded-xl bg-accent/5 border border-accent/10 group-hover:border-[hsl(var(--linkedin)/0.3)] transition-colors">
+                  <p className="text-sm text-muted-foreground italic mb-4">
+                    "{t.experience.lico.testimonial.quote}"
+                  </p>
+                  <footer className="flex items-center gap-3">
+                    <picture>
+                      <source srcSet="/juan-sabate.webp" type="image/webp" />
+                      <img src="/juan-sabate.jpeg" alt={t.experience.lico.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                    </picture>
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-foreground block">{t.experience.lico.testimonial.author}</span>
+                      <span className="text-xs text-muted-foreground">{t.experience.lico.testimonial.role}</span>
+                    </div>
+                    <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
+                  </footer>
+                </blockquote>
+              </a>
             </div>
           </AnimatedSection>
 
@@ -1558,29 +1568,24 @@ function App() {
             </div>
 
             {/* Testimonial */}
-            <blockquote className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10">
-              <p className="text-sm text-muted-foreground italic mb-4">
-                "{t.experience.everis.testimonial.quote}"
-              </p>
-              <footer className="flex items-center gap-3">
-                <picture>
-                  <source srcSet="/manuel-lopez.webp" type="image/webp" />
-                  <img src="/manuel-lopez.jpeg" alt={t.experience.everis.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
-                </picture>
-                <div className="flex-1">
-                  <span className="text-sm font-medium text-foreground block">{t.experience.everis.testimonial.author}</span>
-                  <span className="text-xs text-muted-foreground">{t.experience.everis.testimonial.role}</span>
-                </div>
-                <a
-                  href="https://www.linkedin.com/in/manuellopezalcazar/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-primary hover:underline flex items-center gap-1"
-                >
-                  <Linkedin className="w-3 h-3" />
-                </a>
-              </footer>
-            </blockquote>
+            <a href="https://www.linkedin.com/in/santifer/details/recommendations/" target="_blank" rel="noopener noreferrer" className="block group">
+              <blockquote className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/10 group-hover:border-[hsl(var(--linkedin)/0.3)] transition-colors">
+                <p className="text-sm text-muted-foreground italic mb-4">
+                  "{t.experience.everis.testimonial.quote}"
+                </p>
+                <footer className="flex items-center gap-3">
+                  <picture>
+                    <source srcSet="/manuel-lopez.webp" type="image/webp" />
+                    <img src="/manuel-lopez.jpeg" alt={t.experience.everis.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                  </picture>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-foreground block">{t.experience.everis.testimonial.author}</span>
+                    <span className="text-xs text-muted-foreground">{t.experience.everis.testimonial.role}</span>
+                  </div>
+                  <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
+                </footer>
+              </blockquote>
+            </a>
           </AnimatedSection>
         </div>
       </section>
@@ -1919,7 +1924,7 @@ function App() {
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
                         <p className="text-sm text-foreground leading-relaxed">{post.hook}<span className="text-muted-foreground">...</span> <span className="text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] transition-colors">ver más</span></p>
-                        <svg className="w-4 h-4 shrink-0 mt-0.5" viewBox="0 0 16 16" fill="hsl(var(--linkedin))"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/></svg>
+                        <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))] shrink-0 mt-0.5" />
                       </div>
                     </div>
                   </div>
@@ -1988,29 +1993,24 @@ function App() {
                       </div>
                       {/* Testimonial if exists */}
                       {'testimonial' in item && item.testimonial && (
-                        <blockquote className="mt-4 p-3 rounded-lg bg-primary/5 border border-primary/10">
-                          <p className="text-xs text-muted-foreground italic mb-3">
-                            "{item.testimonial.quote}"
-                          </p>
-                          <footer className="flex items-center gap-2">
-                            <picture>
-                              <source srcSet={item.testimonial.photo.replace(/\.(png|jpg|jpeg)$/i, '.webp')} type="image/webp" />
-                              <img src={item.testimonial.photo} alt={item.testimonial.author} className="w-8 h-8 rounded-full object-cover" width={32} height={32} loading="lazy" decoding="async" />
-                            </picture>
-                            <div className="flex-1">
-                              <span className="text-xs font-medium text-foreground block">{item.testimonial.author}</span>
-                              <span className="text-[10px] text-muted-foreground">{item.testimonial.role}</span>
-                            </div>
-                            <a
-                              href={item.testimonial.linkedin}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-primary hover:underline"
-                            >
-                              <Linkedin className="w-3 h-3" />
-                            </a>
-                          </footer>
-                        </blockquote>
+                        <a href="https://www.linkedin.com/in/santifer/details/recommendations/" target="_blank" rel="noopener noreferrer" className="block group">
+                          <blockquote className="mt-4 p-4 rounded-xl bg-primary/5 border border-primary/10 group-hover:border-[hsl(var(--linkedin)/0.3)] transition-colors">
+                            <p className="text-sm text-muted-foreground italic mb-4">
+                              "{item.testimonial.quote}"
+                            </p>
+                            <footer className="flex items-center gap-3">
+                              <picture>
+                                <source srcSet={item.testimonial.photo.replace(/\.(png|jpg|jpeg)$/i, '.webp')} type="image/webp" />
+                                <img src={item.testimonial.photo} alt={item.testimonial.author} className="w-10 h-10 rounded-full object-cover" width={40} height={40} loading="lazy" decoding="async" />
+                              </picture>
+                              <div className="flex-1">
+                                <span className="text-sm font-medium text-foreground block">{item.testimonial.author}</span>
+                                <span className="text-xs text-muted-foreground">{item.testimonial.role}</span>
+                              </div>
+                              <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
+                            </footer>
+                          </blockquote>
+                        </a>
                       )}
                     </div>
                   </AnimatedSection>
@@ -2142,7 +2142,7 @@ function App() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:border-primary/50 transition-all duration-200 hover:bg-primary/5"
               >
-                <Linkedin className="w-4 h-4" />
+                <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
                 LinkedIn
                 <ExternalLink className="w-3 h-3" />
               </a>
@@ -2151,8 +2151,12 @@ function App() {
         </div>
       </footer>
 
-      {/* Floating Chat */}
-      <FloatingChat lang={lang} />
+      {/* Floating Chat — lazy loaded */}
+      <ChatErrorBoundary>
+        <Suspense fallback={null}>
+          <FloatingChat lang={lang} />
+        </Suspense>
+      </ChatErrorBoundary>
     </div>
   )
 }
