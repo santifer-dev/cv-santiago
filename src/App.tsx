@@ -51,23 +51,23 @@ function useInView(threshold = 0.1) {
 function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
   const [ref, setRef] = useState<HTMLElement | null>(null)
   const [isInView, setIsInView] = useState(false)
+  const [detected, setDetected] = useState(false)
   const hydrated = useHydrated()
   const wasAboveFold = useRef(false)
 
   useEffect(() => {
     if (!ref) return
 
-    // Detect if element was visible at hydration time
-    const rect = ref.getBoundingClientRect()
-    if (rect.top < window.innerHeight) {
-      wasAboveFold.current = true
-      setIsInView(true)
-      return // Already visible, no observer needed
-    }
-
-    // Below-fold: observe scroll
+    // IntersectionObserver instead of getBoundingClientRect (avoids forced reflow).
+    // First callback fires immediately for visible elements → above-fold detection.
+    let firstCallback = true
     const observer = new IntersectionObserver(
       ([entry]) => {
+        if (firstCallback) {
+          firstCallback = false
+          if (entry.isIntersecting) wasAboveFold.current = true
+          setDetected(true)
+        }
         if (entry.isIntersecting) {
           setIsInView(true)
           observer.disconnect()
@@ -82,11 +82,14 @@ function AnimatedSection({ children, className = '', delay = 0 }: { children: Re
   return (
     <motion.div
       ref={setRef}
-      // Pre-hydration: initial={false} → motion preserves DOM state (visible from SSR)
-      // Post-hydration above-fold: initial={false} → already visible, no animation
-      // Post-hydration below-fold: normal animation
-      initial={!hydrated || wasAboveFold.current ? false : { opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      initial={false}
+      animate={
+        !hydrated || !detected
+          ? false  // Pre-hydration / pre-detection: preserve SSR DOM state
+          : isInView
+            ? { opacity: 1, y: 0 }
+            : { opacity: 0, y: 40 }
+      }
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
@@ -1247,7 +1250,7 @@ function App() {
                   <div className="w-full h-full rounded-full overflow-hidden">
                     <picture>
                       <source srcSet="/foto-avatar.webp" type="image/webp" />
-                      <img src="/foto-avatar.png" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" width={192} height={192} fetchPriority="high" />
+                      <img src="/foto-avatar.png" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" width={384} height={384} fetchPriority="high" />
                     </picture>
                   </div>
                 </div>
@@ -2190,12 +2193,14 @@ function App() {
         </div>
       </footer>
 
-      {/* Floating Chat — lazy loaded */}
-      <ChatErrorBoundary>
-        <Suspense fallback={null}>
-          <FloatingChat lang={lang} />
-        </Suspense>
-      </ChatErrorBoundary>
+      {/* Floating Chat — lazy loaded, client-only (avoids React #419 Suspense SSR error) */}
+      {hydrated && (
+        <ChatErrorBoundary>
+          <Suspense fallback={null}>
+            <FloatingChat lang={lang} />
+          </Suspense>
+        </ChatErrorBoundary>
+      )}
     </div>
   )
 }

@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- LCP Image Preload (avatar = Largest Contentful Paint element) -->
+    <link rel="preload" href="/foto-avatar.webp" as="image" type="image/webp" />
+
     <!-- Font Preloads (self-hosted, eliminates Google Fonts CDN) -->
     <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -70,7 +73,7 @@
           "@type": "ProfilePage",
           "@id": "https://santifer.io/#profilepage",
           "url": "https://santifer.io",
-          "dateModified": "2026-02-01",
+          "dateModified": "2026-02-02",
           "mainEntity": { "@id": "https://santifer.io/#person" }
         },
         {
