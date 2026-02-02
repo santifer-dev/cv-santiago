@@ -882,7 +882,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none" />
       <div className="relative z-10 max-w-5xl mx-auto px-6">
         {/* Hook emocional con typewriter reflexivo + botón skip */}
-        <div className="relative pb-6">
+        <div className="relative pb-12">
           <ReflectiveTypewriter
             context={t.story.context}
             reflections={t.story.reflections}
@@ -939,7 +939,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
             </p>
           </motion.div>
 
-          <div className="mt-6 text-center max-w-3xl mx-auto space-y-1">
+          <div className="mt-6 text-center max-w-3xl mx-auto">
             {t.story.seeking.map((line, i) => {
               // Spotlight: lines 0 and 2 light up with finalReveal, line 1 stays as background
               const isSpotlit = i === 0 || i === 2
@@ -955,10 +955,10 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
                   transition={{ duration: 0.6, delay: typewriterComplete ? 0.3 + i * 0.2 : 0, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className={`transition-opacity duration-[2500ms] ease-in-out ${dimOpacity} ${
                     i === 2
-                      ? 'font-display text-lg md:text-2xl font-bold text-gradient-theme leading-relaxed'
+                      ? 'font-display text-lg md:text-2xl font-bold text-gradient-theme leading-snug'
                       : i === 1
-                        ? 'font-display text-lg md:text-2xl text-muted-foreground leading-relaxed'
-                        : 'font-display text-lg md:text-2xl font-bold text-foreground leading-relaxed'
+                        ? 'font-display text-lg md:text-2xl text-muted-foreground leading-snug'
+                        : 'font-display text-lg md:text-2xl font-bold text-foreground leading-snug'
                   }`}
                 >
                   {line}

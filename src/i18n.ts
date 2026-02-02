@@ -24,8 +24,8 @@ export const translations = {
       hookParagraphs: [
         ['Un día, vendí el negocio. Compré *claridad.*'],
         [
-          'Lo que me mueve no cabe en una tienda.',
-          '*Construir* +sistemas que se sostienen solos+. Hechos para durar.',
+          'Lo que me mueve va más allá.',
+          '*Construir* +sistemas que duran+.',
         ],
       ],
       why: 'En Santifer iRepair automaticé todo lo que pude: desde un agente de IA que atendía el 90% de los clientes hasta un sistema operativo que orquestaba 12 bases de datos.',
@@ -617,7 +617,7 @@ export const translations = {
         ['One day, I sold my business. I bought *clarity.*'],
         [
           "What drives me doesn't fit on a shelf.",
-          '*Building* +systems that hold up on their own+. Built to last.',
+          '*Building* +systems that last+.',
         ],
       ],
       why: 'At Santifer iRepair I automated everything I could: from an AI agent that handled 90% of customers to an operating system orchestrating 12 databases.',
