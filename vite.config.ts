@@ -21,9 +21,8 @@ export default defineConfig({
             if (id.includes('motion')) {
               return 'vendor-motion'
             }
-            if (id.includes('react-markdown') || id.includes('remark') || id.includes('rehype') || id.includes('mdast') || id.includes('micromark') || id.includes('unified') || id.includes('unist') || id.includes('hast')) {
-              return 'vendor-markdown'
-            }
+            // react-markdown and its deps (remark, rehype, mdast, micromark, unified, unist, hast)
+            // are NOT in manualChunks — they bundle with FloatingChat's lazy chunk automatically
           }
         },
       },

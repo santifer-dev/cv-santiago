@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, Routes, Route } from 'react-router-dom';
+import Critters from 'critters';
 import App from '../src/App.tsx';
 import { seo } from '../src/i18n.ts';
 
@@ -62,14 +63,44 @@ try {
   esHtml = '';
 }
 
-const injectedEs = indexHtml.replace(
-  '<div id="root"></div>',
-  `<div id="root">${esHtml}</div>`,
-);
-writeFileSync(indexPath, injectedEs, 'utf-8');
-console.log('[prerender] ES: dist/index.html updated');
+const esSeo = seo.es;
 
-// --- EN version (create dist/en/index.html) ---
+const injectedEs = indexHtml
+  // Inject ES content into #root
+  .replace('<div id="root"></div>', `<div id="root">${esHtml}</div>`)
+  // Update SEO meta tags from i18n (single source of truth)
+  .replace(
+    /<title>[^<]*<\/title>/,
+    `<title>${esc(esSeo.title)}</title>`,
+  )
+  .replace(
+    /<meta name="title" content="[^"]*" \/>/,
+    `<meta name="title" content="${esc(esSeo.title)}" />`,
+  )
+  .replace(
+    /<meta name="description" content="[^"]*" \/>/,
+    `<meta name="description" content="${esc(esSeo.description)}" />`,
+  )
+  // Update OG tags
+  .replace(
+    /<meta property="og:title" content="[^"]*" \/>/,
+    `<meta property="og:title" content="${esc(esSeo.title)}" />`,
+  )
+  .replace(
+    /<meta property="og:description" content="[^"]*" \/>/,
+    `<meta property="og:description" content="${esc(esSeo.description)}" />`,
+  )
+  // Update Twitter tags
+  .replace(
+    /<meta name="twitter:title" content="[^"]*" \/>/,
+    `<meta name="twitter:title" content="${esc(esSeo.title)}" />`,
+  )
+  .replace(
+    /<meta name="twitter:description" content="[^"]*" \/>/,
+    `<meta name="twitter:description" content="${esc(esSeo.description)}" />`,
+  );
+
+// --- EN version ---
 let enHtml: string;
 try {
   enHtml = renderApp('en');
@@ -138,9 +169,40 @@ let enPage = indexHtml
     `<meta name="twitter:description" content="${esc(enSeo.description)}" />`,
   );
 
-const enDir = resolve(distDir, 'en');
-mkdirSync(enDir, { recursive: true });
-writeFileSync(resolve(enDir, 'index.html'), enPage, 'utf-8');
-console.log('[prerender] EN: dist/en/index.html created');
+// ---------------------------------------------------------------------------
+// Critical CSS inlining with Critters
+// ---------------------------------------------------------------------------
+const critters = new Critters({
+  path: distDir,
+  publicPath: '/',
+  inlineFonts: false,   // fonts are preloaded separately
+  preload: 'media',     // media="print" onload="this.media='all'" — most reliable async CSS
+  compress: true,
+});
 
+async function inlineCriticalCSS() {
+  try {
+    const processedEs = await critters.process(injectedEs);
+    writeFileSync(indexPath, processedEs, 'utf-8');
+    console.log('[prerender] ES: dist/index.html updated (with critical CSS)');
+
+    const processedEn = await critters.process(enPage);
+    const enDir = resolve(distDir, 'en');
+    mkdirSync(enDir, { recursive: true });
+    writeFileSync(resolve(enDir, 'index.html'), processedEn, 'utf-8');
+    console.log('[prerender] EN: dist/en/index.html created (with critical CSS)');
+  } catch (err) {
+    // Fallback: write without critical CSS inlining
+    console.error('[prerender] Critters failed, writing without critical CSS:', err);
+    writeFileSync(indexPath, injectedEs, 'utf-8');
+    console.log('[prerender] ES: dist/index.html updated (no critical CSS)');
+
+    const enDir = resolve(distDir, 'en');
+    mkdirSync(enDir, { recursive: true });
+    writeFileSync(resolve(enDir, 'index.html'), enPage, 'utf-8');
+    console.log('[prerender] EN: dist/en/index.html created (no critical CSS)');
+  }
+}
+
+await inlineCriticalCSS();
 console.log('[prerender] Done.');

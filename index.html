@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Font Preloads (self-hosted, eliminates Google Fonts CDN) -->
+    <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Primary Meta Tags -->
     <title>santifer | AI PM · Builder · Founder</title>
@@ -62,7 +62,7 @@
           "@type": "WebSite",
           "@id": "https://santifer.io/#website",
           "url": "https://santifer.io",
-          "name": "Santiago Fernández de Valderrama | AI PM & Solutions Architect",
+          "name": "Santiago Fernández de Valderrama | AI Product Manager · Solutions Architect · FDE",
           "inLanguage": ["es", "en"],
           "publisher": { "@id": "https://santifer.io/#person" }
         },
