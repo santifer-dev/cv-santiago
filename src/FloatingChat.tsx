@@ -243,7 +243,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
           bottom: 'max(1.5rem, env(safe-area-inset-bottom, 0px) + 0.5rem)',
           right: 'max(1.5rem, env(safe-area-inset-right, 0px) + 0.5rem)',
         }}
-        aria-label="Toggle chat"
+        aria-label={lang === 'en' ? (isOpen ? 'Close chat with Santi' : 'Open chat with Santi') : (isOpen ? 'Cerrar chat con Santi' : 'Abrir chat con Santi')}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
@@ -302,6 +302,9 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
         {isOpen && (
           <motion.div
             ref={chatContainerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={lang === 'en' ? 'Chat with Santi' : 'Chat con Santi'}
             initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
             animate={isMobile ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
             exit={isMobile ? { opacity: 0 } : { opacity: 0, y: 20, scale: 0.95 }}
@@ -354,6 +357,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
 
             {/* Messages - scroll optimizado para móvil */}
             <div
+              aria-live="polite"
               className={`flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar overscroll-contain ${
                 isMobile ? 'pb-2' : ''
               }`}

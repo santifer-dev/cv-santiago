@@ -1126,11 +1126,28 @@ function App() {
   const t = translations[lang]
   const hydrated = useHydrated()
 
-  const [isDark, setIsDark] = useState(true)
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return true
+    const stored = localStorage.getItem('theme')
+    if (stored) return stored === 'dark'
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDark)
+    const root = document.documentElement
+    root.classList.toggle('dark', isDark)
+    root.classList.toggle('light', !isDark)
+    localStorage.setItem('theme', isDark ? 'dark' : 'light')
   }, [isDark])
+
+  // Listen for system theme changes (only if user hasn't manually toggled)
+  useEffect(() => {
+    if (localStorage.getItem('theme')) return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   // Scroll to hash anchor on load/navigation
   useEffect(() => {
@@ -1173,6 +1190,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-200">
+      {/* Skip navigation — accessible keyboard shortcut */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-primary-foreground focus:font-medium focus:shadow-lg"
+      >
+        {lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}
+      </a>
+
       {/* Language suggestion banner */}
       <AnimatePresence>
         <LanguageBanner
@@ -1226,7 +1251,7 @@ function App() {
       </div>
 
       {/* Hero Section */}
-      <header className="relative overflow-hidden">
+      <header id="main-content" className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent" />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-2xl md:blur-3xl -translate-y-1/2 translate-x-1/2 hidden sm:block" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-2xl md:blur-3xl translate-y-1/2 -translate-x-1/2 hidden sm:block" />

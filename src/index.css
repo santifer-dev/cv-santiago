@@ -91,6 +91,30 @@
     --linkedin: 210 91% 40%;       /* #0A66C2 */
   }
 
+  /* Dark mode via system preference — CSS-first, no JS needed = 0ms flash */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --background: 240 6% 10%;
+      --foreground: 0 0% 93%;
+      --muted: 240 4% 14%;
+      --muted-foreground: 240 5% 65%;
+      --primary: 187 86% 53%;
+      --primary-foreground: 240 10% 4%;
+      --accent: 270 91% 65%;
+      --accent-foreground: 0 0% 100%;
+      --border: 240 4% 20%;
+      --card: 240 5% 13%;
+      --card-foreground: 0 0% 93%;
+      --gradient-from: 187 86% 53%;
+      --gradient-to: 270 91% 65%;
+      --gold: 45 97% 49%;
+      --success: 142 71% 45%;
+      --tool: 187 92% 50%;
+      --linkedin: 210 88% 71%;
+    }
+  }
+
+  /* Manual dark override (user toggled) */
   .dark {
     --background: 240 6% 10%;       /* #18181b - soft dark like VS Code */
     --foreground: 0 0% 93%;         /* off-white, easier on eyes */
@@ -110,6 +134,27 @@
     --success: 142 71% 45%;
     --tool: 187 92% 50%;
     --linkedin: 210 88% 71%;       /* #70B5F9 - lighter for dark bg */
+  }
+
+  /* Manual light override (user toggled when system is dark) */
+  .light {
+    --background: 0 0% 99%;
+    --foreground: 240 10% 4%;
+    --muted: 240 5% 94%;
+    --muted-foreground: 240 5% 35%;
+    --primary: 187 74% 32%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 270 70% 45%;
+    --accent-foreground: 0 0% 100%;
+    --border: 240 6% 85%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 4%;
+    --gradient-from: 187 86% 53%;
+    --gradient-to: 270 91% 65%;
+    --gold: 43 76% 38%;
+    --success: 142 72% 29%;
+    --tool: 187 72% 48%;
+    --linkedin: 210 91% 40%;
   }
 
   /* ========== PROFILE: WARM - Orange/Teal ========== */
@@ -132,6 +177,29 @@
     --success: 142 72% 29%;
     --tool: 22 78% 50%;
     --linkedin: 210 91% 40%;
+  }
+
+  /* Warm dark via system preference */
+  @media (prefers-color-scheme: dark) {
+    .theme-warm:not(.light) {
+      --background: 20 12% 11%;
+      --foreground: 30 20% 90%;
+      --muted: 20 10% 15%;
+      --muted-foreground: 30 15% 60%;
+      --primary: 24 90% 55%;
+      --primary-foreground: 20 20% 8%;
+      --accent: 181 90% 40%;
+      --accent-foreground: 0 0% 100%;
+      --border: 20 8% 22%;
+      --card: 20 10% 14%;
+      --card-foreground: 30 20% 90%;
+      --gradient-from: 24 90% 55%;
+      --gradient-to: 181 85% 38%;
+      --gold: 45 97% 49%;
+      --success: 142 71% 45%;
+      --tool: 24 90% 55%;
+      --linkedin: 210 88% 71%;
+    }
   }
 
   .theme-warm.dark {
@@ -160,6 +228,12 @@
     padding: 0;
     box-sizing: border-box;
     border-color: hsl(var(--border));
+  }
+
+  /* Keyboard focus indicator — visible only for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
   }
 
   html {
