@@ -20,17 +20,20 @@ export const translations = {
     role: 'Convierto trabajo manual en sistemas reutilizables.',
     story: {
       context: '+15 años construyendo+ todo desde cero.',
-      reflections: ['Esto ya lo sé hacer.', 'Hay algo más grande.'],
+      reflections: ['Funciona. Sin mí.', '...¿y ahora qué?'],
       hookParagraphs: [
         ['Un día, vendí el negocio. Compré *claridad.*'],
         [
           'Lo que me mueve no cabe en una tienda.',
-          '*Construir* +sistemas que liberan equipos+. Eso escala.',
+          '*Construir* +sistemas que se sostienen solos+. Hechos para durar.',
         ],
       ],
       why: 'En Santifer iRepair automaticé todo lo que pude: desde un agente de IA que atendía el 90% de los clientes hasta un sistema operativo que orquestaba 12 bases de datos.',
-      seeking:
-        'Ahora busco hacer eso a mayor escala—en empresas donde el impacto se multiplica.',
+      seeking: [
+        'Siento que esto es sólo el principio.',
+        'Equipos grandes. Retos difíciles. End-to-end.',
+        'Listo para el siguiente capítulo.',
+      ],
       nav: [
         { icon: 'briefcase', label: 'Mi camino', href: '#experience' },
         { icon: 'folder', label: 'Lo que construyo', href: '#projects' },
@@ -609,16 +612,20 @@ export const translations = {
     role: 'I turn manual work into reusable systems.',
     story: {
       context: '+15 years building+ everything from scratch.',
-      reflections: ["I've mastered this.", "There's something bigger."],
+      reflections: ['It works. It actually works.', '...now what?'],
       hookParagraphs: [
         ['One day, I sold my business. I bought *clarity.*'],
         [
           "What drives me doesn't fit on a shelf.",
-          '*Building* +systems that unblock teams+. And it scales.',
+          '*Building* +systems that hold up on their own+. Built to last.',
         ],
       ],
       why: 'At Santifer iRepair I automated everything I could: from an AI agent that handled 90% of customers to an operating system orchestrating 12 databases.',
-      seeking: 'Now I want to do it at scale — where impact compounds.',
+      seeking: [
+        'This still feels like day one.',
+        'Bigger teams. Harder problems. End-to-end.',
+        "Ready for what's next.",
+      ],
       nav: [
         { icon: 'briefcase', label: 'My path', href: '#experience' },
         { icon: 'folder', label: 'What I build', href: '#projects' },

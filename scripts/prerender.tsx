@@ -175,18 +175,25 @@ let enPage = indexHtml
 const critters = new Critters({
   path: distDir,
   publicPath: '/',
-  inlineFonts: false,   // fonts are preloaded separately
-  preload: 'media',     // media="print" onload="this.media='all'" — most reliable async CSS
+  inlineFonts: false,     // fonts are preloaded separately
+  preload: 'media',       // media="print" onload="this.media='all'" — most reliable async CSS
   compress: true,
+  reduceInlineStyles: true,
 });
+
+// Remove duplicate image preloads added by critters (we already have one in <head>)
+function dedupePreloads(html: string): string {
+  // Remove critters-added image preload (no type= attribute) — keep our manual one (has type="image/webp")
+  return html.replace(/<link rel="preload" as="image" href="\/foto-avatar\.webp">/g, '');
+}
 
 async function inlineCriticalCSS() {
   try {
-    const processedEs = await critters.process(injectedEs);
+    const processedEs = dedupePreloads(await critters.process(injectedEs));
     writeFileSync(indexPath, processedEs, 'utf-8');
     console.log('[prerender] ES: dist/index.html updated (with critical CSS)');
 
-    const processedEn = await critters.process(enPage);
+    const processedEn = dedupePreloads(await critters.process(enPage));
     const enDir = resolve(distDir, 'en');
     mkdirSync(enDir, { recursive: true });
     writeFileSync(resolve(enDir, 'index.html'), processedEn, 'utf-8');
