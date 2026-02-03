@@ -1,4 +1,4 @@
-# Santiago Fernández de Valderrama
+# Santiago Fernández de Valderrama Aparicio
 
 > AI Product Manager · Solutions Architect (No/Low-Code & AI) · Forward Deployed Engineer
 
@@ -6,11 +6,13 @@
 
 - **Location:** Seville, Spain
 - **Open to:** Remote roles in EU/USA
-- **Email:** hola@santifer.io
+- **Email:** hi@santifer.io
 - **Website:** https://santifer.io
 - **LinkedIn:** https://linkedin.com/in/santifer
 - **GitHub:** https://github.com/santifer-dev
 - **Content Digest:** https://contentdigest.santifer.io
+- **Newsletter (Substack):** https://santifer.substack.com
+- **dev.to:** https://dev.to/santifer
 
 ## Professional Summary
 
@@ -125,11 +127,20 @@ Process and automation consulting for D2C cosmetics brand. Multiple sessions to 
 ### Content Digest (Maven Capstone)
 Python + FastAPI service for LLM-powered content ingestion and digest generation with eval loops and telemetry.
 
+### Life OS (Private · On Request)
+Personal productivity system I built to run my life through conversation. Orchestrates Claude Code with native MCPs (Apple Reminders/Calendar, GitHub), 15 custom skills, 5 automation hooks, and semantic search (BM25 + SQLite FTS5). Pipes into Content Digest for a full knowledge loop: ingest → synthesize → connect → act.
+
 ### Claude Pulse (Open Source)
 SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics and rate limit predictions.
 
+### Claude Eye (Open Source)
+CLI that analyzes web animation videos frame-by-frame using Claude Vision. Detects CSS transition desyncs and generates reports with exact timestamps.
+
 ### Claudeable (Open Source)
 Claude Code meta-project for professional web development. Custom skills, templates and pre-configured MCPs.
+
+### ProjectOS Predict (Maven Capstone)
+Risk prediction dashboard for project portfolios. ML model trained on synthetic data flags delays before they happen. Second capstone from Maven AI PM bootcamp (Marily Nika).
 
 ### santifer.io (This Portfolio)
 Interactive CV with integrated AI chat. The chatbot answers questions about experience and skills with real-time streaming.

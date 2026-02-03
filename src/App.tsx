@@ -1395,6 +1395,23 @@ function App() {
                   </li>
                 ))}
               </ul>
+
+              {/* Trusted By - Corporate Logos */}
+              <div className="pt-4 border-t border-border/50">
+                <p className="text-xs text-muted-foreground/60 uppercase tracking-wider mb-4">{t.experience.santifer.trustedBy.label}</p>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 md:gap-x-8">
+                  {t.experience.santifer.trustedBy.logos.map((logo, i) => (
+                    <div key={i} className="flex items-center gap-2 hover:opacity-90 transition-opacity duration-200">
+                      {'src' in logo ? (
+                        <img src={logo.src} alt={logo.name} className="h-5 w-auto shrink-0 invert opacity-40 hover:opacity-60 dark:invert-0 dark:opacity-60 dark:hover:opacity-80" loading="lazy" />
+                      ) : (
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0 opacity-40 dark:opacity-60" dangerouslySetInnerHTML={{ __html: logo.icon }} />
+                      )}
+                      <span className="text-sm font-medium opacity-40 dark:opacity-60">{logo.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </AnimatedSection>
 
@@ -1777,13 +1794,14 @@ function App() {
             // Separar proyectos
             const allProjects = t.projects.items as readonly Project[]
             const contentDigest = allProjects.find(p => p.title === 'Content Digest')!
+            const lifeOS = allProjects.find(p => p.title === 'Life OS')!
             const santiferIo = allProjects.find(p => p.title === 'santifer.io')!
-            // Tools que dependen de santifer.io (fila 3)
+            // Tools que dependen de santifer.io
             const claudeEye = allProjects.find(p => p.title === 'Claude Eye')!
             const claudeable = allProjects.find(p => p.title === 'Claudeable')!
-            // Fila 4: Claude Pulse + Watermark Remover
+            // Fila 4: Claude Pulse + ProjectOS Predict
             const claudePulse = allProjects.find(p => p.title === 'Claude Pulse')!
-            const watermarkRemover = allProjects.find(p => p.title === 'Watermark Remover')!
+            const projectOSPredict = allProjects.find(p => p.title === 'ProjectOS Predict')!
 
             // Helper para parsear **bold** a elementos con estilo
             const parseBold = (text: string): React.ReactNode[] => {
@@ -1791,6 +1809,121 @@ function App() {
                 i % 2 === 1 ? <strong key={i} className="text-tool font-semibold">{part}</strong> : part
               )
             }
+
+            // Refs para cada tarjeta (para calcular posiciones de conexiones)
+            const containerRef = useRef<HTMLDivElement>(null)
+            const cardRefs = {
+              contentDigest: useRef<HTMLDivElement>(null),
+              lifeOS: useRef<HTMLDivElement>(null),
+              santiferIo: useRef<HTMLDivElement>(null),
+              claudeEye: useRef<HTMLDivElement>(null),
+              claudeable: useRef<HTMLDivElement>(null),
+              claudePulse: useRef<HTMLDivElement>(null),
+              projectOSPredict: useRef<HTMLDivElement>(null),
+            }
+
+            // Hook para calcular líneas de conexión SVG
+            const [lines, setLines] = useState<string[]>([])
+            const { ref: visibilityRef, isInView: isVisible } = useInView(0.1)
+
+            useEffect(() => {
+              if (!isVisible || !containerRef.current) return
+
+              const calculate = () => {
+                const container = containerRef.current!.getBoundingClientRect()
+                const isMobile = window.innerWidth < 768 // Tailwind md breakpoint
+
+                type Edge = 'top' | 'bottom' | 'left' | 'right'
+                const getPoint = (ref: React.RefObject<HTMLDivElement | null>, edge: Edge, ratio = 0.5) => {
+                  const rect = ref.current?.getBoundingClientRect()
+                  if (!rect) return null
+                  const x = rect.left - container.left
+                  const y = rect.top - container.top
+                  switch (edge) {
+                    case 'top': return { x: x + rect.width * ratio, y }
+                    case 'bottom': return { x: x + rect.width * ratio, y: y + rect.height }
+                    case 'left': return { x, y: y + rect.height * ratio }
+                    case 'right': return { x: x + rect.width, y: y + rect.height * ratio }
+                  }
+                }
+
+                // Definir conexiones según el grafo
+                type Connection = {
+                  from: React.RefObject<HTMLDivElement | null>
+                  fromEdge: Edge
+                  fromRatio?: number
+                  to: React.RefObject<HTMLDivElement | null>
+                  toEdge: Edge
+                  toRatio?: number
+                }
+
+                // En móvil: conexiones verticales simples (tarjetas apiladas)
+                // En desktop: grafo complejo con conexiones horizontales y diagonales
+                const connections: Connection[] = isMobile ? [
+                  // Móvil: flujo vertical simple
+                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.lifeOS, toEdge: 'top' },
+                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top' },
+                  { from: cardRefs.santiferIo, fromEdge: 'bottom', to: cardRefs.claudeEye, toEdge: 'top' },
+                  { from: cardRefs.claudeEye, fromEdge: 'bottom', to: cardRefs.claudeable, toEdge: 'top' },
+                  { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.claudePulse, toEdge: 'top' },
+                  { from: cardRefs.claudePulse, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top' },
+                ] : [
+                  // Desktop: grafo complejo
+                  // Conexión horizontal: Content Digest ↔ Life OS
+                  { from: cardRefs.contentDigest, fromEdge: 'right', to: cardRefs.lifeOS, toEdge: 'left' },
+                  // Conexiones verticales hacia santifer.io
+                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top', toRatio: 0.25 },
+                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top', toRatio: 0.75 },
+                  // santifer.io hacia tools
+                  { from: cardRefs.santiferIo, fromEdge: 'bottom', fromRatio: 0.25, to: cardRefs.claudeEye, toEdge: 'top' },
+                  { from: cardRefs.santiferIo, fromEdge: 'bottom', fromRatio: 0.75, to: cardRefs.claudeable, toEdge: 'top' },
+                  // Tools hacia última fila
+                  { from: cardRefs.claudeEye, fromEdge: 'bottom', to: cardRefs.claudePulse, toEdge: 'top' },
+                  { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top' },
+                ]
+
+                const paths = connections.map(conn => {
+                  const start = getPoint(conn.from, conn.fromEdge, conn.fromRatio ?? 0.5)
+                  const end = getPoint(conn.to, conn.toEdge, conn.toRatio ?? 0.5)
+                  if (!start || !end) return ''
+
+                  // Móvil: líneas rectas simples | Desktop: curvas Bézier
+                  if (isMobile) {
+                    return `M ${start.x} ${start.y} L ${end.x} ${end.y}`
+                  }
+
+                  // Determinar si es conexión horizontal o vertical
+                  const isHorizontal = conn.fromEdge === 'left' || conn.fromEdge === 'right'
+                  if (isHorizontal) {
+                    // Curva Bézier horizontal
+                    const midX = (start.x + end.x) / 2
+                    return `M ${start.x} ${start.y} C ${midX} ${start.y}, ${midX} ${end.y}, ${end.x} ${end.y}`
+                  } else {
+                    // Curva Bézier vertical
+                    const midY = (start.y + end.y) / 2
+                    return `M ${start.x} ${start.y} C ${start.x} ${midY}, ${end.x} ${midY}, ${end.x} ${end.y}`
+                  }
+                }).filter(Boolean)
+
+                setLines(paths)
+              }
+
+              // Delay para dar tiempo a las animaciones de entrada (AnimatedSection ~0.6s)
+              const initialTimeout = setTimeout(calculate, 700)
+
+              // Debounce para resize
+              let resizeTimeout: ReturnType<typeof setTimeout>
+              const debouncedCalc = () => {
+                clearTimeout(resizeTimeout)
+                resizeTimeout = setTimeout(calculate, 100)
+              }
+              window.addEventListener('resize', debouncedCalc)
+              return () => {
+                window.removeEventListener('resize', debouncedCalc)
+                clearTimeout(initialTimeout)
+                clearTimeout(resizeTimeout)
+              }
+            }, [isVisible, lang])
 
             // Componente de tarjeta de proyecto
             const ProjectCard = ({ project, variant = 'default', cardRef }: {
@@ -1834,7 +1967,7 @@ function App() {
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground mb-4">
-                    {isHighlight ? parseBold(project.desc) : project.desc}
+                    {parseBold(project.desc)}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {project.tech.map((tech) => (
@@ -1873,34 +2006,63 @@ function App() {
 
 
             return (
-              <div className="mb-12">
-                {/* Fila 1: Content Digest + santifer.io */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div ref={(el) => { containerRef.current = el; visibilityRef(el) }} className="mb-12 relative">
+                {/* SVG de conexiones - absoluto, z-0 para quedar detrás */}
+                <svg
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ zIndex: 0, overflow: 'visible' }}
+                >
+                  {lines.map((d, i) => (
+                    <path
+                      key={i}
+                      d={d}
+                      className="dependency-line"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeDasharray="4 4"
+                      style={{
+                        opacity: isVisible ? 0.6 : 0,
+                        transition: `opacity 0.6s ease-out ${i * 0.1}s`
+                      }}
+                    />
+                  ))}
+                </svg>
+
+                {/* Fila 1: Content Digest + Life OS (proyectos sustanciales conectados) */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                   <AnimatedSection delay={0.1}>
-                    <ProjectCard project={contentDigest} />
+                    <ProjectCard project={contentDigest} cardRef={cardRefs.contentDigest} />
                   </AnimatedSection>
                   <AnimatedSection delay={0.15}>
-                    <ProjectCard project={santiferIo} variant="highlight" />
+                    <ProjectCard project={lifeOS} cardRef={cardRefs.lifeOS} />
                   </AnimatedSection>
                 </div>
 
-                {/* Fila 2: Claude Eye + Claudeable */}
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                {/* Fila 2: santifer.io (highlight, este portfolio) — nodo central */}
+                <div className="mb-6 relative z-10">
                   <AnimatedSection delay={0.2}>
-                    <ProjectCard project={claudeEye} variant="tool-static" />
-                  </AnimatedSection>
-                  <AnimatedSection delay={0.25}>
-                    <ProjectCard project={claudeable} variant="tool-static" />
+                    <ProjectCard project={santiferIo} variant="highlight" cardRef={cardRefs.santiferIo} />
                   </AnimatedSection>
                 </div>
 
-                {/* Fila 3: Claude Pulse + Watermark Remover */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <AnimatedSection delay={0.3}>
-                    <ProjectCard project={claudePulse} variant="tool-static" />
+                {/* Fila 3: Claude Eye + Claudeable — tools */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
+                  <AnimatedSection delay={0.25}>
+                    <ProjectCard project={claudeEye} variant="tool-static" cardRef={cardRefs.claudeEye} />
                   </AnimatedSection>
+                  <AnimatedSection delay={0.3}>
+                    <ProjectCard project={claudeable} variant="tool-static" cardRef={cardRefs.claudeable} />
+                  </AnimatedSection>
+                </div>
+
+                {/* Fila 4: Claude Pulse + ProjectOS Predict */}
+                <div className="grid md:grid-cols-2 gap-6 relative z-10">
                   <AnimatedSection delay={0.35}>
-                    <ProjectCard project={watermarkRemover} />
+                    <ProjectCard project={claudePulse} variant="tool-static" cardRef={cardRefs.claudePulse} />
+                  </AnimatedSection>
+                  <AnimatedSection delay={0.4}>
+                    <ProjectCard project={projectOSPredict} cardRef={cardRefs.projectOSPredict} />
                   </AnimatedSection>
                 </div>
               </div>
