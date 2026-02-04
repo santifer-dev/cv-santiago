@@ -413,6 +413,7 @@ export const translations = {
         company: 'Everis (NTT DATA)',
         role: 'Coordinador de Pruebas (8 testers) & Analista de Software',
         period: '2007 - 2009 · Consultoría',
+        desc: 'Coordinación de testing de producto sanitario multi-vendor: gestión de suites de pruebas funcionales para un equipo de 8 testers y enlace con desarrollo, consultoría de negocio y otras áreas del proyecto.',
         tesauro: {
           title: 'Tesauro de Codificación Médica Auto-aprendizaje',
           desc: 'Motor de recomendación tipo RL para cliente de sanidad pública. Aprendía de las elecciones de los clínicos para afinar sus sugerencias de codificación, reduciendo esfuerzo manual y mejorando precisión progresivamente.',
@@ -431,7 +432,7 @@ export const translations = {
       items: [
         {
           hook: 'Alguien acaba de intentar hackear mi chatbot. Y me enteré en 3 segundos.',
-          reactions: '270+',
+          reactions: '290+',
           comments: '35+',
           url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
         },
@@ -1020,6 +1021,7 @@ export const translations = {
         company: 'Everis (NTT DATA)',
         role: 'Test Coordinator (8 testers) & Software Analyst',
         period: '2007 - 2009 · Consulting',
+        desc: 'Coordinated multi-vendor healthcare product testing: managed functional test suites for a team of 8 testers and acted as liaison with development, business consulting, and other project areas.',
         tesauro: {
           title: 'Self-learning Medical Coding Thesaurus',
           desc: 'RL-style recommendation engine for a public healthcare client. Learned from clinicians\' choices to surface better coding suggestions — cutting manual effort and improving accuracy over time.',
@@ -1038,7 +1040,7 @@ export const translations = {
       items: [
         {
           hook: 'Someone just tried to hack my chatbot. I found out in 3 seconds.',
-          reactions: '270+',
+          reactions: '290+',
           comments: '35+',
           url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
         },

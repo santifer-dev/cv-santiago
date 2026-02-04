@@ -446,3 +446,10 @@ section[id], footer[id] {
 .dependency-line {
   animation: dash-flow 1s linear infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .dependency-line {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}

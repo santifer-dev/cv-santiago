@@ -70,10 +70,10 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
 
   const userMessageCount = messages.filter((m) => m.role === 'user').length;
 
-  // Scroll a mensajes nuevos
+  // Scroll a mensajes nuevos (incluye CTA de contacto que aparece tras 2+ mensajes)
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, userMessageCount]);
 
   // Focus en input al abrir
   useEffect(() => {
