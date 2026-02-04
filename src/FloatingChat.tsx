@@ -70,14 +70,13 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
 
   const userMessageCount = messages.filter((m) => m.role === 'user').length;
 
-  // Scroll a mensajes nuevos (incluye CTA de contacto que aparece tras 2+ mensajes)
+  // Scroll automático: instantáneo durante streaming, suave después
   useEffect(() => {
-    // Delay para esperar a que el CTA termine de renderizarse (tiene delay: 0.3 en animación)
-    const timeout = setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }, 350);
-    return () => clearTimeout(timeout);
-  }, [messages, userMessageCount]);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: isLoading ? 'instant' : 'smooth',
+      block: 'end'
+    });
+  }, [messages, isLoading]);
 
   // Focus en input al abrir
   useEffect(() => {
