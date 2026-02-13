@@ -24,7 +24,7 @@ I operate with end-to-end ownership across discovery → prioritization → deli
 
 1. **AI Product Manager** - AI product discovery, PRDs, roadmap and prioritization for LLM-powered products
 2. **Solutions Architect (No/Low-Code & AI)** - System design for automation platforms integrated with AI
-3. **AI Forward Deployed Engineer** - Stakeholder workshops, rapid prototyping, production delivery
+3. **AI Forward Deployed Engineer** (role pioneered by Palantir) - Stakeholder workshops, rapid prototyping, production delivery
 
 ## Key Achievement: Omnichannel AI Agent "Jacobo"
 
@@ -128,7 +128,10 @@ Coordinated multi-vendor healthcare product testing: managed functional test sui
 Python + FastAPI service for LLM-powered content ingestion and digest generation with eval loops and telemetry.
 
 ### Life OS (Private · On Request)
-Personal productivity system I built to run my life through conversation. Orchestrates Claude Code with native MCPs (Apple Reminders/Calendar, GitHub), 15 custom skills, 5 automation hooks, and semantic search (BM25 + SQLite FTS5). Pipes into Content Digest for a full knowledge loop: ingest → synthesize → connect → act.
+Personal productivity system I built to run my life through conversation. Orchestrates Claude Code with native MCPs (Apple Reminders/Calendar, GitHub), 15 custom skills, 5 automation hooks, and semantic search (BM25 + SQLite FTS5). Pipes into Content Digest for a full knowledge loop and powers Career Ops for HITL automated job search.
+
+### Career Ops (Private · On Request)
+HITL job search pipeline — AI periodically evaluates offers across 10 dimensions (A-F scoring), spins up ATS-optimized PDF resumes per listing, and pre-fills applications. I review, filter, and decide which ones to ship. Batch-processes 48+ offers in parallel (conductor + workers), scans portals with dedup, and adapts narrative framing per role archetype. Plugs into Life OS as a specialized skill.
 
 ### Claude Pulse (Open Source)
 SwiftBar plugin for real-time Claude Code usage monitoring on macOS. Consumption metrics and rate limit predictions.

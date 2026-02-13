@@ -1796,6 +1796,7 @@ function App() {
             const allProjects = t.projects.items as readonly Project[]
             const contentDigest = allProjects.find(p => p.title === 'Content Digest')!
             const lifeOS = allProjects.find(p => p.title === 'Life OS')!
+            const careerOps = allProjects.find(p => p.title === 'Career Ops')!
             const santiferIo = allProjects.find(p => p.title === 'santifer.io')!
             // Tools que dependen de santifer.io
             const claudeEye = allProjects.find(p => p.title === 'Claude Eye')!
@@ -1816,6 +1817,7 @@ function App() {
             const cardRefs = {
               contentDigest: useRef<HTMLDivElement>(null),
               lifeOS: useRef<HTMLDivElement>(null),
+              careerOps: useRef<HTMLDivElement>(null),
               santiferIo: useRef<HTMLDivElement>(null),
               claudeEye: useRef<HTMLDivElement>(null),
               claudeable: useRef<HTMLDivElement>(null),
@@ -1862,25 +1864,29 @@ function App() {
                 // En desktop: grafo complejo con conexiones horizontales y diagonales
                 const connections: Connection[] = isMobile ? [
                   // Móvil: flujo vertical simple
-                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.lifeOS, toEdge: 'top' },
-                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top' },
+                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.careerOps, toEdge: 'top' },
+                  { from: cardRefs.careerOps, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top' },
                   { from: cardRefs.santiferIo, fromEdge: 'bottom', to: cardRefs.claudeEye, toEdge: 'top' },
                   { from: cardRefs.claudeEye, fromEdge: 'bottom', to: cardRefs.claudeable, toEdge: 'top' },
                   { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.claudePulse, toEdge: 'top' },
-                  { from: cardRefs.claudePulse, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top' },
+                  { from: cardRefs.claudePulse, fromEdge: 'bottom', to: cardRefs.contentDigest, toEdge: 'top' },
+                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top' },
                 ] : [
                   // Desktop: grafo complejo
-                  // Conexión horizontal: Content Digest ↔ Life OS
-                  { from: cardRefs.contentDigest, fromEdge: 'right', to: cardRefs.lifeOS, toEdge: 'left' },
-                  // Conexiones verticales hacia santifer.io
-                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top', toRatio: 0.25 },
-                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top', toRatio: 0.75 },
-                  // santifer.io hacia tools
+                  // Fila 1: Life OS ↔ Career Ops (horizontal)
+                  { from: cardRefs.lifeOS, fromEdge: 'right', to: cardRefs.careerOps, toEdge: 'left' },
+                  // Fila 1 → Fila 2: diagonales hacia santifer.io
+                  { from: cardRefs.lifeOS, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top', toRatio: 0.25 },
+                  { from: cardRefs.careerOps, fromEdge: 'bottom', to: cardRefs.santiferIo, toEdge: 'top', toRatio: 0.75 },
+                  // Fila 2 → Fila 3: santifer.io hacia tools
                   { from: cardRefs.santiferIo, fromEdge: 'bottom', fromRatio: 0.25, to: cardRefs.claudeEye, toEdge: 'top' },
                   { from: cardRefs.santiferIo, fromEdge: 'bottom', fromRatio: 0.75, to: cardRefs.claudeable, toEdge: 'top' },
-                  // Tools hacia última fila
+                  // Fila 3 → Fila 4
                   { from: cardRefs.claudeEye, fromEdge: 'bottom', to: cardRefs.claudePulse, toEdge: 'top' },
-                  { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top' },
+                  { from: cardRefs.claudeable, fromEdge: 'bottom', to: cardRefs.contentDigest, toEdge: 'top' },
+                  // Fila 4 → Fila 5: diagonales hacia ProjectOS
+                  { from: cardRefs.claudePulse, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top', toRatio: 0.25 },
+                  { from: cardRefs.contentDigest, fromEdge: 'bottom', to: cardRefs.projectOSPredict, toEdge: 'top', toRatio: 0.75 },
                 ]
 
                 const paths = connections.map(conn => {
@@ -2030,17 +2036,17 @@ function App() {
                   ))}
                 </svg>
 
-                {/* Fila 1: Content Digest + Life OS (proyectos sustanciales conectados) */}
+                {/* Fila 1: Life OS + Career Ops */}
                 <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                   <AnimatedSection delay={0.1}>
-                    <ProjectCard project={contentDigest} cardRef={cardRefs.contentDigest} />
+                    <ProjectCard project={lifeOS} cardRef={cardRefs.lifeOS} />
                   </AnimatedSection>
                   <AnimatedSection delay={0.15}>
-                    <ProjectCard project={lifeOS} cardRef={cardRefs.lifeOS} />
+                    <ProjectCard project={careerOps} cardRef={cardRefs.careerOps} />
                   </AnimatedSection>
                 </div>
 
-                {/* Fila 2: santifer.io (highlight, este portfolio) — nodo central */}
+                {/* Fila 2: santifer.io (highlight) — nodo central */}
                 <div className="mb-6 relative z-10">
                   <AnimatedSection delay={0.2}>
                     <ProjectCard project={santiferIo} variant="highlight" cardRef={cardRefs.santiferIo} />
@@ -2057,12 +2063,19 @@ function App() {
                   </AnimatedSection>
                 </div>
 
-                {/* Fila 4: Claude Pulse + ProjectOS Predict */}
-                <div className="grid md:grid-cols-2 gap-6 relative z-10">
+                {/* Fila 4: Claude Pulse + Content Digest */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6 relative z-10">
                   <AnimatedSection delay={0.35}>
                     <ProjectCard project={claudePulse} variant="tool-static" cardRef={cardRefs.claudePulse} />
                   </AnimatedSection>
                   <AnimatedSection delay={0.4}>
+                    <ProjectCard project={contentDigest} cardRef={cardRefs.contentDigest} />
+                  </AnimatedSection>
+                </div>
+
+                {/* Fila 5: ProjectOS Predict (full width) */}
+                <div className="relative z-10">
+                  <AnimatedSection delay={0.45}>
                     <ProjectCard project={projectOSPredict} cardRef={cardRefs.projectOSPredict} />
                   </AnimatedSection>
                 </div>
