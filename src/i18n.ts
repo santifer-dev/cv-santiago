@@ -440,8 +440,8 @@ export const translations = {
       items: [
         {
           hook: 'Alguien acaba de intentar hackear mi chatbot. Y me enteré en 3 segundos.',
-          reactions: '290+',
-          comments: '35+',
+          reactions: '300+',
+          comments: '50+',
           url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
         },
         {
@@ -1056,8 +1056,8 @@ export const translations = {
       items: [
         {
           hook: 'Someone just tried to hack my chatbot. I found out in 3 seconds.',
-          reactions: '290+',
-          comments: '35+',
+          reactions: '300+',
+          comments: '50+',
           url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
         },
         {
