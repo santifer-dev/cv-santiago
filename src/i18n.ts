@@ -3,13 +3,13 @@ export const seo = {
     title:
       'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
     description:
-      'Fundador reconvertido a AI Product Manager. Automatización con LLMs, no-code, certificado Anthropic. Abierto a roles remotos EU / USA.',
+      'Fundador reconvertido a AI Product Manager. Automatización inteligente, arquitectura de soluciones enterprise, plataformas no-code. Abierto a roles remotos EU / USA.',
   },
   en: {
     title:
       'santifer | AI Product Manager · Solutions Architect · FDE',
     description:
-      'Founder turned AI Product Manager. LLM automation, no-code platforms, Anthropic certified. Open to remote roles in EU / USA.',
+      'Founder turned AI Product Manager. Intelligent automation, enterprise solution architecture, no-code platforms. Open to remote roles in EU / USA.',
   },
 };
 
@@ -89,24 +89,24 @@ export const translations = {
           desc: 'Definición de problemas, PRDs de IA, roadmap y priorización',
         },
         {
-          title: 'Arquitectura de Soluciones',
-          desc: 'Requisitos, diseño de sistemas, APIs / webhooks, OpenAPI',
+          title: 'Arquitectura de Soluciones Enterprise',
+          desc: 'Diseño de sistemas end-to-end entre departamentos, APIs / webhooks, flujos de datos, OpenAPI',
         },
         {
           title: 'Workflows Agénticos',
           desc: 'Agentes LLM, tool use, traspaso HITL, voz + mensajería',
         },
         {
-          title: 'LLMOps & Reliability',
-          desc: 'Observabilidad, evals, error handling, reintentos, SOPs, trade-offs coste / latencia',
+          title: 'LLMOps & AI Governance',
+          desc: 'Observabilidad, evals, error handling, reintentos, SOPs, trade-offs coste / latencia, responsible AI',
         },
         {
           title: 'Forward-Deployed Delivery',
           desc: 'Workshops con stakeholders, mapeo de workflows, prototipado rápido',
         },
         {
-          title: 'Comunicación Técnica',
-          desc: 'Thought leadership, talleres, writing técnico con tracción real',
+          title: 'AI Enablement & Thought Leadership',
+          desc: 'Talleres de adopción de IA, writing técnico con tracción real, Teaching Fellow en AI PM Bootcamp',
         },
       ],
     },
@@ -748,24 +748,24 @@ export const translations = {
           desc: 'Problem definition, AI PRDs, roadmap & prioritization',
         },
         {
-          title: 'Solution Architecture',
-          desc: 'Requirements, system design, APIs / webhooks, OpenAPI',
+          title: 'Enterprise Solution Architecture',
+          desc: 'End-to-end system design across departments, APIs / webhooks, data flows, OpenAPI',
         },
         {
           title: 'Agentic Workflows',
           desc: 'LLM agents, tool use, HITL handoff, voice + messaging',
         },
         {
-          title: 'LLMOps & Reliability',
-          desc: 'Observability, evals, error handling, retries, SOPs, cost / latency trade-offs',
+          title: 'LLMOps & AI Governance',
+          desc: 'Observability, evals, error handling, retries, SOPs, cost / latency trade-offs, responsible AI',
         },
         {
           title: 'Forward-Deployed Delivery',
           desc: 'Stakeholder workshops, workflow mapping, rapid prototyping',
         },
         {
-          title: 'Technical Communication',
-          desc: 'Thought leadership, workshops, technical writing with real traction',
+          title: 'AI Enablement & Thought Leadership',
+          desc: 'AI adoption workshops, technical writing with real traction, Teaching Fellow at AI PM Bootcamp',
         },
       ],
     },

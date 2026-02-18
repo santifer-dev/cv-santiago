@@ -1356,9 +1356,9 @@ function App() {
                     key={i}
                     className="p-4 rounded-xl bg-background/50 border border-border hover:border-accent/30 transition-colors group"
                   >
-                    <div className="flex items-center gap-2 mb-1">
-                      <Zap className="w-4 h-4 text-accent shrink-0" />
-                      <span className="text-sm font-semibold group-hover:text-accent transition-colors">{item.title}</span>
+                    <div className="flex items-start gap-2 mb-1 min-h-[2.5rem]">
+                      <Zap className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                      <span className="text-sm font-semibold group-hover:text-accent transition-colors leading-tight">{item.title}</span>
                     </div>
                     <p className="text-xs text-muted-foreground pl-6">{item.desc}</p>
                   </div>

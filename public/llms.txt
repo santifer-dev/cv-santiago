@@ -42,11 +42,11 @@ Built an AI agent achieving **~90% customer self-service rate**:
 ## Core Competencies
 
 - **AI Product Discovery:** Problem definition, AI PRDs, roadmap & prioritization
-- **Solution Architecture:** Requirements, system design, APIs/webhooks, OpenAPI specs
+- **Enterprise Solution Architecture:** End-to-end system design across departments, APIs/webhooks, data flows, OpenAPI specs
 - **Agentic Workflows:** LLM agents, tool use/function calling, HITL handoff, voice + messaging
-- **LLMOps & Reliability:** Observability, evals, error handling, retries, SOPs, cost/latency trade-offs
+- **LLMOps & AI Governance:** Observability, evals, error handling, retries, SOPs, cost/latency trade-offs, responsible AI
 - **Forward-Deployed Delivery:** Stakeholder workshops, workflow mapping, rapid prototyping
-- **Technical Communication:** Thought leadership, workshops, technical writing with real traction
+- **AI Enablement & Thought Leadership:** AI adoption workshops, technical writing with real traction, Teaching Fellow at AI PM Bootcamp
 
 ## Development Methodology
 
