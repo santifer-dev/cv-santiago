@@ -456,6 +456,17 @@ export const translations = {
       title: 'Compartiendo',
       slides: 'Slides',
       comingSoon: 'Próximamente',
+      aiFluency: {
+        title: 'AI Fluency Educator',
+        badge: 'Gestión del Cambio · AI Fluency',
+        desc: 'Certificado por Anthropic para enseñar a equipos y organizaciones a adoptar IA. Framework 4D: Delegation, Description, Discernment, Diligence — decidir qué delegar, comunicarlo bien, evaluar outputs y colaborar de forma responsable. Aplicado como Teaching Fellow en el AI PM Bootcamp de Maven.',
+        certs: [
+          { title: 'Teaching AI Fluency', url: 'https://verify.skilljar.com/c/x3bzuoz99rq5' },
+          { title: 'AI Fluency: Framework & Foundations', url: 'https://verify.skilljar.com/c/d6rhfox7ktq6' },
+          { title: 'AI Fluency for Educators', url: 'https://verify.skilljar.com/c/2stz4dkso6ho' },
+          { title: 'AI Fluency for Students', url: 'https://verify.skilljar.com/c/p9y69uiekbxd' },
+        ],
+      },
       items: [
         {
           year: '2026',
@@ -541,6 +552,34 @@ export const translations = {
           org: 'Anthropic',
           logo: 'anthropic',
           url: 'https://verify.skilljar.com/c/eijx7hwc2x89',
+        },
+        {
+          year: '2026',
+          title: 'AI Fluency: Framework & Foundations',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/d6rhfox7ktq6',
+        },
+        {
+          year: '2026',
+          title: 'Teaching AI Fluency',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/x3bzuoz99rq5',
+        },
+        {
+          year: '2026',
+          title: 'AI Fluency for Educators',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/2stz4dkso6ho',
+        },
+        {
+          year: '2026',
+          title: 'AI Fluency for Students',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/p9y69uiekbxd',
         },
         {
           year: '2025',
@@ -1072,6 +1111,17 @@ export const translations = {
       title: 'Sharing',
       slides: 'Slides',
       comingSoon: 'More coming soon.',
+      aiFluency: {
+        title: 'AI Fluency Educator',
+        badge: 'Change Management · AI Fluency',
+        desc: 'Certified by Anthropic to teach teams and organizations how to adopt AI. The 4D framework: Delegation, Description, Discernment, Diligence — deciding what to delegate, communicating it well, evaluating outputs, and collaborating responsibly. Applied as Teaching Fellow at Maven\'s AI PM Bootcamp.',
+        certs: [
+          { title: 'Teaching AI Fluency', url: 'https://verify.skilljar.com/c/x3bzuoz99rq5' },
+          { title: 'AI Fluency: Framework & Foundations', url: 'https://verify.skilljar.com/c/d6rhfox7ktq6' },
+          { title: 'AI Fluency for Educators', url: 'https://verify.skilljar.com/c/2stz4dkso6ho' },
+          { title: 'AI Fluency for Students', url: 'https://verify.skilljar.com/c/p9y69uiekbxd' },
+        ],
+      },
       items: [
         {
           year: '2026',
@@ -1157,6 +1207,34 @@ export const translations = {
           org: 'Anthropic',
           logo: 'anthropic',
           url: 'https://verify.skilljar.com/c/eijx7hwc2x89',
+        },
+        {
+          year: '2026',
+          title: 'AI Fluency: Framework & Foundations',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/d6rhfox7ktq6',
+        },
+        {
+          year: '2026',
+          title: 'Teaching AI Fluency',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/x3bzuoz99rq5',
+        },
+        {
+          year: '2026',
+          title: 'AI Fluency for Educators',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/2stz4dkso6ho',
+        },
+        {
+          year: '2026',
+          title: 'AI Fluency for Students',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/p9y69uiekbxd',
         },
         {
           year: '2025',

@@ -2204,6 +2204,40 @@ function App() {
               </AnimatedSection>
             ))}
           </div>
+
+          {/* AI Fluency Educator card */}
+          {t.speaking.aiFluency && (
+            <AnimatedSection delay={0.3}>
+              <div className="mt-16 p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
+                    <GraduationCap className="w-6 h-6 text-accent" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                      <h3 className="font-display font-bold">{t.speaking.aiFluency.title}</h3>
+                      <span className="badge px-2 py-0.5 bg-accent/20 text-accent text-xs">{t.speaking.aiFluency.badge}</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">{t.speaking.aiFluency.desc}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {t.speaking.aiFluency.certs.map((cert: { title: string; url: string }, i: number) => (
+                        <a
+                          key={i}
+                          href={cert.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 text-xs text-muted-foreground hover:text-accent hover:bg-accent/20 transition-colors"
+                        >
+                          <BadgeCheck className="w-3.5 h-3.5" />
+                          {cert.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          )}
         </div>
       </section>
 

@@ -117,6 +117,10 @@ Coordinated multi-vendor healthcare product testing: managed functional test sui
 
 - **Anthropic (2026):** Introduction to Model Context Protocol
 - **Anthropic (2026):** Claude Code in Action
+- **Anthropic (2026):** AI Fluency: Framework & Foundations — Anthropic's 4D framework for AI interaction: effective, efficient, ethical, safe
+- **Anthropic (2026):** Teaching AI Fluency — Certified to teach AI Fluency to professionals and organizations
+- **Anthropic (2026):** AI Fluency for Educators
+- **Anthropic (2026):** AI Fluency for Students
 - **Airtable (2025):** AI App Builder Certification
 - **Airtable (2024):** Builder Certification
 - **Airtable (2024):** Admin Certification
