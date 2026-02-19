@@ -253,14 +253,14 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Accesibilidad: tamaños mínimos mejorados */
+  /* Accesibilidad: tamaños mínimos WCAG AA */
   .text-xs {
-    font-size: 0.8125rem; /* 13px en vez de 12px */
+    font-size: 0.875rem; /* 14px — mínimo legible */
     line-height: 1.4;
   }
 
   .text-sm {
-    font-size: 0.9375rem; /* 15px en vez de 14px */
+    font-size: 1rem; /* 16px — WCAG AA body minimum */
     line-height: 1.5;
   }
 }

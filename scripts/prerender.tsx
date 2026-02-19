@@ -115,7 +115,7 @@ let enPage = indexHtml
   // Inject EN content into #root
   .replace('<div id="root"></div>', `<div id="root">${enHtml}</div>`)
   // Switch to EN lang
-  .replace('<html lang="es">', '<html lang="en">')
+  .replace('<html lang="es" class="dark">', '<html lang="en" class="dark">')
   // Update SEO meta tags
   .replace(
     /<title>[^<]*<\/title>/,

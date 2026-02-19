@@ -1362,7 +1362,7 @@ function App() {
                       <Zap className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                       <span className="text-sm font-semibold group-hover:text-accent transition-colors leading-tight">{item.title}</span>
                     </div>
-                    <p className="text-xs text-muted-foreground pl-6">{item.desc}</p>
+                    <p className="text-sm text-muted-foreground pl-6">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -1549,7 +1549,7 @@ function App() {
               <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Database className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.erp.title}</p>
-                <p className="text-xs text-muted-foreground">{t.experience.santifer.erp.desc}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.santifer.erp.desc}</p>
                 <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.erp.metric}</span>
               </div>
             </AnimatedSection>
@@ -1559,7 +1559,7 @@ function App() {
               <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Bot className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.gpts.title}</p>
-                <p className="text-xs text-muted-foreground">{t.experience.santifer.gpts.desc}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.santifer.gpts.desc}</p>
                 <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.gpts.metric}</span>
               </div>
             </AnimatedSection>
@@ -1569,7 +1569,7 @@ function App() {
               <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Timer className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.reservas.title}</p>
-                <p className="text-xs text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
                 <span className="text-xs font-medium text-accent mt-auto pt-3">{t.experience.santifer.reservas.metric}</span>
               </div>
             </AnimatedSection>
@@ -1579,7 +1579,7 @@ function App() {
               <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Users className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.crm.title}</p>
-                <p className="text-xs text-muted-foreground">{t.experience.santifer.crm.desc}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.santifer.crm.desc}</p>
                 <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.crm.metric}</span>
               </div>
             </AnimatedSection>
@@ -1589,7 +1589,7 @@ function App() {
               <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
                 <Sparkles className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.genAI.title}</p>
-                <p className="text-xs text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
+                <p className="text-sm text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
                 <span className="text-xs font-medium text-accent mt-auto pt-3">{t.experience.santifer.genAI.metric}</span>
               </div>
             </AnimatedSection>
@@ -1956,7 +1956,7 @@ function App() {
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className={`font-display text-lg font-bold transition-colors ${
+                    <h3 className={`font-display text-xl font-bold transition-colors ${
                       isTool ? 'group-hover:text-tool' : 'group-hover:text-primary'
                     }`}>{project.title}</h3>
                     <div className="flex items-center gap-2">
