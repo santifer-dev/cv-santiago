@@ -904,7 +904,7 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 onClick={() => skipRef.current?.()}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm text-muted-foreground border border-border/50 bg-card backdrop-blur-sm cursor-pointer hover:bg-primary/10 hover:border-primary/30 hover:text-foreground transition-all duration-200"
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm text-muted-foreground border border-border/50 bg-card backdrop-blur-sm cursor-pointer hover:bg-primary/10 hover:border-primary/30 hover:text-foreground transition-colors duration-200"
               >
                 <SkipForward className="w-3.5 h-3.5" />
                 {t.story.skipButton}
@@ -1291,8 +1291,8 @@ function App() {
                 <div className="absolute inset-2 rounded-full bg-gradient-theme-50 p-[2px]">
                   <div className="w-full h-full rounded-full overflow-hidden">
                     <picture>
-                      <source srcSet="/foto-avatar.webp" type="image/webp" />
-                      <img src="/foto-avatar.png" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" width={384} height={384} fetchPriority="high" />
+                      <source srcSet="/foto-avatar-sm.webp 192w, /foto-avatar.webp 384w" sizes="(max-width: 768px) 160px, 192px" type="image/webp" />
+                      <img src="/foto-avatar-sm.png" srcSet="/foto-avatar-sm.png 192w, /foto-avatar.png 384w" sizes="(max-width: 768px) 160px, 192px" alt="Santiago Fernández de Valderrama" className="w-full h-full object-cover" width={192} height={192} fetchPriority="high" />
                     </picture>
                   </div>
                 </div>
@@ -1419,7 +1419,7 @@ function App() {
 
           {/* Business OS - Full Width Hero Card */}
           <AnimatedSection delay={0.1} className="mb-8">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-all duration-200 group">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-colors duration-200 group">
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-start justify-between mb-4">
@@ -1471,7 +1471,7 @@ function App() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
             {/* Large card - AI Agent */}
             <AnimatedSection delay={0.15} className="col-span-2 row-span-2">
-              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 hover:border-primary/40 transition-all duration-200 group flex flex-col">
+              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 hover:border-primary/40 transition-colors duration-200 group flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Bot className="w-6 h-6 text-primary" />
@@ -1503,7 +1503,7 @@ function App() {
 
             {/* Large card - Web Programática + SEO */}
             <AnimatedSection delay={0.2} className="col-span-2 row-span-2">
-              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20 hover:border-accent/40 transition-all duration-200 group flex flex-col">
+              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border border-accent/20 hover:border-accent/40 transition-colors duration-200 group flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
                     <Layout className="w-6 h-6 text-accent" />
@@ -1535,7 +1535,7 @@ function App() {
 
             {/* EXIT 2025 - Verde Success para destacar logro/credibilidad */}
             <AnimatedSection delay={0.25} className="col-span-2">
-              <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-success/10 to-success/5 border border-success/30 hover:border-success/50 transition-all duration-200">
+              <div className="h-full p-5 rounded-2xl bg-gradient-to-r from-success/10 to-success/5 border border-success/30 hover:border-success/50 transition-colors duration-200">
                 <div className="flex items-center gap-3 mb-2">
                   <Zap className="w-5 h-5 text-success" />
                   <span className="font-display font-bold text-success">{t.experience.santifer.exit}</span>
@@ -1546,7 +1546,7 @@ function App() {
 
             {/* ERP card */}
             <AnimatedSection delay={0.3}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
                 <Database className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.erp.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.erp.desc}</p>
@@ -1556,7 +1556,7 @@ function App() {
 
             {/* GPTs card */}
             <AnimatedSection delay={0.35}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
                 <Bot className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.gpts.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.gpts.desc}</p>
@@ -1566,7 +1566,7 @@ function App() {
 
             {/* Reservas card */}
             <AnimatedSection delay={0.4}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
                 <Timer className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.reservas.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
@@ -1576,7 +1576,7 @@ function App() {
 
             {/* CRM card */}
             <AnimatedSection delay={0.45}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
                 <Users className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.crm.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.crm.desc}</p>
@@ -1586,7 +1586,7 @@ function App() {
 
             {/* GenAI Marketing card */}
             <AnimatedSection delay={0.5}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 flex flex-col">
+              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
                 <Sparkles className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.genAI.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
@@ -1719,7 +1719,7 @@ function App() {
 
           {/* SA Playbook - Premium Card */}
           <AnimatedSection delay={0.05} className="mb-8">
-            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-all duration-200 group relative overflow-hidden">
+            <div className="p-8 rounded-2xl bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold/50 transition-colors duration-200 group relative overflow-hidden">
               {/* Subtle glow effect */}
               <div className="absolute -top-24 -right-24 w-48 h-48 bg-gold/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -1947,7 +1947,7 @@ function App() {
               return (
                 <div
                   ref={cardRef}
-                  className={`h-full p-6 rounded-2xl transition-all duration-200 flex flex-col ${hasHover ? 'group' : ''} ${
+                  className={`h-full p-6 rounded-2xl transition-colors duration-200 flex flex-col ${hasHover ? 'group' : ''} ${
                     isHighlight
                       ? 'bg-gradient-to-br from-accent/5 to-transparent border-2 border-accent/50 hover:border-accent/70'
                       : isTool
@@ -2140,7 +2140,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 group h-full flex flex-col">
+                  <div className="p-6 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 group h-full flex flex-col">
                     <span className="text-xs text-primary font-medium">
                       {talk.year} · {talk.eventUrl ? (
                         <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
@@ -2261,7 +2261,7 @@ function App() {
               <div className="space-y-4">
                 {t.education.items.map((item, i) => (
                   <AnimatedSection key={i} delay={0.1 + i * 0.1}>
-                    <div className="p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-all duration-200 group">
+                    <div className="p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 group">
                       <div className="flex items-start justify-between">
                         <div>
                           <span className="text-xs text-primary font-medium">{item.year} · {item.org}</span>
@@ -2331,7 +2331,7 @@ function App() {
                       href={cert.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-accent/30 transition-all duration-200 group cursor-pointer"
+                      className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-accent/30 transition-colors duration-200 group cursor-pointer"
                     >
                       <span className="text-sm font-mono text-accent font-medium">{cert.year}</span>
                       <div className="flex-1">
@@ -2434,7 +2434,7 @@ function App() {
                 href="https://linkedin.com/in/santifer/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:border-primary/50 transition-all duration-200 hover:bg-primary/5"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border hover:border-primary/50 transition-colors duration-200 hover:bg-primary/5"
               >
                 <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
                 LinkedIn

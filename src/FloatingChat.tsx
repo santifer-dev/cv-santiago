@@ -439,7 +439,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                     <button
                       key={i}
                       onClick={() => handlePromptClick(prompt.query)}
-                      className={`flex items-center gap-1.5 rounded-full font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 active:bg-primary/30 transition-all duration-200 ${
+                      className={`flex items-center gap-1.5 rounded-full font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 active:bg-primary/30 transition-colors duration-200 ${
                         isMobile
                           ? 'px-4 py-2.5 text-sm min-h-[44px]'
                           : 'px-3 py-1.5 text-xs'
@@ -526,7 +526,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                   enterKeyHint="send"
                   autoComplete="off"
                   autoCorrect="off"
-                  className={`flex-1 px-4 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all disabled:opacity-50 ${
+                  className={`flex-1 px-4 rounded-xl bg-muted border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-colors disabled:opacity-50 ${
                     isMobile ? 'py-3 text-base' : 'py-2.5 text-sm'
                   }`}
                 />
