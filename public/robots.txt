@@ -1,3 +1,8 @@
+# Most bots crawl. The best ones read llms.txt → /llms.txt
+#
+# Built by Santiago Fernández — hi@santifer.io
+# Stack: React 19 · Claude API · Vercel Edge · 39 evals
+
 User-agent: *
 Allow: /
 Disallow: /api/

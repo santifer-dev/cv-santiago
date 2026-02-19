@@ -1,0 +1,15 @@
+# Security Policy for santifer.io
+# https://securitytxt.org/ — RFC 9116
+
+Contact: mailto:hi@santifer.io
+Preferred-Languages: en, es
+Canonical: https://santifer.io/.well-known/security.txt
+Expires: 2027-02-19T00:00:00.000Z
+
+# Security measures implemented:
+# - Content Security Policy (CSP) headers
+# - Input sanitization on chat API
+# - Prompt injection defense (4-layer: input filtering, system prompt guardrails, output validation, Langfuse monitoring)
+# - Rate limiting on API endpoints
+# - No user data stored — stateless chat sessions
+# - 39 automated evals including 5 security/jailbreak tests
