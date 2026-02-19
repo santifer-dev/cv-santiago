@@ -26,8 +26,8 @@
           "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://vercel.live; style-src 'self' 'unsafe-inline' https://vercel.live; font-src 'self' https://vercel.live; img-src 'self' data: https:; connect-src 'self' https://vercel.live https://*.pusher.com wss://*.pusher.com; frame-src https://vercel.live; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'"
         },
         {
-          "key": "X-Hiring",
-          "value": "true"
+          "key": "X-Open-To",
+          "value": "interesting-problems"
         },
         {
           "key": "X-Built-With",
