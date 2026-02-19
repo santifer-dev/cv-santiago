@@ -74,9 +74,9 @@
     --foreground: 240 10% 4%;
     --muted: 240 5% 94%;
     --muted-foreground: 240 5% 35%;
-    --primary: 187 74% 32%;
+    --primary: 187 74% 28%;
     --primary-foreground: 0 0% 100%;
-    --accent: 270 70% 45%;
+    --accent: 270 70% 38%;
     --accent-foreground: 0 0% 100%;
     --border: 240 6% 85%;
     --card: 0 0% 100%;
@@ -87,7 +87,7 @@
     /* Semantic accent colors */
     --gold: 43 76% 38%;
     --success: 142 72% 29%;
-    --tool: 187 72% 48%;
+    --tool: 187 72% 30%;
     --linkedin: 210 91% 40%;       /* #0A66C2 */
   }
 
@@ -100,13 +100,13 @@
       --muted-foreground: 240 5% 65%;
       --primary: 187 86% 53%;
       --primary-foreground: 240 10% 4%;
-      --accent: 270 91% 70%;
+      --accent: 270 91% 78%;
       --accent-foreground: 0 0% 100%;
       --border: 240 4% 20%;
       --card: 240 5% 13%;
       --card-foreground: 0 0% 93%;
       --gradient-from: 187 86% 53%;
-      --gradient-to: 270 91% 70%;
+      --gradient-to: 270 91% 78%;
       --gold: 45 97% 49%;
       --success: 142 71% 45%;
       --tool: 187 92% 50%;
@@ -128,7 +128,7 @@
     --card: 240 5% 13%;             /* elevated above background */
     --card-foreground: 0 0% 93%;
     --gradient-from: 187 86% 53%;
-    --gradient-to: 270 91% 70%;
+    --gradient-to: 270 91% 78%;
     /* Semantic accent colors */
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
@@ -142,9 +142,9 @@
     --foreground: 240 10% 4%;
     --muted: 240 5% 94%;
     --muted-foreground: 240 5% 35%;
-    --primary: 187 74% 32%;
+    --primary: 187 74% 28%;
     --primary-foreground: 0 0% 100%;
-    --accent: 270 70% 45%;
+    --accent: 270 70% 38%;
     --accent-foreground: 0 0% 100%;
     --border: 240 6% 85%;
     --card: 0 0% 100%;
@@ -153,7 +153,7 @@
     --gradient-to: 270 91% 65%;
     --gold: 43 76% 38%;
     --success: 142 72% 29%;
-    --tool: 187 72% 48%;
+    --tool: 187 72% 30%;
     --linkedin: 210 91% 40%;
   }
 
@@ -163,7 +163,7 @@
     --foreground: 20 20% 10%;
     --muted: 30 30% 93%;
     --muted-foreground: 20 15% 40%;
-    --primary: 22 78% 50%;         /* Orange base */
+    --primary: 22 78% 40%;         /* Orange base — WCAG AA */
     --primary-foreground: 0 0% 100%;
     --accent: 181 100% 26%;        /* Teal */
     --accent-foreground: 0 0% 100%;
@@ -175,7 +175,7 @@
     /* Semantic accent colors */
     --gold: 43 76% 38%;
     --success: 142 72% 29%;
-    --tool: 22 78% 50%;
+    --tool: 22 78% 40%;
     --linkedin: 210 91% 40%;
   }
 

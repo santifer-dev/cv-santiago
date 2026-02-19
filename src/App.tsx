@@ -1206,7 +1206,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-200">
+    <div className="min-h-screen bg-background transition-colors duration-200" role="main">
       {/* Skip navigation — accessible keyboard shortcut */}
       <a
         href="#main-content"
@@ -1234,7 +1234,7 @@ function App() {
           transition={{ type: 'spring', stiffness: 400, damping: 17 }}
           onClick={toggleLang}
           className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
-          aria-label={lang === 'es' ? 'EN — Switch to English' : 'ES — Cambiar a Español'}
+          title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
         >
           <motion.span
             key={lang}
@@ -1405,11 +1405,11 @@ function App() {
                   {t.experience.santifer.trustedBy.logos.map((logo, i) => (
                     <div key={i} className="flex items-center gap-2 hover:opacity-90 transition-opacity duration-200">
                       {'src' in logo ? (
-                        <img src={logo.src} alt={logo.name} className="h-5 w-auto shrink-0 invert opacity-40 hover:opacity-60 dark:invert-0 dark:opacity-60 dark:hover:opacity-80" loading="lazy" />
+                        <img src={logo.src} alt={logo.name} className="h-5 w-auto shrink-0 invert opacity-60 hover:opacity-80 dark:invert-0 dark:opacity-70 dark:hover:opacity-90" loading="lazy" />
                       ) : (
-                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0 opacity-40 dark:opacity-60" dangerouslySetInnerHTML={{ __html: logo.icon }} />
+                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 shrink-0 opacity-60 dark:opacity-70" aria-hidden="true" dangerouslySetInnerHTML={{ __html: logo.icon }} />
                       )}
-                      <span className="text-sm font-medium opacity-40 dark:opacity-60">{logo.name}</span>
+                      <span className="text-sm font-medium opacity-60 dark:opacity-70">{logo.name}</span>
                     </div>
                   ))}
                 </div>
@@ -1968,8 +1968,8 @@ function App() {
                           : 'bg-primary/10 text-primary'
                       }`}>{project.badge}</span>
                       {project.badgeBuilding && (
-                        <span className="badge px-2 py-0.5 bg-green-500/10 text-green-500 flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-dot"></span>
+                        <span className="badge px-2 py-0.5 bg-success/10 text-success flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-dot"></span>
                           {project.badgeBuilding}
                         </span>
                       )}
@@ -2183,7 +2183,7 @@ function App() {
                     <img src="/foto-avatar.webp" alt="" role="presentation" className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
-                        <p className="text-sm text-foreground leading-relaxed">{post.hook}<span className="text-muted-foreground">...</span> <span className="text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] transition-colors">ver más</span></p>
+                        <p className="text-sm text-foreground leading-relaxed">{post.hook}<span className="text-muted-foreground">...</span> <span className="text-[hsl(var(--linkedin))] group-hover:text-[hsl(var(--linkedin))] transition-colors">ver más</span></p>
                         <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))] shrink-0 mt-0.5" />
                       </div>
                     </div>
@@ -2197,7 +2197,7 @@ function App() {
                       <MessageCircle className="w-3.5 h-3.5" />
                       {post.comments}
                     </span>
-                    <span className="ml-auto text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] group-hover:underline flex items-center gap-1.5 transition-colors">
+                    <span className="ml-auto text-[hsl(var(--linkedin))] group-hover:text-[hsl(var(--linkedin))] group-hover:underline flex items-center gap-1.5 transition-colors">
                       {t.linkedinPosts.cta}
                       <ExternalLink className="w-3 h-3" aria-hidden="true" />
                     </span>
