@@ -14,7 +14,7 @@ class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: b
 
 function LinkedInLogo({ className = "w-4 h-4" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 16 16" fill="currentColor">
+    <svg className={className} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
       <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
     </svg>
   )
@@ -1013,12 +1013,12 @@ function StorySection({ t }: { t: (typeof translations)[Lang] }) {
 function CertLogo({ logo }: { logo: string }) {
   const logos: Record<string, React.ReactNode> = {
     anthropic: (
-      <svg viewBox="0 0 92.2 65" className="w-6 h-6" fill="currentColor">
+      <svg viewBox="0 0 92.2 65" className="w-6 h-6" fill="currentColor" aria-hidden="true">
         <path d="M66.5,0H52.4l25.7,65h14.1L66.5,0z M25.7,0L0,65h14.4l5.3-13.6h26.9L51.8,65h14.4L40.5,0C40.5,0,25.7,0,25.7,0z M24.3,39.3l8.8-22.8l8.8,22.8H24.3z"/>
       </svg>
     ),
     airtable: (
-      <svg viewBox="0 0 200 170" className="w-6 h-6">
+      <svg viewBox="0 0 200 170" className="w-6 h-6" aria-hidden="true">
         <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
         <path fill="#18BFFF" d="M105.312 88.46v65.617c0 3.12 3.147 5.258 6.048 4.108l73.806-28.648a4.42 4.42 0 0 0 2.79-4.108V59.813c0-3.121-3.147-5.258-6.048-4.108l-73.806 28.648a4.42 4.42 0 0 0-2.79 4.108"/>
         <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
@@ -1026,7 +1026,7 @@ function CertLogo({ logo }: { logo: string }) {
       </svg>
     ),
     make: (
-      <svg viewBox="0 0 24 24" className="w-6 h-6">
+      <svg viewBox="0 0 24 24" className="w-6 h-6" aria-hidden="true">
         <defs>
           <linearGradient gradientUnits="userSpaceOnUse" id="make-fill-0" x1="1.5" x2="12" y1="19.5" y2="0">
             <stop stopColor="#F0F"/><stop offset=".17" stopColor="#E90CF9"/><stop offset=".54" stopColor="#C023ED"/><stop offset="1" stopColor="#B02DE9"/>
@@ -1126,7 +1126,7 @@ function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: (
         className="p-1 text-muted-foreground hover:text-foreground transition-colors"
         aria-label="Dismiss"
       >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
@@ -1234,7 +1234,7 @@ function App() {
           transition={{ type: 'spring', stiffness: 400, damping: 17 }}
           onClick={toggleLang}
           className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
-          aria-label="Toggle language"
+          aria-label={lang === 'es' ? 'EN — Switch to English' : 'ES — Cambiar a Español'}
         >
           <motion.span
             key={lang}
@@ -1383,7 +1383,7 @@ function App() {
                   <h3 className="font-display text-2xl font-bold">{t.experience.santifer.company}</h3>
                 </div>
                 <a href="https://santiferirepair.es" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline flex items-center gap-1">
-                  santiferirepair.es <ExternalLink className="w-3 h-3" />
+                  santiferirepair.es <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>
                 <span className="text-sm text-muted-foreground">{t.experience.santifer.location}</span>
               </div>
@@ -1424,7 +1424,7 @@ function App() {
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-gold/20 flex items-center justify-center shrink-0">
-                      <svg viewBox="0 0 200 170" className="w-6 h-6">
+                      <svg viewBox="0 0 200 170" className="w-6 h-6" aria-hidden="true">
                         <path fill="#FCB400" d="M90.039 12.368 24.079 39.66c-3.667 1.519-3.63 6.729.062 8.192l66.235 26.266a24.58 24.58 0 0 0 18.12 0l66.236-26.266c3.69-1.463 3.729-6.673.062-8.192l-65.96-27.292a24.58 24.58 0 0 0-18.795 0"/>
                         <path fill="#18BFFF" d="M105.312 88.46v65.617c0 3.12 3.147 5.258 6.048 4.108l73.806-28.648a4.42 4.42 0 0 0 2.79-4.108V59.813c0-3.121-3.147-5.258-6.048-4.108l-73.806 28.648a4.42 4.42 0 0 0-2.79 4.108"/>
                         <path fill="#F82B60" d="m88.078 91.846-21.904 10.576-2.224 1.075-46.238 22.155c-2.93 1.414-6.672-.722-6.672-3.978V60.088c0-1.178.604-2.195 1.414-2.96a5 5 0 0 1 1.12-.84c1.104-.663 2.68-.84 4.02-.31L87.71 83.76c3.564 1.414 3.844 6.408.368 8.087"/>
@@ -1609,7 +1609,7 @@ function App() {
                   <h3 className="font-display text-2xl font-bold">{t.experience.lico.company}</h3>
                 </div>
                 <a href="https://licocosmetics.es" target="_blank" rel="noopener noreferrer" className="text-sm text-accent hover:underline flex items-center gap-1">
-                  licocosmetics.es <ExternalLink className="w-3 h-3" />
+                  licocosmetics.es <ExternalLink className="w-3 h-3" aria-hidden="true" />
                 </a>
                 <span className="text-sm text-muted-foreground">{t.experience.lico.location}</span>
               </div>
@@ -1709,7 +1709,7 @@ function App() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                 </svg>
                 {t.projects.githubLink.split('/').pop()}
@@ -1734,7 +1734,7 @@ function App() {
                       <span className="badge px-3 py-1 bg-gold/20 text-gold">{t.projects.saPlaybook.badge}</span>
                     </div>
                   </div>
-                  <h4 className="font-display text-2xl font-bold mb-1">{t.projects.saPlaybook.title}</h4>
+                  <h3 className="font-display text-2xl font-bold mb-1">{t.projects.saPlaybook.title}</h3>
                   <p className="text-sm text-gold font-medium mb-4">{t.projects.saPlaybook.tagline}</p>
                   <p className="text-muted-foreground mb-6">{t.projects.saPlaybook.desc}</p>
 
@@ -1770,7 +1770,7 @@ function App() {
                 {/* Right side - visual element */}
                 <div className="hidden lg:flex flex-col items-center justify-center p-6 rounded-xl bg-gold/5 border border-gold/10 min-w-[180px]">
                   <div className="text-4xl mb-3 opacity-80">
-                    <svg viewBox="0 0 24 24" className="w-16 h-16 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <svg viewBox="0 0 24 24" className="w-16 h-16 text-gold" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                       <path d="M4 17l6-6-6-6M12 19h8" />
                     </svg>
                   </div>
@@ -2003,7 +2003,7 @@ function App() {
                         </>
                       ) : (
                         <>
-                          <ExternalLink className="w-4 h-4" />
+                          <ExternalLink className="w-4 h-4" aria-hidden="true" />
                           {t.projects.viewPrototype}
                         </>
                       )}
@@ -2127,7 +2127,7 @@ function App() {
                       <span className="text-xs text-primary font-medium">
                         {talk.year} · {talk.eventUrl ? (
                           <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                            {talk.event} <ExternalLink className="w-3 h-3 inline" />
+                            {talk.event} <ExternalLink className="w-3 h-3 inline" aria-hidden="true" />
                           </a>
                         ) : talk.event}
                       </span>
@@ -2144,7 +2144,7 @@ function App() {
                     <span className="text-xs text-primary font-medium">
                       {talk.year} · {talk.eventUrl ? (
                         <a href={talk.eventUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                          {talk.event} <ExternalLink className="w-3 h-3 inline" />
+                          {talk.event} <ExternalLink className="w-3 h-3 inline" aria-hidden="true" />
                         </a>
                       ) : talk.event}
                     </span>
@@ -2180,7 +2180,7 @@ function App() {
                   className="block p-5 rounded-2xl bg-card border border-border/50 border-t-2 border-t-[hsl(var(--linkedin))] hover:border-border transition-colors group h-full"
                 >
                   <div className="flex gap-3">
-                    <img src="/foto-avatar.webp" alt="" className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
+                    <img src="/foto-avatar.webp" alt="" role="presentation" className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
                         <p className="text-sm text-foreground leading-relaxed">{post.hook}<span className="text-muted-foreground">...</span> <span className="text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] transition-colors">ver más</span></p>
@@ -2199,7 +2199,7 @@ function App() {
                     </span>
                     <span className="ml-auto text-[hsl(var(--linkedin)/0.8)] group-hover:text-[hsl(var(--linkedin))] group-hover:underline flex items-center gap-1.5 transition-colors">
                       {t.linkedinPosts.cta}
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink className="w-3 h-3" aria-hidden="true" />
                     </span>
                   </div>
                 </a>
@@ -2278,7 +2278,7 @@ function App() {
                                   className="inline-flex items-center gap-1 text-primary hover:underline"
                                 >
                                   {item.projectLabel}
-                                  <ExternalLink className="w-3 h-3" />
+                                  <ExternalLink className="w-3 h-3" aria-hidden="true" />
                                 </a>
                               </>
                             )}
@@ -2438,7 +2438,7 @@ function App() {
               >
                 <LinkedInLogo className="w-4 h-4 text-[hsl(var(--linkedin))]" />
                 LinkedIn
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-3 h-3" aria-hidden="true" />
               </a>
             </div>
           </AnimatedSection>

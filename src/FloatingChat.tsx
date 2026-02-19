@@ -30,7 +30,7 @@ const PromptIcon = ({ icon }: { icon: string }) => {
     mail: Mail,
   };
   const Icon = icons[icon as keyof typeof icons] || HelpCircle;
-  return <Icon className="w-3.5 h-3.5" />;
+  return <Icon className="w-3.5 h-3.5" aria-hidden="true" />;
 };
 
 // Hook para detectar móvil
@@ -258,7 +258,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
               transition={{ duration: 0.2 }}
               className="w-full h-full rounded-full bg-gradient-theme flex items-center justify-center"
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-6 h-6 text-white" aria-hidden="true" />
             </motion.div>
           ) : (
             <motion.div
@@ -274,7 +274,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                 <source srcSet="/chatbot-avatar.webp" type="image/webp" />
                 <img
                   src="/chatbot-avatar.png"
-                  alt="Chat con santifer"
+                  alt={lang === 'en' ? 'Chat with Santi' : 'Chat con Santi'}
                   className="w-full h-full rounded-full object-cover"
                   width={56}
                   height={56}
@@ -353,7 +353,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                   className="w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   aria-label="Close chat"
                 >
-                  <ChevronDown className="w-5 h-5" />
+                  <ChevronDown className="w-5 h-5" aria-hidden="true" />
                 </button>
               )}
             </div>
@@ -468,7 +468,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                       href={`mailto:${translations[lang].email}`}
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-theme-r text-white text-sm font-medium hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
                     >
-                      <Mail className="w-4 h-4" />
+                      <Mail className="w-4 h-4" aria-hidden="true" />
                       {translations[lang].email}
                     </a>
                   </div>
@@ -488,6 +488,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                   >
                     <Loader2
                       className={`text-muted-foreground animate-spin ${isMobile ? 'w-5 h-5' : 'w-4 h-4'}`}
+                      aria-hidden="true"
                     />
                     <span
                       className={`text-muted-foreground ${isMobile ? 'text-sm' : 'text-xs'}`}
@@ -520,6 +521,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder={t.placeholder}
+                  aria-label={t.placeholder}
                   disabled={isLoading}
                   enterKeyHint="send"
                   autoComplete="off"
@@ -533,11 +535,12 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => sendMessage()}
                   disabled={isLoading || !input.trim()}
+                  aria-label={lang === 'en' ? 'Send message' : 'Enviar mensaje'}
                   className={`rounded-xl bg-gradient-theme flex items-center justify-center text-white disabled:opacity-50 disabled:cursor-not-allowed transition-opacity ${
                     isMobile ? 'w-12 h-12' : 'w-10 h-10'
                   }`}
                 >
-                  <Send className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} />
+                  <Send className={isMobile ? 'w-5 h-5' : 'w-4 h-4'} aria-hidden="true" />
                 </motion.button>
               </div>
             </div>

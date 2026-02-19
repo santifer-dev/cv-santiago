@@ -100,13 +100,13 @@
       --muted-foreground: 240 5% 65%;
       --primary: 187 86% 53%;
       --primary-foreground: 240 10% 4%;
-      --accent: 270 91% 65%;
+      --accent: 270 91% 70%;
       --accent-foreground: 0 0% 100%;
       --border: 240 4% 20%;
       --card: 240 5% 13%;
       --card-foreground: 0 0% 93%;
       --gradient-from: 187 86% 53%;
-      --gradient-to: 270 91% 65%;
+      --gradient-to: 270 91% 70%;
       --gold: 45 97% 49%;
       --success: 142 71% 45%;
       --tool: 187 92% 50%;
@@ -122,13 +122,13 @@
     --muted-foreground: 240 5% 65%;
     --primary: 187 86% 53%;
     --primary-foreground: 240 10% 4%;
-    --accent: 270 91% 65%;
+    --accent: 270 91% 70%;
     --accent-foreground: 0 0% 100%;
     --border: 240 4% 20%;           /* more visible borders */
     --card: 240 5% 13%;             /* elevated above background */
     --card-foreground: 0 0% 93%;
     --gradient-from: 187 86% 53%;
-    --gradient-to: 270 91% 65%;
+    --gradient-to: 270 91% 70%;
     /* Semantic accent colors */
     --gold: 45 97% 49%;
     --success: 142 71% 45%;
