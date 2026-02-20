@@ -256,6 +256,10 @@
       ]
     }
     </script>
+    <!-- Theme detection before first paint (eliminates dark→light FOUC) -->
+    <script>
+      (function(){var s=localStorage.getItem('theme');var d=s?s==='dark':window.matchMedia('(prefers-color-scheme:dark)').matches;var h=document.documentElement;h.classList.toggle('dark',d);h.classList.toggle('light',!d);var m=document.querySelector('meta[name="color-scheme"]');if(m)m.content=d?'dark':'light';var t=document.querySelector('meta[name="theme-color"]');if(t)t.content=d?'#0a0a0a':'#ffffff'})()
+    </script>
   </head>
   <body>
     <div id="root"></div>

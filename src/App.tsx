@@ -1141,14 +1141,11 @@ function App() {
   const t = translations[lang]
   const hydrated = useHydrated()
 
-  // Always start dark to match SSR prerender; real preference applied in useEffect
-  const [isDark, setIsDark] = useState(true)
-
-  useEffect(() => {
-    const stored = localStorage.getItem('theme')
-    if (stored) setIsDark(stored === 'dark')
-    else setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches)
-  }, [])
+  // Read theme from DOM (set by inline script in <head> before first paint)
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof document === 'undefined') return true
+    return document.documentElement.classList.contains('dark')
+  })
 
   useEffect(() => {
     const root = document.documentElement
