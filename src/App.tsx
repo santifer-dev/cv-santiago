@@ -1476,7 +1476,7 @@ function App() {
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Bot className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="badge px-3 py-1 bg-primary/20 text-primary">{t.experience.santifer.jacobo.badge}</span>
+                  <span className="badge px-3 py-1 bg-primary/10 text-primary">{t.experience.santifer.jacobo.badge}</span>
                 </div>
                 <h4 className="font-display text-xl font-bold mb-2 group-hover:text-primary transition-colors">{t.experience.santifer.jacobo.title}</h4>
                 <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.jacobo.desc}</p>
@@ -1508,7 +1508,7 @@ function App() {
                   <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
                     <Layout className="w-6 h-6 text-accent" />
                   </div>
-                  <span className="badge px-3 py-1 bg-accent/20 text-accent">{t.experience.santifer.webSeo.badge}</span>
+                  <span className="badge px-3 py-1 bg-accent/10 text-accent">{t.experience.santifer.webSeo.badge}</span>
                 </div>
                 <h4 className="font-display text-xl font-bold mb-2 group-hover:text-accent transition-colors">{t.experience.santifer.webSeo.title}</h4>
                 <p className="text-muted-foreground text-sm mb-4">{t.experience.santifer.webSeo.desc}</p>
@@ -1964,11 +1964,11 @@ function App() {
                         isTool
                           ? 'bg-tool/10 text-tool'
                           : isHighlight
-                          ? 'bg-accent/20 text-accent'
+                          ? 'bg-accent/10 text-accent'
                           : 'bg-primary/10 text-primary'
                       }`}>{project.badge}</span>
                       {project.badgeBuilding && (
-                        <span className="badge px-2 py-0.5 bg-success/10 text-success flex items-center gap-1.5">
+                        <span className="badge px-2 py-0.5 bg-success/5 text-success flex items-center gap-1.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse-dot"></span>
                           {project.badgeBuilding}
                         </span>
@@ -2095,7 +2095,7 @@ function App() {
                 <div>
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-display font-bold">{t.claudeCode.title}</h3>
-                    <span className="badge px-2 py-0.5 bg-accent/20 text-accent">{t.claudeCode.badge}</span>
+                    <span className="badge px-2 py-0.5 bg-accent/10 text-accent">{t.claudeCode.badge}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{t.claudeCode.desc}</p>
                 </div>
@@ -2218,7 +2218,7 @@ function App() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2 flex-wrap">
                       <h3 className="font-display font-bold">{t.speaking.aiFluency.title}</h3>
-                      <span className="badge px-2 py-0.5 bg-accent/20 text-accent text-xs">{t.speaking.aiFluency.badge}</span>
+                      <span className="badge px-2 py-0.5 bg-accent/10 text-accent text-xs">{t.speaking.aiFluency.badge}</span>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">{t.speaking.aiFluency.desc}</p>
                     <div className="flex flex-wrap gap-2">
