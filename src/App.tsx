@@ -1141,24 +1141,24 @@ function App() {
   const t = translations[lang]
   const hydrated = useHydrated()
 
-  // Read theme from DOM (set by inline script in <head> before first paint)
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document === 'undefined') return true
-    return document.documentElement.classList.contains('dark')
-  })
+  // Always start dark to match SSR prerender (inline <script> in <head> handles actual CSS)
+  const [isDark, setIsDark] = useState(true)
 
+  // Sync React state with inline script's theme detection after hydration
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', isDark)
-    root.classList.toggle('light', !isDark)
-    localStorage.setItem('theme', isDark ? 'dark' : 'light')
-  }, [isDark])
+    setIsDark(document.documentElement.classList.contains('dark'))
+  }, [])
 
   // Listen for system theme changes (only if user hasn't manually toggled)
   useEffect(() => {
     if (localStorage.getItem('theme')) return
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches)
+    const handler = (e: MediaQueryListEvent) => {
+      const dark = e.matches
+      setIsDark(dark)
+      document.documentElement.classList.toggle('dark', dark)
+      document.documentElement.classList.toggle('light', !dark)
+    }
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
@@ -1249,7 +1249,13 @@ function App() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          onClick={() => setIsDark(!isDark)}
+          onClick={() => {
+            const next = !isDark
+            setIsDark(next)
+            document.documentElement.classList.toggle('dark', next)
+            document.documentElement.classList.toggle('light', !next)
+            localStorage.setItem('theme', next ? 'dark' : 'light')
+          }}
           className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
           aria-label="Toggle theme"
         >
