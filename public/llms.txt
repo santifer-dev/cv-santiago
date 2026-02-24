@@ -154,6 +154,24 @@ Risk prediction dashboard for project portfolios. ML model trained on synthetic 
 ### santifer.io (This Portfolio)
 Interactive CV with integrated AI chat. The chatbot answers questions about experience and skills with real-time streaming.
 
+## Lightning Session: n8n for Product Managers (Maven, Feb 2026)
+
+Session taught at AI Product Academy (Maven, Marily Nika). Full material: https://santifer.io/n8n-for-pms
+
+**Problem:** PMs lose 20-30h/week on repetitive tasks (sprint reports, classifying feedback, moving data between tools). Santiago tracked 170h/month before automating.
+
+**Workflow 1 — The Automatable Friday:** Automated sprint report posted to Slack every Friday at 9am. 4 nodes: Schedule Trigger → Airtable (read sprint) → Code (group by assignee, format markdown) → Slack. No AI, pure plumbing. Saves 4-6h per sprint.
+
+**Workflow 2 — The Intelligent Router:** AI-powered feedback classification. Form Trigger → Basic LLM Chain (classify as BUG/FEATURE/QUESTION) → Switch (route by category) → Slack (different channel) + Airtable (log). One AI node turns a "dumb pipe" into a "smart pipe."
+
+**Classification prompt design:** Role, signal words per category, tiebreaker rule (bugs > features > questions), safe default (QUESTION if unclear), strict single-word output.
+
+**Universal pattern:** TRIGGER (when) → READ (get data) → PROCESS (transform/classify) → ACT (notify/log). Structure stays the same — only the prompt and data source change.
+
+**Key lessons:** Automate the boring task first. Your database already has 90% of the data. Automate the trigger, not just the task. Start with one workflow running reliably.
+
+Both workflows are downloadable as importable JSON from the cheat sheet.
+
 ## LinkedIn (Technical Content with Real Engagement)
 
 - Post about chatbot security (300+ reactions, 50+ comments): how I detected a hack attempt in 3 seconds with Langfuse

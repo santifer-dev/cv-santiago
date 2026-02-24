@@ -118,6 +118,27 @@ Módulos del Business OS:
 - Post sobre oportunidades de negocio en nichos (115+ reacciones, 10+ comentarios): análisis de datos de mercado para encontrar el próximo negocio
 - Post sobre exit de Santifer iRepair (65+ reacciones): narrativa de 16 años construyendo y la decisión de vender
 
+**Lightning Session: n8n for Product Managers (Maven, Feb 2026):**
+Sesión impartida en AI Product Academy (Maven, Marily Nika). Material completo: santifer.io/n8n-for-pms
+
+Tema central: los PMs pierden 20-30h/semana en tareas repetitivas (sprint reports, clasificar feedback, mover datos entre herramientas). En mi caso eran 170h/mes antes de automatizar.
+
+Workflow 1 — The Automatable Friday: sprint report automático que se publica en Slack cada viernes a las 9am. 4 nodos: Schedule Trigger → Airtable (leer sprint) → Code (agrupar por assignee, formatear markdown) → Slack. Sin IA, puro plumbing. Ahorra 4-6h por sprint.
+
+Workflow 2 — The Intelligent Router: clasificación de feedback con IA. Form Trigger → Basic LLM Chain (clasificar como BUG/FEATURE/QUESTION) → Switch (ruta por categoría) → Slack (canal diferente) + Airtable (log). Un nodo de IA convierte un "dumb pipe" en un "smart pipe".
+
+El prompt de clasificación incluye: role, signal words por categoría, tiebreaker rule (bugs > features > questions), safe default (QUESTION si hay duda), output estricto (una palabra).
+
+Patrón universal: TRIGGER (cuándo) → READ (obtener datos) → PROCESS (transformar/clasificar) → ACT (notificar/registrar). La estructura no cambia — solo el prompt y la fuente de datos.
+
+Lecciones clave:
+- Automatiza lo aburrido primero (sprint reports > integraciones fancy)
+- Tu base de datos ya tiene el 90% de los datos que necesitas
+- Automatiza el trigger, no solo la tarea (runs on schedule > runs on click)
+- Empieza con uno: 1 workflow funcionando > 5 en borrador
+
+Los 2 workflows son descargables como JSON importable en n8n desde la cheat sheet.
+
 **Tech Stack:**
 - AI/LLM: OpenAI (custom GPTs, tool use via OpenAPI), ElevenLabs, Claude
 - Automation: Airtable (Builder/Admin certificado), n8n, Make (Advanced certified), Zapier
