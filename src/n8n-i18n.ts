@@ -33,8 +33,8 @@ export const n8nContent = {
     altSlug: 'n8n-for-pms',
     readingTime: '5 min de lectura',
     seo: {
-      title: 'n8n para Product Managers: Automatiza Sprint Reports y Clasifica Feedback con IA',
-      description: 'Cheat sheet práctico para Product Managers: automatiza sprint reports y clasifica feedback con IA usando n8n. 2 workflow templates importables, un prompt listo para usar y guía paso a paso.',
+      title: 'Qué es n8n y cómo lo usan los Product Managers para automatizar con IA',
+      description: 'Guía práctica de n8n para Product Managers: qué es, cómo automatizar sprint reports y clasificar feedback con IA. 2 workflows importables gratis, prompt listo y tutorial paso a paso.',
     },
     nav: {
       back: 'santifer.io',
@@ -42,9 +42,9 @@ export const n8nContent = {
       breadcrumbCurrent: 'n8n para PMs',
     },
     header: {
-      kicker: 'Lightning Session — AI Product Academy',
+      kicker: 'Lightning Session — <a>AI Product Academy de Marily Nika</a>',
       h1: 'n8n para Product Managers',
-      subtitle: 'Cheat sheet práctico: automatiza tus sprint reports y clasifica feedback con IA — sin escribir código.',
+      subtitle: 'Guía práctica: automatiza sprint reports y clasifica feedback con IA usando workflows de n8n — sin escribir código.',
       date: '24 feb 2026',
     },
     intro: {
@@ -150,6 +150,11 @@ export const n8nContent = {
       ],
       punchline: 'La tubería no cambia. El prompt sí.',
     },
+    bootcampCta: {
+      heading: '¿Quieres ir más allá en AI Product Management?',
+      body: 'Aprendí estas técnicas en el AI PM Bootcamp de Marily Nika — el programa más práctico de AI Product Management que he encontrado. Si quieres construir productos de IA, no solo leer sobre ellos, este es el sitio.',
+      cta: 'Únete a la próxima cohorte',
+    },
     getStarted: {
       heading: 'Empieza',
       steps: [
@@ -157,6 +162,7 @@ export const n8nContent = {
         { num: 2, text: 'Elige la tarea más aburrida de tu viernes' },
         { num: 3, text: 'Monta un workflow esta semana' },
       ],
+      bonusStep: '¿Quieres aprender AI Product Management de principio a fin? Echa un vistazo al <a>AI PM Bootcamp de la Dra. Marily Nika</a> — donde me formé y ahora enseño como Fellow.',
       quote: 'La primera automatización es la más difícil. La segunda lleva la mitad de tiempo.',
     },
     lessons: {
@@ -184,20 +190,24 @@ export const n8nContent = {
       heading: 'Preguntas Frecuentes',
       items: [
         {
+          q: '¿Qué es n8n?',
+          a: 'n8n es una plataforma de automatización de workflows open source. Te permite conectar herramientas (Slack, Jira, Airtable, APIs) y crear flujos de trabajo visuales sin código. A diferencia de Zapier o Make, es self-hostable y tiene nodos de IA nativos para integrar LLMs directamente en tus automatizaciones.',
+        },
+        {
           q: '¿Puede n8n conectarse a Jira / Salesforce / mi herramienta?',
           a: 'Sí. Más de 400 integraciones — Jira, Salesforce, Notion, Linear, HubSpot, Zendesk, Google Sheets. Si lo usas, n8n probablemente se conecta.',
         },
         {
           q: '¿n8n es gratis?',
-          a: 'Free tier en cloud, o self-host gratis. El free tier es suficiente para todo lo que se muestra aquí.',
+          a: 'Sí. Free tier en cloud con 5 workflows activos, o puedes hacer self-host completamente gratis sin límites. El free tier es suficiente para todo lo que se muestra aquí.',
         },
         {
           q: '¿Qué LLM debería usar para el clasificador?',
           a: 'El que tu empresa ya pague. El prompt funciona igual con Claude, GPT-4 o Gemini. El patrón de clasificación no cambia con el modelo.',
         },
         {
-          q: '¿En qué se diferencia de Zapier o Make?',
-          a: 'Open source, self-hostable, nodos de IA nativos y un canvas visual que te deja ver la lógica de branching. Zapier es genial para triggers simples. n8n es para cuando necesitas branching, IA, loops y control total.',
+          q: '¿n8n o Make? ¿En qué se diferencia de Zapier?',
+          a: 'n8n es open source, self-hostable, con nodos de IA nativos y un canvas visual que te deja ver la lógica de branching. Zapier es genial para triggers simples. Make tiene buen pricing. n8n es para cuando necesitas branching, IA, loops y control total — y está creciendo un 647% anual en España.',
         },
         {
           q: '¿Y si la IA clasifica algo mal?',
@@ -223,6 +233,8 @@ export const n8nContent = {
     },
     footer: {
       role: 'AI Product Manager · Solutions Architect',
+      fellowAt: 'Teaching Fellow en',
+      fellowLink: 'AI Product Academy',
       copyright: 'Todos los derechos reservados.',
     },
   },
@@ -240,7 +252,7 @@ export const n8nContent = {
       breadcrumbCurrent: 'n8n for PMs',
     },
     header: {
-      kicker: 'Lightning Session — AI Product Academy',
+      kicker: 'Lightning Session — <a>Marily Nika\'s AI Product Academy</a>',
       h1: 'n8n for Product Managers',
       subtitle: 'Practical cheat sheet: automate your sprint reports and classify feedback with AI — no code required.',
       date: 'Feb 24, 2026',
@@ -348,6 +360,11 @@ export const n8nContent = {
       ],
       punchline: 'The pipe stays the same. The prompt changes.',
     },
+    bootcampCta: {
+      heading: 'Want to go deeper into AI Product Management?',
+      body: 'I learned these skills at Marily Nika\'s AI PM Bootcamp — the most hands-on AI PM program I\'ve found. If you want to build AI products, not just read about them, this is where to start.',
+      cta: 'Join the next cohort',
+    },
     getStarted: {
       heading: 'Get Started',
       steps: [
@@ -355,6 +372,7 @@ export const n8nContent = {
         { num: 2, text: 'Pick your most boring Friday task' },
         { num: 3, text: 'Build one workflow this week' },
       ],
+      bonusStep: 'Want to learn AI Product Management end-to-end? Check out the <a>AI PM Bootcamp by Dr. Marily Nika</a> — where I trained and now teach as a Fellow.',
       quote: 'The first automation is the hardest. The second takes half the time.',
     },
     lessons: {
@@ -421,6 +439,8 @@ export const n8nContent = {
     },
     footer: {
       role: 'AI Product Manager · Solutions Architect',
+      fellowAt: 'Teaching Fellow at',
+      fellowLink: 'AI Product Academy',
       copyright: 'All rights reserved.',
     },
   },

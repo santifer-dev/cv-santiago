@@ -278,7 +278,17 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
 
         {/* Header */}
         <header className="mb-10">
-          <p className="text-primary font-medium text-sm mb-3 tracking-wide uppercase">{t.header.kicker}</p>
+          <p className="text-primary font-medium text-sm mb-3 tracking-wide uppercase">
+            {t.header.kicker.includes('<a>') ? (
+              t.header.kicker.split(/<a>|<\/a>/).map((part, i) =>
+                i === 1 ? (
+                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer" className="hover:underline">{part}</a>
+                ) : (
+                  <span key={i}>{part}</span>
+                )
+              )
+            ) : t.header.kicker}
+          </p>
           <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4">
             {t.header.h1}
           </h1>
@@ -512,6 +522,23 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             <p className="text-foreground font-medium">{t.pattern.punchline}</p>
           </div>
 
+          {/* Bootcamp CTA */}
+          <div className="my-10 relative rounded-2xl p-[1.5px] bg-gradient-theme">
+            <div className="p-6 sm:p-8 rounded-[calc(1rem-1.5px)] bg-card">
+              <p className="font-display font-semibold text-foreground text-lg mb-2">{t.bootcampCta.heading}</p>
+              <p className="text-muted-foreground leading-relaxed mb-4">{t.bootcampCta.body}</p>
+              <a
+                href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
+              >
+                {t.bootcampCta.cta}
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
           {/* Get Started */}
           <AnchorHeading id="get-started">{t.getStarted.heading}</AnchorHeading>
           <ol className="space-y-3 text-muted-foreground mb-8 ml-1">
@@ -531,6 +558,28 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
               </li>
             ))}
           </ol>
+
+          {/* Bonus step — bootcamp */}
+          <div className="flex items-start gap-3 mt-3 mb-8 ml-1 text-muted-foreground">
+            <span className="bg-card border border-primary/30 text-primary w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">4</span>
+            <span>
+              {t.getStarted.bonusStep.split(/<a>|<\/a>/).map((part, i) =>
+                i === 1 ? (
+                  <a
+                    key={i}
+                    href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    {part}
+                  </a>
+                ) : (
+                  <span key={i}>{part}</span>
+                )
+              )}
+            </span>
+          </div>
 
           <blockquote className="border-l-4 border-primary/40 pl-4 py-1 text-foreground italic mb-8">
             {t.getStarted.quote}
@@ -604,7 +653,17 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             />
             <div>
               <p className="font-medium text-foreground">Santiago Fernández de Valderrama</p>
-              <p className="text-sm text-muted-foreground">{t.footer.role}</p>
+              <p className="text-sm text-muted-foreground">
+                {t.footer.role} · {t.footer.fellowAt}{' '}
+                <a
+                  href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  {t.footer.fellowLink}
+                </a>
+              </p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3 mb-8">
