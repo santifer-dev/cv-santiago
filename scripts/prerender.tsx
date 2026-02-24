@@ -17,6 +17,7 @@ import { StaticRouter, Routes, Route } from 'react-router-dom';
 import Critters from 'critters';
 import App from '../src/App.tsx';
 import N8nForPMs from '../src/N8nForPMs.tsx';
+import { n8nContent } from '../src/n8n-i18n.ts';
 import { seo } from '../src/i18n.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -37,11 +38,12 @@ function renderApp(lang: 'es' | 'en'): string {
   );
 }
 
-function renderN8nPage(): string {
+function renderN8nPage(lang: 'es' | 'en'): string {
+  const slug = n8nContent[lang].slug;
   return renderToString(
-    <StaticRouter location="/n8n-for-pms">
+    <StaticRouter location={`/${slug}`}>
       <Routes>
-        <Route path="/n8n-for-pms" element={<N8nForPMs />} />
+        <Route path={`/${slug}`} element={<N8nForPMs lang={lang} />} />
       </Routes>
     </StaticRouter>
   );
@@ -180,35 +182,47 @@ let enPage = indexHtml
     `<meta name="twitter:description" content="${esc(enSeo.description)}" />`,
   );
 
-// --- n8n-for-pms page ---
-const n8nSeo = {
-  title: 'n8n for Product Managers: Automate Sprint Reports & Classify Feedback with AI',
-  description: 'Practical cheat sheet for Product Managers: automate sprint reports and classify feedback with AI using n8n. 2 importable workflow templates, a ready-to-use prompt, and step-by-step guide.',
-};
+// --- n8n pages (ES + EN) ---
+function buildN8nPage(lang: 'es' | 'en'): string {
+  const n8n = n8nContent[lang];
+  const url = `https://santifer.io/${n8n.slug}`;
+  const altUrl = `https://santifer.io/${n8n.altSlug}`;
+  const altLang = lang === 'es' ? 'en' : 'es';
+  const htmlLang = lang === 'es' ? 'es' : 'en';
+  const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
+  const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_ES';
 
-let n8nHtml: string;
-try {
-  n8nHtml = renderN8nPage();
-} catch (err) {
-  console.error('[prerender] SSR failed for n8n-for-pms, falling back to empty root:', err);
-  n8nHtml = '';
+  let n8nHtml: string;
+  try {
+    n8nHtml = renderN8nPage(lang);
+  } catch (err) {
+    console.error(`[prerender] SSR failed for ${n8n.slug}, falling back to empty root:`, err);
+    n8nHtml = '';
+  }
+
+  // hreflang links
+  const hreflangLinks = `<link rel="alternate" hreflang="${lang}" href="${url}" /><link rel="alternate" hreflang="${altLang}" href="${altUrl}" /><link rel="alternate" hreflang="x-default" href="https://santifer.io/n8n-para-pms" />`;
+
+  return indexHtml
+    .replace('<div id="root"></div>', `<div id="root">${n8nHtml}</div>`)
+    .replace('<html lang="es" class="dark">', `<html lang="${htmlLang}" class="dark">`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${esc(n8n.seo.title)}</title>`)
+    .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(n8n.seo.title)}" />`)
+    .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(n8n.seo.description)}" />`)
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${url}" />${hreflangLinks}`)
+    .replace(/<meta property="og:type" content="[^"]*" \/>/, '<meta property="og:type" content="article" />')
+    .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
+    .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(n8n.seo.title)}" />`)
+    .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(n8n.seo.description)}" />`)
+    .replace(/<meta property="og:locale" content="es_ES" \/>/, `<meta property="og:locale" content="${ogLocale}" />`)
+    .replace(/<meta property="og:locale:alternate" content="en_US" \/>/, `<meta property="og:locale:alternate" content="${ogLocaleAlt}" />`)
+    .replace(/<meta name="twitter:url" content="[^"]*" \/>/, `<meta name="twitter:url" content="${url}" />`)
+    .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(n8n.seo.title)}" />`)
+    .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(n8n.seo.description)}" />`);
 }
 
-const n8nPage = indexHtml
-  .replace('<div id="root"></div>', `<div id="root">${n8nHtml}</div>`)
-  .replace('<html lang="es" class="dark">', '<html lang="en" class="dark">')
-  .replace(/<title>[^<]*<\/title>/, `<title>${esc(n8nSeo.title)}</title>`)
-  .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(n8nSeo.title)}" />`)
-  .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(n8nSeo.description)}" />`)
-  .replace(/<link rel="canonical" href="[^"]*" \/>/, '<link rel="canonical" href="https://santifer.io/n8n-for-pms" />')
-  .replace(/<meta property="og:type" content="[^"]*" \/>/, '<meta property="og:type" content="article" />')
-  .replace(/<meta property="og:url" content="[^"]*" \/>/, '<meta property="og:url" content="https://santifer.io/n8n-for-pms" />')
-  .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(n8nSeo.title)}" />`)
-  .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(n8nSeo.description)}" />`)
-  .replace(/<meta property="og:locale" content="es_ES" \/>/, '<meta property="og:locale" content="en_US" />')
-  .replace(/<meta name="twitter:url" content="[^"]*" \/>/, '<meta name="twitter:url" content="https://santifer.io/n8n-for-pms" />')
-  .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(n8nSeo.title)}" />`)
-  .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(n8nSeo.description)}" />`);
+const n8nEsPage = buildN8nPage('es');
+const n8nEnPage = buildN8nPage('en');
 
 // ---------------------------------------------------------------------------
 // Critical CSS inlining with Critters
@@ -240,10 +254,16 @@ async function inlineCriticalCSS() {
     writeFileSync(resolve(enDir, 'index.html'), processedEn, 'utf-8');
     console.log('[prerender] EN: dist/en/index.html created (with critical CSS)');
 
-    const processedN8n = dedupePreloads(await critters.process(n8nPage));
-    const n8nDir = resolve(distDir, 'n8n-for-pms');
-    mkdirSync(n8nDir, { recursive: true });
-    writeFileSync(resolve(n8nDir, 'index.html'), processedN8n, 'utf-8');
+    const processedN8nEs = dedupePreloads(await critters.process(n8nEsPage));
+    const n8nEsDir = resolve(distDir, 'n8n-para-pms');
+    mkdirSync(n8nEsDir, { recursive: true });
+    writeFileSync(resolve(n8nEsDir, 'index.html'), processedN8nEs, 'utf-8');
+    console.log('[prerender] n8n-para-pms: dist/n8n-para-pms/index.html created (with critical CSS)');
+
+    const processedN8nEn = dedupePreloads(await critters.process(n8nEnPage));
+    const n8nEnDir = resolve(distDir, 'n8n-for-pms');
+    mkdirSync(n8nEnDir, { recursive: true });
+    writeFileSync(resolve(n8nEnDir, 'index.html'), processedN8nEn, 'utf-8');
     console.log('[prerender] n8n-for-pms: dist/n8n-for-pms/index.html created (with critical CSS)');
   } catch (err) {
     // Fallback: write without critical CSS inlining
@@ -256,9 +276,14 @@ async function inlineCriticalCSS() {
     writeFileSync(resolve(enDir, 'index.html'), enPage, 'utf-8');
     console.log('[prerender] EN: dist/en/index.html created (no critical CSS)');
 
-    const n8nDir = resolve(distDir, 'n8n-for-pms');
-    mkdirSync(n8nDir, { recursive: true });
-    writeFileSync(resolve(n8nDir, 'index.html'), n8nPage, 'utf-8');
+    const n8nEsDir = resolve(distDir, 'n8n-para-pms');
+    mkdirSync(n8nEsDir, { recursive: true });
+    writeFileSync(resolve(n8nEsDir, 'index.html'), n8nEsPage, 'utf-8');
+    console.log('[prerender] n8n-para-pms: dist/n8n-para-pms/index.html created (no critical CSS)');
+
+    const n8nEnDir = resolve(distDir, 'n8n-for-pms');
+    mkdirSync(n8nEnDir, { recursive: true });
+    writeFileSync(resolve(n8nEnDir, 'index.html'), n8nEnPage, 'utf-8');
     console.log('[prerender] n8n-for-pms: dist/n8n-for-pms/index.html created (no critical CSS)');
   }
 }

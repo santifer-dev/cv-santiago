@@ -20,7 +20,7 @@ function GlobalChat() {
 
   if (!hydrated) return null
 
-  const lang = pathname === '/en' ? 'en' : pathname === '/' ? 'es' : 'en'
+  const lang = (pathname === '/' || pathname === '/n8n-para-pms') ? 'es' : 'en'
 
   return (
     <ChatErrorBoundary>
@@ -46,7 +46,8 @@ const app = (
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/en" element={<App />} />
-        <Route path="/n8n-for-pms" element={<N8nForPMs />} />
+        <Route path="/n8n-para-pms" element={<N8nForPMs lang="es" />} />
+        <Route path="/n8n-for-pms" element={<N8nForPMs lang="en" />} />
       </Routes>
       <GlobalChat />
     </BrowserRouter>
