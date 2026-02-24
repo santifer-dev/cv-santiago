@@ -1,0 +1,68 @@
+{
+  "name": "The Automatable Friday — Sprint Report",
+  "nodes": [
+    {
+      "id": "schedule-trigger",
+      "name": "Every Friday 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 400],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [5],
+              "triggerAtHour": 9,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "airtable-read",
+      "name": "Read Sprint Data",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [240, 400],
+      "parameters": {
+        "operation": "search",
+        "base": { "__rl": true, "mode": "id", "value": "YOUR_BASE_ID" },
+        "table": { "__rl": true, "mode": "id", "value": "YOUR_TABLE_ID" },
+        "filterByFormula": "AND({Sprint}='Sprint 24', {Status}='Done')",
+        "options": {}
+      }
+    },
+    {
+      "id": "format-report",
+      "name": "Format Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 400],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const items = $input.all();\n\n// Group by assignee\nconst byAssignee = {};\nlet totalPoints = 0;\nlet totalDone = items.length;\n\nfor (const item of items) {\n  const assignee = item.json.Assignee || 'Unassigned';\n  const points = item.json['Story Points'] || 0;\n  \n  if (!byAssignee[assignee]) {\n    byAssignee[assignee] = { tasks: 0, points: 0 };\n  }\n  byAssignee[assignee].tasks++;\n  byAssignee[assignee].points += points;\n  totalPoints += points;\n}\n\n// Build Slack message\nlet message = `*Sprint 24 Report*\\n`;\nmessage += `_Auto-generated on ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}_\\n\\n`;\nmessage += `*Completed:* ${totalDone} tasks | ${totalPoints} story points\\n\\n`;\nmessage += `*By Team Member:*\\n`;\n\nfor (const [name, data] of Object.entries(byAssignee)) {\n  message += `  ${name}: ${data.tasks} tasks (${data.points} pts)\\n`;\n}\n\nmessage += `\\n_This report runs automatically every Friday at 9am. You did nothing._`;\n\nreturn [{ json: { message } }];"
+      }
+    },
+    {
+      "id": "slack-post",
+      "name": "Post to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [720, 400],
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "mode": "name", "value": "sprint-updates" },
+        "text": "={{ $json.message }}",
+        "otherOptions": {}
+      }
+    }
+  ],
+  "connections": {
+    "Every Friday 9am": { "main": [[{ "node": "Read Sprint Data", "type": "main", "index": 0 }]] },
+    "Read Sprint Data": { "main": [[{ "node": "Format Report", "type": "main", "index": 0 }]] },
+    "Format Report": { "main": [[{ "node": "Post to Slack", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

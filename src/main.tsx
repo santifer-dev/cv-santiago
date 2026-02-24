@@ -3,6 +3,7 @@ import { hydrateRoot, createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
+import N8nForPMs from './N8nForPMs.tsx'
 
 // Console easter egg
 const ASCII_ART = `\n ███████╗ █████╗ ███╗   ██╗████████╗██╗███████╗███████╗██████╗ \n ██╔════╝██╔══██╗████╗  ██║╚══██╔══╝██║██╔════╝██╔════╝██╔══██╗\n ███████╗███████║██╔██╗ ██║   ██║   ██║█████╗  █████╗  ██████╔╝\n ╚════██║██╔══██║██║╚██╗██║   ██║   ██║██╔══╝  ██╔══╝  ██╔══██╗\n ███████║██║  ██║██║ ╚████║   ██║   ██║██║     ███████╗██║  ██║\n ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝\n`
@@ -19,6 +20,7 @@ const app = (
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/en" element={<App />} />
+        <Route path="/n8n-for-pms" element={<N8nForPMs />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

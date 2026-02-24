@@ -2135,7 +2135,7 @@ function App() {
 
           {/* Teaching / Speaking cards */}
           <div className="grid md:grid-cols-2 gap-6">
-            {t.speaking.items.map((talk: { year: string; event: string; eventUrl: string; title: string; desc: string; pdf: string; featured: boolean }, i: number) => (
+            {t.speaking.items.map((talk: { year: string; event: string; eventUrl: string; title: string; desc: string; pdf: string; featured: boolean; materialUrl?: string; materialLabel?: string }, i: number) => (
               <AnimatedSection key={i} delay={0.1 + i * 0.1}>
                 {talk.featured ? (
                   <div className="relative rounded-2xl p-[1.5px] bg-gradient-theme h-full">
@@ -2166,16 +2166,27 @@ function App() {
                     </span>
                     <h3 className="font-display font-bold mt-2 group-hover:text-primary transition-colors">{talk.title}</h3>
                     <p className="text-sm text-muted-foreground mt-2 flex-1">{talk.desc}</p>
-                    {talk.pdf && (
-                      <a
-                        href={talk.pdf}
-                        download
-                        className="mt-4 inline-flex items-center gap-2 text-xs text-primary hover:underline"
-                      >
-                        <Download className="w-4 h-4" />
-                        {t.speaking.slides}
-                      </a>
-                    )}
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      {talk.pdf && (
+                        <a
+                          href={talk.pdf}
+                          download
+                          className="inline-flex items-center gap-2 text-xs text-primary hover:underline"
+                        >
+                          <Download className="w-4 h-4" />
+                          {t.speaking.slides}
+                        </a>
+                      )}
+                      {talk.materialUrl && (
+                        <a
+                          href={talk.materialUrl}
+                          className="inline-flex items-center gap-2 text-xs text-primary hover:underline"
+                        >
+                          <FileText className="w-4 h-4" />
+                          {talk.materialLabel || 'Material'}
+                        </a>
+                      )}
+                    </div>
                   </div>
                 )}
               </AnimatedSection>

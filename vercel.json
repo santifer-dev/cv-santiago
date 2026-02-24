@@ -50,7 +50,11 @@
       "destination": "/en/index.html"
     },
     {
-      "source": "/((?!api|assets|en|.*\\..*).*)",
+      "source": "/n8n-for-pms",
+      "destination": "/n8n-for-pms/index.html"
+    },
+    {
+      "source": "/((?!api|assets|en|n8n-for-pms|.*\\..*).*)",
       "destination": "/index.html"
     }
   ],

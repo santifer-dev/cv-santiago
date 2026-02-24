@@ -16,6 +16,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter, Routes, Route } from 'react-router-dom';
 import Critters from 'critters';
 import App from '../src/App.tsx';
+import N8nForPMs from '../src/N8nForPMs.tsx';
 import { seo } from '../src/i18n.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -31,6 +32,16 @@ function renderApp(lang: 'es' | 'en'): string {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/en" element={<App />} />
+      </Routes>
+    </StaticRouter>
+  );
+}
+
+function renderN8nPage(): string {
+  return renderToString(
+    <StaticRouter location="/n8n-for-pms">
+      <Routes>
+        <Route path="/n8n-for-pms" element={<N8nForPMs />} />
       </Routes>
     </StaticRouter>
   );
@@ -169,6 +180,36 @@ let enPage = indexHtml
     `<meta name="twitter:description" content="${esc(enSeo.description)}" />`,
   );
 
+// --- n8n-for-pms page ---
+const n8nSeo = {
+  title: 'n8n for Product Managers: Automate Sprint Reports & Classify Feedback with AI',
+  description: 'Practical cheat sheet for Product Managers: automate sprint reports and classify feedback with AI using n8n. 2 importable workflow templates, a ready-to-use prompt, and step-by-step guide.',
+};
+
+let n8nHtml: string;
+try {
+  n8nHtml = renderN8nPage();
+} catch (err) {
+  console.error('[prerender] SSR failed for n8n-for-pms, falling back to empty root:', err);
+  n8nHtml = '';
+}
+
+const n8nPage = indexHtml
+  .replace('<div id="root"></div>', `<div id="root">${n8nHtml}</div>`)
+  .replace('<html lang="es" class="dark">', '<html lang="en" class="dark">')
+  .replace(/<title>[^<]*<\/title>/, `<title>${esc(n8nSeo.title)}</title>`)
+  .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(n8nSeo.title)}" />`)
+  .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(n8nSeo.description)}" />`)
+  .replace(/<link rel="canonical" href="[^"]*" \/>/, '<link rel="canonical" href="https://santifer.io/n8n-for-pms" />')
+  .replace(/<meta property="og:type" content="[^"]*" \/>/, '<meta property="og:type" content="article" />')
+  .replace(/<meta property="og:url" content="[^"]*" \/>/, '<meta property="og:url" content="https://santifer.io/n8n-for-pms" />')
+  .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(n8nSeo.title)}" />`)
+  .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(n8nSeo.description)}" />`)
+  .replace(/<meta property="og:locale" content="es_ES" \/>/, '<meta property="og:locale" content="en_US" />')
+  .replace(/<meta name="twitter:url" content="[^"]*" \/>/, '<meta name="twitter:url" content="https://santifer.io/n8n-for-pms" />')
+  .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(n8nSeo.title)}" />`)
+  .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(n8nSeo.description)}" />`);
+
 // ---------------------------------------------------------------------------
 // Critical CSS inlining with Critters
 // ---------------------------------------------------------------------------
@@ -198,6 +239,12 @@ async function inlineCriticalCSS() {
     mkdirSync(enDir, { recursive: true });
     writeFileSync(resolve(enDir, 'index.html'), processedEn, 'utf-8');
     console.log('[prerender] EN: dist/en/index.html created (with critical CSS)');
+
+    const processedN8n = dedupePreloads(await critters.process(n8nPage));
+    const n8nDir = resolve(distDir, 'n8n-for-pms');
+    mkdirSync(n8nDir, { recursive: true });
+    writeFileSync(resolve(n8nDir, 'index.html'), processedN8n, 'utf-8');
+    console.log('[prerender] n8n-for-pms: dist/n8n-for-pms/index.html created (with critical CSS)');
   } catch (err) {
     // Fallback: write without critical CSS inlining
     console.error('[prerender] Critters failed, writing without critical CSS:', err);
@@ -208,6 +255,11 @@ async function inlineCriticalCSS() {
     mkdirSync(enDir, { recursive: true });
     writeFileSync(resolve(enDir, 'index.html'), enPage, 'utf-8');
     console.log('[prerender] EN: dist/en/index.html created (no critical CSS)');
+
+    const n8nDir = resolve(distDir, 'n8n-for-pms');
+    mkdirSync(n8nDir, { recursive: true });
+    writeFileSync(resolve(n8nDir, 'index.html'), n8nPage, 'utf-8');
+    console.log('[prerender] n8n-for-pms: dist/n8n-for-pms/index.html created (no critical CSS)');
   }
 }
 

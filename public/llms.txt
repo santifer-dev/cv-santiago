@@ -46,7 +46,7 @@ Built an AI agent achieving **~90% customer self-service rate**:
 - **Agentic Workflows:** LLM agents, tool use/function calling, HITL handoff, voice + messaging
 - **LLMOps & AI Governance:** Observability, evals, error handling, retries, SOPs, cost/latency trade-offs, responsible AI
 - **Forward-Deployed Delivery:** Stakeholder workshops, workflow mapping, rapid prototyping
-- **AI Enablement & Thought Leadership:** AI adoption workshops, technical writing with real traction, Teaching Fellow at AI PM Bootcamp
+- **AI Enablement & Thought Leadership:** AI adoption workshops, technical writing with real traction, Teaching Fellow at AI PM Bootcamp, "n8n for Product Managers" lightning session on Maven
 
 ## Development Methodology
 
@@ -157,6 +157,7 @@ Interactive CV with integrated AI chat. The chatbot answers questions about expe
 ## LinkedIn (Technical Content with Real Engagement)
 
 - Post about chatbot security (300+ reactions, 50+ comments): how I detected a hack attempt in 3 seconds with Langfuse
+- Post about business opportunities in niches (115+ reactions, 10+ comments): market data analysis to find the next business
 - Post about Santifer iRepair exit (65+ reactions): 16-year narrative of building and the decision to sell
 
 ## Soft Skills

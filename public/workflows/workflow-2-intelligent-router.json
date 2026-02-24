@@ -1,0 +1,152 @@
+{
+  "name": "The Intelligent Router — AI Feedback Classification",
+  "nodes": [
+    {
+      "id": "form-trigger",
+      "name": "Feedback Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [0, 432],
+      "parameters": {
+        "formTitle": "Product Feedback",
+        "formDescription": "<p>Submit your feedback about our product. An AI will classify and route it automatically.</p>",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "Your Name", "placeholder": "Jane Smith", "requiredField": true },
+            { "fieldLabel": "Email", "fieldType": "email", "placeholder": "jane@company.com", "requiredField": true },
+            { "fieldLabel": "Feedback", "fieldType": "textarea", "placeholder": "Describe your feedback, bug report, or feature request...", "requiredField": true },
+            { "fieldLabel": "Product Area", "fieldType": "dropdown", "fieldOptions": { "values": [{ "option": "Dashboard" }, { "option": "Export" }, { "option": "Settings" }, { "option": "API" }, { "option": "Auth" }] }, "requiredField": true }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ai-classify",
+      "name": "AI Classifier",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [224, 432],
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a product feedback classifier for a SaaS company.\n\nYour task: classify the feedback below into exactly ONE category.\n\nCategories:\n- BUG — The user reports something broken, crashing, erroring, or not working as expected. Look for words like: crash, error, broken, fail, wrong, doesn't work, can't.\n- FEATURE — The user requests new functionality or an improvement to existing features. Look for words like: add, would be nice, wish, could you, suggestion, improve.\n- QUESTION — The user asks how to do something or needs help understanding the product. Look for words like: how do I, where is, can I, is it possible, help.\n\nRules:\n- If the feedback contains BOTH a bug description AND a feature request, classify as BUG (broken things take priority).\n- If unclear, classify as QUESTION (safest default — a human will review).\n- Respond with ONLY the category name in caps. No explanation, no punctuation.\n\nFeedback: {{ $json.Feedback }}",
+        "batching": {}
+      }
+    },
+    {
+      "id": "switch-route",
+      "name": "Route by Category",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [576, 400],
+      "parameters": {
+        "rules": {
+          "values": [
+            { "conditions": { "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 1 }, "conditions": [{ "id": "bug-check", "leftValue": "={{ $json.text }}", "rightValue": "BUG", "operator": { "type": "string", "operation": "contains" } }], "combinator": "and" } },
+            { "conditions": { "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 1 }, "conditions": [{ "id": "feature-check", "leftValue": "={{ $json.text }}", "rightValue": "FEATURE", "operator": { "type": "string", "operation": "contains" } }], "combinator": "and" } },
+            { "conditions": { "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 1 }, "conditions": [{ "id": "question-check", "leftValue": "={{ $json.text }}", "rightValue": "QUESTION", "operator": { "type": "string", "operation": "contains" } }], "combinator": "and" } }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      }
+    },
+    {
+      "id": "slack-bugs",
+      "name": "Notify #bugs",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [800, 240],
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "mode": "name", "value": "bugs" },
+        "text": "=:bug: *New Bug Report*\n*From:* {{ $('Feedback Form').item.json['Your Name'] }}\n*Area:* {{ $('Feedback Form').item.json['Product Area'] }}\n*Feedback:* {{ $('Feedback Form').item.json.Feedback }}",
+        "otherOptions": {}
+      }
+    },
+    {
+      "id": "slack-features",
+      "name": "Notify #feature-requests",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [800, 432],
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "mode": "name", "value": "feature-requests" },
+        "text": "=:bulb: *New Feature Request*\n*From:* {{ $('Feedback Form').item.json['Your Name'] }}\n*Area:* {{ $('Feedback Form').item.json['Product Area'] }}\n*Feedback:* {{ $('Feedback Form').item.json.Feedback }}",
+        "otherOptions": {}
+      }
+    },
+    {
+      "id": "slack-questions",
+      "name": "Notify #questions",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [800, 624],
+      "parameters": {
+        "select": "channel",
+        "channelId": { "__rl": true, "mode": "name", "value": "questions" },
+        "text": "=:question: *New Question*\n*From:* {{ $('Feedback Form').item.json['Your Name'] }}\n*Area:* {{ $('Feedback Form').item.json['Product Area'] }}\n*Feedback:* {{ $('Feedback Form').item.json.Feedback }}",
+        "otherOptions": {}
+      }
+    },
+    {
+      "id": "airtable-log",
+      "name": "Log to Airtable",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [1024, 432],
+      "parameters": {
+        "operation": "create",
+        "base": { "__rl": true, "mode": "id", "value": "YOUR_BASE_ID" },
+        "table": { "__rl": true, "mode": "id", "value": "YOUR_TABLE_ID" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $('Feedback Form').item.json['Your Name'] }}",
+            "Email": "={{ $('Feedback Form').item.json.Email }}",
+            "Feedback": "={{ $('Feedback Form').item.json.Feedback }}",
+            "Category": "={{ $('Route by Category').item.json.text.includes('BUG') ? 'Bug' : $('Route by Category').item.json.text.includes('FEATURE') ? 'Feature Request' : 'Question' }}",
+            "Product Area": "={{ $('Feedback Form').item.json['Product Area'] }}",
+            "Source": "Form"
+          },
+          "matchingColumns": [],
+          "schema": [
+            { "id": "Name", "displayName": "Name", "type": "string" },
+            { "id": "Email", "displayName": "Email", "type": "string" },
+            { "id": "Feedback", "displayName": "Feedback", "type": "string" },
+            { "id": "Category", "displayName": "Category", "type": "options", "options": [{ "name": "Bug", "value": "Bug" }, { "name": "Feature Request", "value": "Feature Request" }, { "name": "Question", "value": "Question" }] },
+            { "id": "Product Area", "displayName": "Product Area", "type": "options", "options": [{ "name": "Dashboard", "value": "Dashboard" }, { "name": "Export", "value": "Export" }, { "name": "Settings", "value": "Settings" }, { "name": "API", "value": "API" }, { "name": "Auth", "value": "Auth" }] },
+            { "id": "Source", "displayName": "Source", "type": "string" }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "llm-anthropic",
+      "name": "Anthropic Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [240, 656],
+      "parameters": {
+        "model": { "__rl": true, "mode": "list", "value": "claude-sonnet-4-5-20250929", "cachedResultName": "Claude Sonnet 4.5" },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Feedback Form": { "main": [[{ "node": "AI Classifier", "type": "main", "index": 0 }]] },
+    "AI Classifier": { "main": [[{ "node": "Route by Category", "type": "main", "index": 0 }]] },
+    "Route by Category": { "main": [
+      [{ "node": "Notify #bugs", "type": "main", "index": 0 }],
+      [{ "node": "Notify #feature-requests", "type": "main", "index": 0 }],
+      [{ "node": "Notify #questions", "type": "main", "index": 0 }],
+      [{ "node": "Notify #questions", "type": "main", "index": 0 }]
+    ]},
+    "Notify #bugs": { "main": [[{ "node": "Log to Airtable", "type": "main", "index": 0 }]] },
+    "Notify #feature-requests": { "main": [[{ "node": "Log to Airtable", "type": "main", "index": 0 }]] },
+    "Notify #questions": { "main": [[{ "node": "Log to Airtable", "type": "main", "index": 0 }]] },
+    "Anthropic Chat Model": { "ai_languageModel": [[{ "node": "AI Classifier", "type": "ai_languageModel", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}
