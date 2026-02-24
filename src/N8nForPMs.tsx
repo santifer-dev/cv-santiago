@@ -282,7 +282,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             {t.header.kicker.includes('<a>') ? (
               t.header.kicker.split(/<a>|<\/a>/).map((part, i) =>
                 i === 1 ? (
-                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer" className="hover:underline">{part}</a>
+                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer nofollow" className="hover:underline">{part}</a>
                 ) : (
                   <span key={i}>{part}</span>
                 )
@@ -350,7 +350,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             <div className="px-5 py-4 rounded-[calc(1rem-1.5px)] bg-card text-sm text-muted-foreground leading-relaxed">
               {t.previewCta.text.split(/<a>|<\/a>/).map((part, i) =>
                 i === 1 ? (
-                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">{part}</a>
+                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer nofollow" className="text-primary hover:underline font-medium">{part}</a>
                 ) : (
                   <span key={i}>{part}</span>
                 )
@@ -543,7 +543,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
               <a
                 href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer nofollow"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
               >
                 {t.bootcampCta.cta}
@@ -582,7 +582,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
                     key={i}
                     href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="noopener noreferrer nofollow"
                     className="text-primary hover:underline font-medium"
                   >
                     {part}
@@ -671,7 +671,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
                 <a
                   href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   className="text-primary hover:underline"
                 >
                   {t.footer.fellowLink}
