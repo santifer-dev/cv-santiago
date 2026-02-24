@@ -1,9 +1,35 @@
-import { StrictMode } from 'react'
+import { StrictMode, lazy, Suspense, useState, useEffect, Component, type ReactNode } from 'react'
 import { hydrateRoot, createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import N8nForPMs from './N8nForPMs.tsx'
+
+const FloatingChat = lazy(() => import('./FloatingChat'))
+
+class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  state = { hasError: false }
+  static getDerivedStateFromError() { return { hasError: true } }
+  render() { return this.state.hasError ? null : this.props.children }
+}
+
+function GlobalChat() {
+  const { pathname } = useLocation()
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+
+  if (!hydrated) return null
+
+  const lang = pathname === '/en' ? 'en' : pathname === '/' ? 'es' : 'en'
+
+  return (
+    <ChatErrorBoundary>
+      <Suspense fallback={null}>
+        <FloatingChat lang={lang} />
+      </Suspense>
+    </ChatErrorBoundary>
+  )
+}
 
 // Console easter egg
 const ASCII_ART = `\n ███████╗ █████╗ ███╗   ██╗████████╗██╗███████╗███████╗██████╗ \n ██╔════╝██╔══██╗████╗  ██║╚══██╔══╝██║██╔════╝██╔════╝██╔══██╗\n ███████╗███████║██╔██╗ ██║   ██║   ██║█████╗  █████╗  ██████╔╝\n ╚════██║██╔══██║██║╚██╗██║   ██║   ██║██╔══╝  ██╔══╝  ██╔══██╗\n ███████║██║  ██║██║ ╚████║   ██║   ██║██║     ███████╗██║  ██║\n ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝\n`
@@ -22,6 +48,7 @@ const app = (
         <Route path="/en" element={<App />} />
         <Route path="/n8n-for-pms" element={<N8nForPMs />} />
       </Routes>
+      <GlobalChat />
     </BrowserRouter>
   </StrictMode>
 )

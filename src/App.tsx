@@ -1,16 +1,9 @@
-import { useState, useEffect, useCallback, useMemo, useReducer, useRef, lazy, Suspense, Component, type ReactNode } from 'react'
+import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 
-const FloatingChat = lazy(() => import('./FloatingChat'))
-
-class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
-  state = { hasError: false }
-  static getDerivedStateFromError() { return { hasError: true } }
-  render() { return this.state.hasError ? null : this.props.children }
-}
 
 function LinkedInLogo({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -2477,14 +2470,6 @@ function App() {
         </div>
       </footer>
 
-      {/* Floating Chat — lazy loaded, client-only (avoids React #419 Suspense SSR error) */}
-      {hydrated && (
-        <ChatErrorBoundary>
-          <Suspense fallback={null}>
-            <FloatingChat lang={lang} />
-          </Suspense>
-        </ChatErrorBoundary>
-      )}
     </div>
   )
 }
