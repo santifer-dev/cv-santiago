@@ -47,21 +47,41 @@ function useIsMobile() {
   return isMobile;
 }
 
-// Generate unique session ID
-function generateSessionId() {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+const STORAGE_KEY = 'santi-chat';
+
+function loadSession(fallbackGreeting: string): { messages: Message[]; sessionId: string; showPrompts: boolean } {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.messages) && data.messages.length > 0 && typeof data.sessionId === 'string') {
+        const hasUserMessages = data.messages.some((m: Message) => m.role === 'user');
+        return { messages: data.messages, sessionId: data.sessionId, showPrompts: !hasUserMessages };
+      }
+    }
+  } catch { /* ignore corrupt storage */ }
+  const sessionId = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  return { messages: [{ role: 'assistant', content: fallbackGreeting }], sessionId, showPrompts: true };
+}
+
+function saveSession(messages: Message[], sessionId: string) {
+  try {
+    // Don't persist empty assistant messages (loading placeholders)
+    const clean = messages.filter((m) => m.content !== '');
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ messages: clean, sessionId }));
+  } catch { /* storage full or unavailable */ }
 }
 
 export default function FloatingChat({ lang }: FloatingChatProps) {
   const t = translations[lang].chat;
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: t.greeting },
-  ]);
+
+  const [session] = useState(() => loadSession(t.greeting));
+  const [messages, setMessages] = useState<Message[]>(session.messages);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showPrompts, setShowPrompts] = useState(true);
-  const [sessionId] = useState(() => generateSessionId());
+  const [showPrompts, setShowPrompts] = useState(session.showPrompts);
+  const [sessionId] = useState(session.sessionId);
     const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -120,7 +140,13 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
     }
   }, [isMobile, isOpen]);
 
-  
+  // Persist messages to sessionStorage
+  useEffect(() => {
+    if (!isLoading) {
+      saveSession(messages, sessionId);
+    }
+  }, [messages, isLoading, sessionId]);
+
   // Solo actualizar greeting si el usuario aún no ha escrito nada
   useEffect(() => {
     const hasUserMessages = messages.some((m) => m.role === 'user');
