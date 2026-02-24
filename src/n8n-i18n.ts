@@ -155,7 +155,7 @@ export const n8nContent = {
     },
     bootcampCta: {
       heading: '¿Quieres ir más allá en AI Product Management?',
-      body: 'Aprendí estas técnicas en el AI PM Bootcamp de Marily Nika — el programa más práctico de AI Product Management que he encontrado. Si quieres construir productos de IA, no solo leer sobre ellos, este es el sitio.',
+      body: 'Aprendí estas técnicas en el AI PM Bootcamp de Marily Nika — el programa más práctico de AI Product Management que he encontrado. Ahora enseño ahí como Teaching Fellow. Si quieres construir productos de IA, no solo leer sobre ellos, este es el sitio.',
       cta: 'Únete a la próxima cohorte',
     },
     getStarted: {
@@ -368,7 +368,7 @@ export const n8nContent = {
     },
     bootcampCta: {
       heading: 'Want to go deeper into AI Product Management?',
-      body: 'I learned these skills at Marily Nika\'s AI PM Bootcamp — the most hands-on AI PM program I\'ve found. If you want to build AI products, not just read about them, this is where to start.',
+      body: 'I learned these skills at Marily Nika\'s AI PM Bootcamp — the most hands-on AI PM program I\'ve found. I now teach there as a Teaching Fellow. If you want to build AI products, not just read about them, this is where to start.',
       cta: 'Join the next cohort',
     },
     getStarted: {
