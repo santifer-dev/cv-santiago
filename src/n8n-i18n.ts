@@ -52,6 +52,9 @@ export const n8nContent = {
       body: 'Yo lo medí. Veinte. Algunas semanas, treinta. Sprint reports que se comen un día entero. Feedback disperso en cinco herramientas que tenía que leer, clasificar y convertir en tickets uno por uno. Status updates escritos desde cero cada lunes.',
       punchline: 'No era product manager. Era un router de datos muy caro. Moviendo información entre herramientas que deberían hablarse entre ellas. Gastaba 170 horas al mes en esto en mi propia empresa antes de automatizarlo todo. Hoy te enseño cómo hacer lo mismo con dos workflows que puedes montar en una tarde.',
     },
+    previewCta: {
+      text: 'Este cheat sheet es un adelanto de lo que enseño en el <a>AI PM Bootcamp de Marily Nika</a> — el programa donde me formé y ahora soy Teaching Fellow. Si quieres el curso completo de AI Product Management, echa un vistazo.',
+    },
     timeSinks: {
       heading: 'Los 5 Sumideros de Tiempo del PM (20-30 horas/semana)',
       columns: { num: '#', sink: 'Sumidero', hours: 'Horas/semana', pattern: 'Patrón de automatización' },
@@ -261,6 +264,9 @@ export const n8nContent = {
       hook: 'How many hours a week do you spend on work that has nothing to do with product?',
       body: 'I tracked mine. It was twenty. Some weeks, thirty. Sprint reports that take a full day. Feedback scattered across five tools that I had to read, classify, and turn into tickets one by one. Status updates typed from scratch every Monday.',
       punchline: 'I wasn\'t a product manager. I was a very expensive data router. Moving information between tools that should have been talking to each other. I spent 170 hours a month on this at my own company before I automated all of it. Today I\'ll show you how to do the same with two workflows you can build in an afternoon.',
+    },
+    previewCta: {
+      text: 'This cheat sheet is a preview of what I teach at <a>Marily Nika\'s AI PM Bootcamp</a> — the program where I trained and now serve as Teaching Fellow. If you want the full AI Product Management course, check it out.',
     },
     timeSinks: {
       heading: 'The 5 PM Time Sinks (20-30 hours/week)',

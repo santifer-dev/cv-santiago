@@ -345,6 +345,19 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             )}
           </p>
 
+          {/* Preview CTA */}
+          <div className="mb-10 relative rounded-2xl p-[1.5px] bg-gradient-theme">
+            <div className="px-5 py-4 rounded-[calc(1rem-1.5px)] bg-card text-sm text-muted-foreground leading-relaxed">
+              {t.previewCta.text.split(/<a>|<\/a>/).map((part, i) =>
+                i === 1 ? (
+                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">{part}</a>
+                ) : (
+                  <span key={i}>{part}</span>
+                )
+              )}
+            </div>
+          </div>
+
           {/* Time Sinks Table */}
           <AnchorHeading id="time-sinks">{t.timeSinks.heading}</AnchorHeading>
           <div className="overflow-x-auto -mx-4 sm:mx-0">
