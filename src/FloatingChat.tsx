@@ -147,10 +147,10 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
     }
   }, [messages, isLoading, sessionId]);
 
-  // Solo actualizar greeting si el usuario aún no ha escrito nada
+  // Update greeting when lang changes — only if no conversation exists yet
   useEffect(() => {
     const hasUserMessages = messages.some((m) => m.role === 'user');
-    if (!hasUserMessages) {
+    if (!hasUserMessages && !sessionStorage.getItem(STORAGE_KEY)) {
       setMessages([{ role: 'assistant', content: t.greeting }]);
       setShowPrompts(true);
     }
