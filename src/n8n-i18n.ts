@@ -53,7 +53,7 @@ export const n8nContent = {
       punchline: 'No era product manager. Era un router de datos muy caro. Moviendo información entre herramientas que deberían hablarse entre ellas. Gastaba 170 horas al mes en esto en mi propia empresa antes de automatizarlo todo. Hoy te enseño cómo hacer lo mismo con dos workflows que puedes montar en una tarde.',
     },
     previewCta: {
-      text: 'Este cheat sheet es un adelanto de lo que enseño en el <a>AI PM Bootcamp de Marily Nika</a> — el programa donde me formé y ahora soy Teaching Fellow. Si quieres el curso completo de AI Product Management, echa un vistazo.',
+      text: 'Esto es un adelanto de lo que enseño como Teaching Fellow en el <a>AI PM Bootcamp de Marily Nika</a>. El curso completo cubre de principio a fin cómo construir productos de IA — desde discovery hasta producción.',
     },
     timeSinks: {
       heading: 'Los 5 Sumideros de Tiempo del PM (20-30 horas/semana)',
@@ -155,7 +155,7 @@ export const n8nContent = {
     },
     bootcampCta: {
       heading: '¿Quieres ir más allá en AI Product Management?',
-      body: 'Aprendí estas técnicas en el AI PM Bootcamp de Marily Nika — el programa más práctico de AI Product Management que he encontrado. Ahora enseño ahí como Teaching Fellow. Si quieres construir productos de IA, no solo leer sobre ellos, este es el sitio.',
+      body: 'Lo que acabas de leer es una fracción de lo que cubro en el AI PM Bootcamp de Marily Nika. El programa completo te lleva de "quiero usar IA" a "estoy lanzando productos de IA" — con proyectos reales, no teoría. Es donde me formé, y ahora enseño ahí como Fellow.',
       cta: 'Únete a la próxima cohorte',
     },
     getStarted: {
@@ -266,7 +266,7 @@ export const n8nContent = {
       punchline: 'I wasn\'t a product manager. I was a very expensive data router. Moving information between tools that should have been talking to each other. I spent 170 hours a month on this at my own company before I automated all of it. Today I\'ll show you how to do the same with two workflows you can build in an afternoon.',
     },
     previewCta: {
-      text: 'This cheat sheet is a preview of what I teach at <a>Marily Nika\'s AI PM Bootcamp</a> — the program where I trained and now serve as Teaching Fellow. If you want the full AI Product Management course, check it out.',
+      text: 'This is a preview of what I teach as a Teaching Fellow at <a>Marily Nika\'s AI PM Bootcamp</a>. The full course covers how to build AI products end-to-end — from discovery to production.',
     },
     timeSinks: {
       heading: 'The 5 PM Time Sinks (20-30 hours/week)',
@@ -368,7 +368,7 @@ export const n8nContent = {
     },
     bootcampCta: {
       heading: 'Want to go deeper into AI Product Management?',
-      body: 'I learned these skills at Marily Nika\'s AI PM Bootcamp — the most hands-on AI PM program I\'ve found. I now teach there as a Teaching Fellow. If you want to build AI products, not just read about them, this is where to start.',
+      body: 'What you just read is a fraction of what I cover at Marily Nika\'s AI PM Bootcamp. The full program takes you from "I want to use AI" to "I\'m shipping AI products" — with real projects, not theory. It\'s where I trained, and I now teach there as a Fellow.',
       cta: 'Join the next cohort',
     },
     getStarted: {
