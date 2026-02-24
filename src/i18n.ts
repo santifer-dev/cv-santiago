@@ -253,6 +253,12 @@ export const translations = {
       title: 'Claude Code Power User',
       badge: 'High-Agency · AI-Fluency',
       desc: 'Herramienta principal de desarrollo. Custom skills reutilizables (deploy automatizado, traducción técnica, diseño), agentes especializados por proyecto, e integración de MCPs (GitHub, Vercel, etc.). Mentalidad high-agency: sé qué construir y cómo orquestar la IA para entregarlo.',
+      certs: [
+        { title: 'Building with the Claude API', url: 'https://verify.skilljar.com/c/s4bu5znz53vm' },
+        { title: 'Advanced MCP Topics', url: 'https://verify.skilljar.com/c/eiovmq5qaeyd' },
+        { title: 'Claude Code in Action', url: 'https://verify.skilljar.com/c/eijx7hwc2x89' },
+        { title: 'Introduction to MCP', url: 'https://verify.skilljar.com/c/4pxam3irsioq' },
+      ],
     },
     experience: {
       title: 'Experiencia Laboral',
@@ -445,6 +451,12 @@ export const translations = {
           url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
         },
         {
+          hook: 'Tu próximo negocio está en este gráfico. Pista: no es la barra grande.',
+          reactions: '115+',
+          comments: '10+',
+          url: 'https://www.linkedin.com/feed/update/urn:li:share:7431057438880980992',
+        },
+        {
           hook: 'Acabo de vender mi empresa, Santifer iRepair, tras 16 años (no me he vuelto loco).',
           reactions: '65+',
           comments: '15+',
@@ -541,10 +553,17 @@ export const translations = {
       items: [
         {
           year: '2026',
-          title: 'Introduction to Model Context Protocol',
+          title: 'Building with the Claude API',
           org: 'Anthropic',
           logo: 'anthropic',
-          url: 'https://verify.skilljar.com/c/4pxam3irsioq',
+          url: 'https://verify.skilljar.com/c/s4bu5znz53vm',
+        },
+        {
+          year: '2026',
+          title: 'Advanced MCP Topics',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/eiovmq5qaeyd',
         },
         {
           year: '2026',
@@ -552,6 +571,13 @@ export const translations = {
           org: 'Anthropic',
           logo: 'anthropic',
           url: 'https://verify.skilljar.com/c/eijx7hwc2x89',
+        },
+        {
+          year: '2026',
+          title: 'Introduction to Model Context Protocol',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/4pxam3irsioq',
         },
         {
           year: '2026',
@@ -912,6 +938,12 @@ export const translations = {
       title: 'Claude Code Power User',
       badge: 'High-Agency · AI-Fluency',
       desc: 'Primary dev tool. I build reusable custom skills (automated deploy, tech translation, design systems), configure per-project agents, and wire up MCPs (GitHub, Vercel, etc.). High-agency mindset: I know what to build and how to orchestrate AI to ship it.',
+      certs: [
+        { title: 'Building with the Claude API', url: 'https://verify.skilljar.com/c/s4bu5znz53vm' },
+        { title: 'Advanced MCP Topics', url: 'https://verify.skilljar.com/c/eiovmq5qaeyd' },
+        { title: 'Claude Code in Action', url: 'https://verify.skilljar.com/c/eijx7hwc2x89' },
+        { title: 'Introduction to MCP', url: 'https://verify.skilljar.com/c/4pxam3irsioq' },
+      ],
     },
     experience: {
       title: 'Work Experience',
@@ -1100,6 +1132,12 @@ export const translations = {
           url: 'https://www.linkedin.com/posts/santifer_llmops-ai-observability-activity-7421984735024816128-Dpl_',
         },
         {
+          hook: 'Your next business is in this chart. Hint: it\'s not the big bar.',
+          reactions: '115+',
+          comments: '10+',
+          url: 'https://www.linkedin.com/feed/update/urn:li:share:7431057438880980992',
+        },
+        {
           hook: "I just sold my company, Santifer iRepair, after 16 years (no, I haven't lost it).",
           reactions: '65+',
           comments: '15+',
@@ -1196,10 +1234,17 @@ export const translations = {
       items: [
         {
           year: '2026',
-          title: 'Introduction to Model Context Protocol',
+          title: 'Building with the Claude API',
           org: 'Anthropic',
           logo: 'anthropic',
-          url: 'https://verify.skilljar.com/c/4pxam3irsioq',
+          url: 'https://verify.skilljar.com/c/s4bu5znz53vm',
+        },
+        {
+          year: '2026',
+          title: 'Advanced MCP Topics',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/eiovmq5qaeyd',
         },
         {
           year: '2026',
@@ -1207,6 +1252,13 @@ export const translations = {
           org: 'Anthropic',
           logo: 'anthropic',
           url: 'https://verify.skilljar.com/c/eijx7hwc2x89',
+        },
+        {
+          year: '2026',
+          title: 'Introduction to Model Context Protocol',
+          org: 'Anthropic',
+          logo: 'anthropic',
+          url: 'https://verify.skilljar.com/c/4pxam3irsioq',
         },
         {
           year: '2026',

@@ -2098,6 +2098,22 @@ function App() {
                     <span className="badge px-2 py-0.5 bg-accent/10 text-accent">{t.claudeCode.badge}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{t.claudeCode.desc}</p>
+                  {t.claudeCode.certs && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {t.claudeCode.certs.map((cert: { title: string; url: string }, i: number) => (
+                        <a
+                          key={i}
+                          href={cert.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 text-xs text-muted-foreground hover:text-accent hover:bg-accent/20 transition-colors"
+                        >
+                          <BadgeCheck className="w-3.5 h-3.5" />
+                          {cert.title}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -2170,16 +2186,16 @@ function App() {
           <div className="my-10 border-t border-border/40" />
 
           {/* LinkedIn Posts — fake embed cards */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {t.linkedinPosts.items.map((post: { hook: string; reactions: string; comments: string; url: string }, i: number) => (
               <AnimatedSection key={`li-${i}`} delay={0.2 + i * 0.1}>
                 <a
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-5 rounded-2xl bg-card border border-border/50 border-t-2 border-t-[hsl(var(--linkedin))] hover:border-border transition-colors group h-full"
+                  className="flex flex-col p-5 rounded-2xl bg-card border border-border/50 border-t-2 border-t-[hsl(var(--linkedin))] hover:border-border transition-colors group h-full"
                 >
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 flex-1">
                     <img src="/foto-avatar.webp" alt="" role="presentation" className="w-10 h-10 rounded-full shrink-0 mt-0.5" />
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start gap-2">
@@ -2324,14 +2340,18 @@ function App() {
                 </h2>
               </AnimatedSection>
 
-              <div className="space-y-4">
-                {t.certifications.items.map((cert, i) => (
-                  <AnimatedSection key={i} delay={0.1 + i * 0.1}>
+              <div className="space-y-1 rounded-xl overflow-hidden border border-border">
+                {t.certifications.items.map((cert, i) => {
+                  // Alternate background by logical group: 0-3 tech, 4-7 fluency, 8-10 airtable, 11 make
+                  const group = i < 4 ? 0 : i < 8 ? 1 : i < 11 ? 2 : 3
+                  const isAlt = group % 2 === 1
+                  return (
+                  <AnimatedSection key={i} delay={0.1 + i * 0.05}>
                     <a
                       href={cert.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-accent/30 transition-colors duration-200 group cursor-pointer"
+                      className={`flex items-center gap-4 p-4 hover:border-accent/30 transition-colors duration-200 group cursor-pointer ${isAlt ? 'bg-muted/40' : 'bg-card'}`}
                     >
                       <span className="text-sm font-mono text-accent font-medium">{cert.year}</span>
                       <div className="flex-1">
@@ -2343,7 +2363,8 @@ function App() {
                       </div>
                     </a>
                   </AnimatedSection>
-                ))}
+                  )
+                })}
               </div>
             </div>
           </div>

@@ -133,6 +133,8 @@ Módulos del Business OS:
 **Certificaciones:**
 - 2026: Introduction to Model Context Protocol (Anthropic)
 - 2026: Claude Code in Action (Anthropic)
+- 2026: Advanced MCP Topics (Anthropic)
+- 2026: Building with the Claude API (Anthropic)
 - 2026: AI Fluency: Framework & Foundations (Anthropic) — Framework 4D: effective, efficient, ethical, safe
 - 2026: Teaching AI Fluency (Anthropic) — Certificado para enseñar AI Fluency a profesionales y organizaciones
 - 2026: AI Fluency for Educators (Anthropic)
