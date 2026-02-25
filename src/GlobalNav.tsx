@@ -5,13 +5,15 @@ import { Sun, Moon, Globe, ArrowLeft } from 'lucide-react'
 /**
  * GlobalNav — unified navigation across all pages.
  *
- * - Home (/, /en): floating circular buttons (fixed, no layout impact)
- * - Inner pages: sticky bar with back link + lang/theme toggles
+ * - Home (/, /en): floating controls top-right (fixed, no layout impact)
+ * - Inner pages: sticky semi-transparent bar with ← santifer.io + same controls
  *
- * Theme state lives here. No Motion dependency (keeps bundle light).
+ * Controls (lang pill + theme button) are visually identical everywhere.
  */
 
 const ALT_PATH: Record<string, string> = {
+  '/': '/en',
+  '/en': '/',
   '/n8n-para-pms': '/n8n-for-pms',
   '/n8n-for-pms': '/n8n-para-pms',
 }
@@ -24,14 +26,12 @@ function useLang() {
 }
 
 function useTheme() {
-  // Default dark to match SSR prerender
   const [isDark, setIsDark] = useState(true)
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains('dark'))
   }, [])
 
-  // System preference listener (only if user hasn't manually toggled)
   useEffect(() => {
     if (localStorage.getItem('theme')) return
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
@@ -55,46 +55,53 @@ function useTheme() {
   return { isDark, toggleTheme }
 }
 
-function ThemeButton({ isDark, onClick, size = 'lg' }: { isDark: boolean; onClick: () => void; size?: 'lg' | 'sm' }) {
-  const cls = size === 'lg'
-    ? 'w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors'
-    : 'w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors'
+/** Shared controls: Globe lang pill + theme circle — identical on every page */
+function NavControls({ altPath, altLabel, isDark, toggleTheme }: {
+  altPath: string
+  altLabel: string
+  isDark: boolean
+  toggleTheme: () => void
+}) {
   return (
-    <button onClick={onClick} className={cls} aria-label="Toggle theme">
-      {isDark ? <Sun className="w-5 h-5 text-primary" /> : <Moon className="w-5 h-5 text-primary" />}
-    </button>
+    <div className="flex items-center gap-2">
+      <Link
+        to={altPath}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+      >
+        <Globe className="w-3.5 h-3.5" />
+        {altLabel}
+      </Link>
+      <button
+        onClick={toggleTheme}
+        className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
+        aria-label="Toggle theme"
+      >
+        {isDark ? <Sun className="w-5 h-5 text-primary" /> : <Moon className="w-5 h-5 text-primary" />}
+      </button>
+    </div>
   )
 }
 
-/** Home pages: floating buttons top-right, no layout impact */
-function HomeNav({ lang, isDark, toggleTheme }: { lang: 'es' | 'en'; isDark: boolean; toggleTheme: () => void }) {
-  const navigate = useNavigate()
+/** Home pages: floating controls top-right, no layout impact */
+function HomeNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; isDark: boolean; toggleTheme: () => void; pathname: string }) {
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
 
   if (!hydrated) return null
 
-  const toggleLang = () => navigate(lang === 'es' ? '/en' : '/')
+  const altPath = ALT_PATH[pathname] || (lang === 'es' ? '/en' : '/')
+  const altLabel = lang === 'es' ? 'EN' : 'ES'
 
   return (
-    <div className="fixed top-6 right-6 z-50 flex gap-3">
-      <button
-        onClick={toggleLang}
-        className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
-        title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-      >
-        <span className="text-sm font-bold text-primary">
-          {lang === 'es' ? 'EN' : 'ES'}
-        </span>
-      </button>
-      <ThemeButton isDark={isDark} onClick={toggleTheme} size="lg" />
+    <div className="fixed top-6 right-6 z-50">
+      <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
     </div>
   )
 }
 
-/** Inner pages: sticky bar with back link */
+/** Inner pages: sticky bar with back link + same controls */
 function InnerNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; isDark: boolean; toggleTheme: () => void; pathname: string }) {
-  const altPath = ALT_PATH[pathname]
+  const altPath = ALT_PATH[pathname] || (lang === 'es' ? '/en' : '/')
   const altLabel = lang === 'es' ? 'EN' : 'ES'
 
   return (
@@ -104,18 +111,7 @@ function InnerNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; 
           <ArrowLeft className="w-4 h-4" />
           santifer.io
         </Link>
-        <div className="flex items-center gap-2">
-          {altPath && (
-            <Link
-              to={altPath}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              {altLabel}
-            </Link>
-          )}
-          <ThemeButton isDark={isDark} onClick={toggleTheme} size="sm" />
-        </div>
+        <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
       </div>
     </nav>
   )
@@ -126,7 +122,7 @@ export default function GlobalNav() {
   const { isDark, toggleTheme } = useTheme()
 
   if (isHome) {
-    return <HomeNav lang={lang} isDark={isDark} toggleTheme={toggleTheme} />
+    return <HomeNav lang={lang} isDark={isDark} toggleTheme={toggleTheme} pathname={pathname} />
   }
 
   return <InnerNav lang={lang} isDark={isDark} toggleTheme={toggleTheme} pathname={pathname} />
