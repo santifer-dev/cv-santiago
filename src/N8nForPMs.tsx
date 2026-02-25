@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { Download, Copy, Check, ExternalLink, Clock, ChevronRight } from 'lucide-react'
 import { n8nContent, CLASSIFICATION_PROMPT, type N8nLang } from './n8n-i18n'
 
@@ -129,7 +128,7 @@ function DownloadButton({ href, label }: { href: string; label: string }) {
 
 function AnchorHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="group font-display text-2xl md:text-3xl font-bold text-foreground mt-16 mb-6 scroll-mt-8">
+    <h2 id={id} className="group font-display text-2xl md:text-3xl font-bold text-foreground mt-16 mb-6 scroll-mt-24">
       <a href={`#${id}`} className="hover:text-primary transition-colors">
         {children}
         <span className="ml-2 opacity-0 group-hover:opacity-100 text-muted-foreground transition-opacity">#</span>
@@ -226,15 +225,6 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted-foreground">
-          <ol className="flex items-center gap-1">
-            <li><Link to="/" className="hover:text-primary transition-colors">{t.nav.breadcrumbHome}</Link></li>
-            <li><ChevronRight className="w-3.5 h-3.5" /></li>
-            <li className="text-foreground font-medium">{t.nav.breadcrumbCurrent}</li>
-          </ol>
-        </nav>
-
         {/* Header */}
         <header className="mb-10">
           <p className="text-primary font-medium text-sm mb-3 tracking-wide uppercase">

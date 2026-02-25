@@ -56,8 +56,8 @@ export const n8nContent = {
       text: 'Esto es un adelanto de lo que enseño como Teaching Fellow en el <a>AI PM Bootcamp de Marily Nika</a>. El curso completo cubre de principio a fin cómo construir productos de IA — desde discovery hasta producción.',
     },
     timeSinks: {
-      heading: 'Los 5 Sumideros de Tiempo del PM (20-30 horas/semana)',
-      columns: { num: '#', sink: 'Sumidero', hours: 'Horas/semana', pattern: 'Patrón de automatización' },
+      heading: 'Las 5 Tareas que te Roban el Tiempo (20-30 h/semana)',
+      columns: { num: '#', sink: 'Tarea', hours: 'Horas/semana', pattern: 'Patrón de automatización' },
       rows: [
         { num: '1', sink: 'Sprint reports', hours: '8-12/sprint', pattern: 'Schedule → Query → Format → Send' },
         { num: '2', sink: 'Clasificar feedback', hours: '5-10', pattern: 'Trigger → AI Classify → Route' },
@@ -89,12 +89,12 @@ export const n8nContent = {
       downloadLabel: 'Descargar Workflow 1 JSON',
     },
     transition: {
-      line1: 'No hay IA en el Workflow 1. Es pura fontanería.',
-      line2: 'Cuatro nodos que te ahorran 4-6 horas por sprint. Ahora imagina qué pasa cuando añadimos inteligencia.',
+      line1: 'No hay IA en el Workflow 1. Es pura fontanería de datos.',
+      line2: 'Cuatro nodos que te ahorran 4-6 horas por sprint. Ahora imagina qué pasa cuando le añadimos inteligencia.',
     },
     workflow2: {
       heading: 'Workflow 2: El Router Inteligente',
-      description: 'Clasificación de feedback con IA que envía bugs, features y preguntas al canal de Slack correcto. Un nodo de IA convierte una tubería tonta en una tubería inteligente.',
+      description: 'Clasificación de feedback con IA que envía bugs, features y preguntas al canal de Slack correcto. Un nodo de IA convierte un flujo mecánico en un flujo inteligente.',
       pipelineLabels: [
         { name: 'Form Trigger', detail: '' },
         { name: 'AI Classify', detail: '(LLM)' },
@@ -108,7 +108,7 @@ export const n8nContent = {
       nodes: [
         { name: 'n8n Form Trigger:', detail: 'Nombre, Email, Texto de Feedback, Área de Producto' },
         { name: 'Basic LLM Chain:', detail: 'Clasificar feedback con IA' },
-        { name: 'Switch:', detail: 'Enrutar según output del LLM (BUG / FEATURE / QUESTION)' },
+        { name: 'Switch:', detail: 'Redirigir según resultado del LLM (BUG / FEATURE / QUESTION)' },
         { name: 'Slack:', detail: 'Canal diferente por categoría' },
         { name: 'Airtable:', detail: 'Registrar cada feedback clasificado' },
       ],
@@ -123,7 +123,7 @@ export const n8nContent = {
         { label: 'Safe default', detail: 'nada se pierde' },
         { label: 'Strict output', detail: 'hace que el nodo Switch sea fiable' },
       ],
-      quote: 'Un nodo de IA convirtió una tubería tonta en una tubería inteligente.',
+      quote: 'Un nodo de IA convirtió un flujo mecánico en un flujo inteligente.',
       ambiguousHeading: 'La Prueba Ambigua',
       ambiguousExample: '"Estaría genial que el export pudiera manejar más de 100 filas sin crashear."',
       ambiguousExplanation1: '¿Es un feature request ("estaría genial") o un bug ("crashear")? La tiebreaker rule del prompt lo resuelve: si el feedback contiene un bug y un feature request, clasificar como BUG — lo roto tiene prioridad.',
@@ -146,12 +146,12 @@ export const n8nContent = {
       worksFor: 'Este patrón sirve para:',
       useCases: [
         'Priorizar tickets de soporte',
-        'Enrutar leads de ventas',
-        'Triagear quejas de clientes',
+        'Redirigir leads de ventas',
+        'Priorizar quejas de clientes',
         'Clasificar respuestas NPS',
         'Procesar envíos de formularios',
       ],
-      punchline: 'La tubería no cambia. El prompt sí.',
+      punchline: 'El flujo no cambia. El prompt sí.',
     },
     bootcampCta: {
       heading: '¿Quieres ir más allá en AI Product Management?',

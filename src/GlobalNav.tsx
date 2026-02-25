@@ -1,16 +1,19 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Sun, Moon, Globe, ArrowLeft } from 'lucide-react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Sun, Moon, Globe, House, X, ChevronRight } from 'lucide-react'
+import { translations, type Lang } from './i18n'
 
 /**
  * GlobalNav — unified navigation across all pages.
  *
- * Controls (lang pill + theme button) are positioned identically everywhere:
- * - Home: fixed at top-6 right-6 (floating, no layout impact)
- * - Inner pages: inside a sticky bar with pt-6 pb-3 px-6, so controls land
- *   at exactly the same screen position (24px from top & right edges)
+ * The translucent bar is a "contextual message container" that appears
+ * when there's something to communicate:
+ * - Inner pages: permanent "← santifer.io" back link
+ * - Any page: temporary language suggestion when browser lang ≠ page lang
  *
- * The inner-page bar fades in for a smooth navigation feel.
+ * Language suggestion is right-aligned, next to the lang pill, reinforcing
+ * the connection. Controls always live inside the bar when it's visible;
+ * when there's no bar (home, no banner), controls float fixed at top-6 right-6.
  */
 
 const ALT_PATH: Record<string, string> = {
@@ -20,11 +23,93 @@ const ALT_PATH: Record<string, string> = {
   '/n8n-for-pms': '/n8n-para-pms',
 }
 
+const BANNER_DISMISSED_KEY = 'lang-banner-dismissed'
+
+const PAGE_TITLE: Record<string, string> = {
+  '/n8n-para-pms': 'n8n para PMs',
+  '/n8n-for-pms': 'n8n for PMs',
+}
+
+/** Short labels for breadcrumb display when scrolled to a section */
+const SECTION_LABELS: Record<string, Record<string, string>> = {
+  '/n8n-para-pms': {
+    'time-sinks': 'Tareas que Roban Tiempo',
+    'workflow-1': 'Workflow 1',
+    'workflow-2': 'Workflow 2',
+    'the-pattern': 'El Patrón',
+    'get-started': 'Empieza',
+    'lessons': 'Lecciones',
+    'faq': 'FAQ',
+    'import': 'Importar',
+    'resources': 'Recursos',
+  },
+  '/n8n-for-pms': {
+    'time-sinks': 'Time Sinks',
+    'workflow-1': 'Workflow 1',
+    'workflow-2': 'Workflow 2',
+    'the-pattern': 'The Pattern',
+    'get-started': 'Get Started',
+    'lessons': 'Lessons',
+    'faq': 'FAQ',
+    'import': 'Import',
+    'resources': 'Resources',
+  },
+}
+
+/** Observes h2[id] elements and returns the currently visible section ID */
+function useActiveSection(pathname: string, enabled: boolean) {
+  const [activeId, setActiveId] = useState<string | null>(null)
+
+  useEffect(() => {
+    setActiveId(null)
+    if (!enabled) return
+
+    // Small delay to let React render the new page's headings
+    const timer = setTimeout(() => {
+      const h1 = document.querySelector('h1')
+      const headings = Array.from(document.querySelectorAll('h2[id]'))
+      if (headings.length === 0) return
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              // h1 visible → no active section
+              if (entry.target.tagName === 'H1') {
+                setActiveId(null)
+                return
+              }
+              setActiveId(entry.target.id)
+              return
+            }
+          }
+        },
+        { rootMargin: '-64px 0px -75% 0px' }
+      )
+
+      if (h1) observer.observe(h1)
+
+      headings.forEach((h) => observer.observe(h))
+      // Store cleanup for the observer
+      cleanupRef.current = () => observer.disconnect()
+    }, 100)
+
+    const cleanupRef = { current: () => {} }
+    return () => {
+      clearTimeout(timer)
+      cleanupRef.current()
+    }
+  }, [pathname, enabled])
+
+  return activeId
+}
+
 function useLang() {
   const { pathname } = useLocation()
   const isHome = pathname === '/' || pathname === '/en'
   const lang: 'es' | 'en' = (pathname === '/' || pathname === '/n8n-para-pms') ? 'es' : 'en'
-  return { pathname, isHome, lang }
+  const pageTitle = PAGE_TITLE[pathname] ?? null
+  return { pathname, isHome, lang, pageTitle }
 }
 
 function useTheme() {
@@ -57,12 +142,56 @@ function useTheme() {
   return { isDark, toggleTheme }
 }
 
+/**
+ * Detects browser/page language mismatch.
+ * Uses sessionStorage to survive re-mounts across navigations:
+ * - null: not shown yet → show after 2s delay
+ * - 'shown': already visible → show immediately, no animation
+ * - 'dismissed': user closed it → never show again
+ */
+function useLanguageBanner(lang: Lang) {
+  const stored = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem(BANNER_DISMISSED_KEY) : null
+  const [visible, setVisible] = useState(stored === 'shown')
+  const isFirstAppearance = useRef(stored !== 'shown')
+
+  // Show after delay on first visit (no sessionStorage entry yet)
+  useEffect(() => {
+    if (typeof navigator === 'undefined') return
+    if (stored) return // already 'shown' or 'dismissed'
+
+    const browserPrefersEn = !navigator.language.toLowerCase().startsWith('es')
+    const mismatch = (lang === 'es' && browserPrefersEn) || (lang === 'en' && !browserPrefersEn)
+    if (!mismatch) return
+
+    const timer = setTimeout(() => {
+      sessionStorage.setItem(BANNER_DISMISSED_KEY, 'shown')
+      setVisible(true)
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [lang, stored])
+
+  // Auto-dismiss if user switches language via toggle
+  useEffect(() => {
+    if (!visible) return
+    const browserPrefersEn = !navigator.language.toLowerCase().startsWith('es')
+    const mismatch = (lang === 'es' && browserPrefersEn) || (lang === 'en' && !browserPrefersEn)
+    if (!mismatch) {
+      sessionStorage.setItem(BANNER_DISMISSED_KEY, 'dismissed')
+      setVisible(false)
+    }
+  }, [lang, visible])
+
+  const dismiss = useCallback(() => {
+    sessionStorage.setItem(BANNER_DISMISSED_KEY, 'dismissed')
+    setVisible(false)
+  }, [])
+
+  return { showBanner: visible, dismiss, animateBanner: visible && isFirstAppearance.current }
+}
+
 /** Shared controls: Globe lang pill + theme circle */
 function NavControls({ altPath, altLabel, isDark, toggleTheme }: {
-  altPath: string
-  altLabel: string
-  isDark: boolean
-  toggleTheme: () => void
+  altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -84,67 +213,130 @@ function NavControls({ altPath, altLabel, isDark, toggleTheme }: {
   )
 }
 
-/** Home: floating controls at top-6 right-6, no layout impact */
-function HomeNav({ altPath, altLabel, isDark, toggleTheme }: {
-  altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
-}) {
-  const [hydrated, setHydrated] = useState(false)
-  useEffect(() => setHydrated(true), [])
-
-  if (!hydrated) return null
-
-  return (
-    <div className="fixed top-6 right-6 z-50">
-      <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
-    </div>
-  )
-}
-
-/**
- * Inner pages: sticky bar with back link + controls.
- * Uses pt-6 px-6 so controls land at exact same position as home's
- * fixed top-6 right-6.
- *
- * Only the bar background and back link fade in — controls stay instant
- * since they were already visible on the previous page.
- */
-function InnerNav({ altPath, altLabel, isDark, toggleTheme }: {
-  altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
-}) {
-  return (
-    <nav className="sticky top-0 z-50 relative">
-      {/* Bar background fades in — the "new" element when entering an inner page */}
-      <div
-        className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
-        style={{ animation: 'nav-fade-in 0.35s ease-out' }}
-      />
-      <div className="relative pt-6 pb-3 px-6 flex items-center justify-between">
-        {/* Back link fades in — also new context */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
-          style={{ animation: 'nav-fade-in 0.4s ease-out' }}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          santifer.io
-        </Link>
-        {/* Controls appear instantly — they were already on screen */}
-        <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
-      </div>
-    </nav>
-  )
-}
-
 export default function GlobalNav() {
-  const { pathname, isHome, lang } = useLang()
+  const { pathname, isHome, lang, pageTitle } = useLang()
   const { isDark, toggleTheme } = useTheme()
+  const { showBanner, dismiss, animateBanner } = useLanguageBanner(lang)
+  const navigate = useNavigate()
+  const activeSection = useActiveSection(pathname, !isHome)
 
   const altPath = ALT_PATH[pathname] || (lang === 'es' ? '/en' : '/')
   const altLabel = lang === 'es' ? 'ES' : 'EN'
 
-  if (isHome) {
-    return <HomeNav altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
+  const t = translations[lang]
+  const hasBar = !isHome || showBanner
+
+  // Breadcrumb: show active section label or fall back to page title
+  const sectionLabels = SECTION_LABELS[pathname]
+  const activeSectionLabel = activeSection && sectionLabels?.[activeSection]
+
+
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+
+  // Animation tracking — bar and back link animate only on first appearance
+  const barShown = useRef(false)
+  const animateBar = hasBar && !barShown.current
+  if (hasBar) barShown.current = true
+
+  const backLinkShown = useRef(false)
+  const animateBackLink = !isHome && !backLinkShown.current
+  if (!isHome) backLinkShown.current = true
+
+  const switchLang = () => {
+    dismiss()
+    navigate(altPath)
   }
 
-  return <InnerNav altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
+  const controls = <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
+
+  const fade = (duration: string) => ({ animation: `nav-fade-in ${duration} ease-out` })
+
+  // Banner message (right-aligned, near lang pill)
+  const bannerMessage = showBanner ? (
+    <div
+      className="flex items-center gap-2.5 text-sm"
+      style={animateBanner ? fade('0.4s') : undefined}
+    >
+      <span className="text-muted-foreground hidden sm:inline">{t.ui.languageBanner}</span>
+      <button
+        onClick={switchLang}
+        className="inline-flex items-center gap-1 font-medium text-primary hover:text-primary/80 transition-colors"
+      >
+        {t.ui.languageBannerSwitchPrefix}<Globe className="w-3.5 h-3.5 mx-0.5" />{t.ui.languageBannerSwitchLang}
+      </button>
+      <button
+        onClick={dismiss}
+        className="text-muted-foreground hover:text-foreground transition-colors"
+        aria-label="Dismiss"
+      >
+        <X className="w-3.5 h-3.5" />
+      </button>
+    </div>
+  ) : null
+
+  // Bar visible: controls (+ optional banner) inside it
+  if (hasBar) {
+    return (
+      <nav className="sticky top-0 z-50 relative">
+        <div
+          className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
+          style={animateBar ? fade('0.35s') : undefined}
+        />
+        <div className="relative pt-6 pb-3 px-6 flex items-center justify-between">
+          {/* Left: back link on inner pages, empty on home */}
+          <div>
+            {!isHome && (
+              <nav
+                aria-label="Breadcrumb"
+                className="inline-flex items-center gap-1.5 text-sm"
+                style={animateBackLink ? fade('0.4s') : undefined}
+              >
+                <Link
+                  to={lang === 'en' ? '/en' : '/'}
+                  className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <House className="w-4 h-4" />
+                  <span className="hidden sm:inline">santifer.io</span>
+                </Link>
+                {pageTitle && (
+                  <>
+                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+                    <button
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className={`hover:text-foreground transition-colors cursor-pointer ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
+                    >
+                      {pageTitle}
+                    </button>
+                  </>
+                )}
+                {activeSectionLabel && (
+                  <>
+                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+                    <span className="text-foreground font-medium truncate max-w-[140px] sm:max-w-none">
+                      {activeSectionLabel}
+                    </span>
+                  </>
+                )}
+              </nav>
+            )}
+          </div>
+          {/* Right: banner message + controls, all grouped together */}
+          <div className="flex items-center gap-4">
+            {bannerMessage}
+            {controls}
+          </div>
+        </div>
+      </nav>
+    )
+  }
+
+  // No bar: floating controls only
+  if (!hydrated) return null
+
+  return (
+    <div className="fixed top-6 right-6 z-50">
+      {controls}
+    </div>
+  )
 }

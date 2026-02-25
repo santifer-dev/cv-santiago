@@ -14,6 +14,21 @@ class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: b
   render() { return this.state.hasError ? null : this.props.children }
 }
 
+/** Reset scroll + fade-in on route change */
+function PageTransition({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
+  return (
+    <div key={pathname} style={{ animation: 'page-fade-in 0.25s ease-out' }}>
+      {children}
+    </div>
+  )
+}
+
 function GlobalChat() {
   const { pathname } = useLocation()
   const [hydrated, setHydrated] = useState(false)
@@ -45,12 +60,14 @@ const app = (
   <StrictMode>
     <BrowserRouter>
       <GlobalNav />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/en" element={<App />} />
-        <Route path="/n8n-para-pms" element={<N8nForPMs lang="es" />} />
-        <Route path="/n8n-for-pms" element={<N8nForPMs lang="en" />} />
-      </Routes>
+      <PageTransition>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/en" element={<App />} />
+          <Route path="/n8n-para-pms" element={<N8nForPMs lang="es" />} />
+          <Route path="/n8n-for-pms" element={<N8nForPMs lang="en" />} />
+        </Routes>
+      </PageTransition>
       <GlobalChat />
     </BrowserRouter>
   </StrictMode>

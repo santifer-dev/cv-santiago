@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
@@ -1999,13 +1999,13 @@ function App() {
                         </a>
                       )}
                       {talk.materialUrl && (
-                        <a
-                          href={talk.materialUrl}
+                        <Link
+                          to={talk.materialUrl}
                           className="inline-flex items-center gap-2 text-xs text-primary hover:underline"
                         >
                           <FileText className="w-4 h-4" />
                           {talk.materialLabel || 'Material'}
-                        </a>
+                        </Link>
                       )}
                     </div>
                   </div>

@@ -674,7 +674,9 @@ export const translations = {
     },
     ui: {
       languageBanner: '🇬🇧 This site is available in English',
-      languageBannerSwitch: 'Switch',
+      languageBannerSwitch: 'Switch to EN',
+      languageBannerSwitchPrefix: 'Switch to',
+      languageBannerSwitchLang: 'EN',
       languageToggle: 'ES',
       typingIndicator: 'santifer está escribiendo...',
     },
@@ -1366,7 +1368,9 @@ export const translations = {
     },
     ui: {
       languageBanner: '🇪🇸 Este sitio está disponible en español',
-      languageBannerSwitch: 'Cambiar',
+      languageBannerSwitch: 'Cambiar a ES',
+      languageBannerSwitchPrefix: 'Cambiar a',
+      languageBannerSwitchLang: 'ES',
       languageToggle: 'EN',
       typingIndicator: 'santifer is typing...',
     },
