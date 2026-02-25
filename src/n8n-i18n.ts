@@ -161,7 +161,7 @@ export const n8nContent = {
     getStarted: {
       heading: 'Empieza',
       steps: [
-        { num: 1, text: '<a>n8n Cloud (free tier)</a> — regístrate y empieza a construir' },
+        { num: 1, text: '<a>n8n Cloud (14 días gratis)</a> — regístrate y empieza a construir' },
         { num: 2, text: 'Elige la tarea más aburrida de tu viernes' },
         { num: 3, text: 'Monta un workflow esta semana' },
       ],
@@ -202,7 +202,7 @@ export const n8nContent = {
         },
         {
           q: '¿n8n es gratis?',
-          a: 'Sí. Free tier en cloud con 5 workflows activos, o puedes hacer self-host completamente gratis sin límites. El free tier es suficiente para todo lo que se muestra aquí.',
+          a: 'Self-hosted es gratis para siempre (open source, sin límites). En cloud tienes 14 días de prueba gratis del plan Pro, sin tarjeta. Después desde 24 €/mes. Para lo que se muestra aquí, el trial sobra.',
         },
         {
           q: '¿Qué LLM debería usar para el clasificador?',
@@ -374,7 +374,7 @@ export const n8nContent = {
     getStarted: {
       heading: 'Get Started',
       steps: [
-        { num: 1, text: '<a>n8n Cloud (free tier)</a> — sign up and start building' },
+        { num: 1, text: '<a>n8n Cloud (14-day free trial)</a> — sign up and start building' },
         { num: 2, text: 'Pick your most boring Friday task' },
         { num: 3, text: 'Build one workflow this week' },
       ],
@@ -411,7 +411,7 @@ export const n8nContent = {
         },
         {
           q: 'Is n8n free?',
-          a: 'Free tier on cloud, or self-host for free. The free tier is enough for everything shown here.',
+          a: 'Self-hosted is free forever (open source, no limits). Cloud gives you a 14-day free trial of the Pro plan, no credit card required. After that, plans start at €24/month. The trial is more than enough for everything shown here.',
         },
         {
           q: 'What LLM should I use for the classifier?',
