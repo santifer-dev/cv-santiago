@@ -103,17 +103,23 @@ function HomeNav({ altPath, altLabel, isDark, toggleTheme }: {
 /**
  * Inner pages: sticky bar with back link + controls.
  * Uses pt-6 px-6 so controls land at exact same position as home's
- * fixed top-6 right-6. Bar fades in for smooth transition.
+ * fixed top-6 right-6.
+ *
+ * Only the bar background and back link fade in — controls stay instant
+ * since they were already visible on the previous page.
  */
 function InnerNav({ altPath, altLabel, isDark, toggleTheme }: {
   altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
 }) {
   return (
-    <nav
-      className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border"
-      style={{ animation: 'nav-fade-in 0.35s ease-out' }}
-    >
-      <div className="pt-6 pb-3 px-6 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 relative">
+      {/* Bar background fades in — the "new" element when entering an inner page */}
+      <div
+        className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
+        style={{ animation: 'nav-fade-in 0.35s ease-out' }}
+      />
+      <div className="relative pt-6 pb-3 px-6 flex items-center justify-between">
+        {/* Back link fades in — also new context */}
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
@@ -122,6 +128,7 @@ function InnerNav({ altPath, altLabel, isDark, toggleTheme }: {
           <ArrowLeft className="w-4 h-4" />
           santifer.io
         </Link>
+        {/* Controls appear instantly — they were already on screen */}
         <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
       </div>
     </nav>
