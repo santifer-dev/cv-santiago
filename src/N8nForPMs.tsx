@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Download, Copy, Check, ExternalLink, Clock, ChevronRight, ArrowLeft, Sun, Moon, Globe } from 'lucide-react'
+import { Download, Copy, Check, ExternalLink, Clock, ChevronRight } from 'lucide-react'
 import { n8nContent, CLASSIFICATION_PROMPT, type N8nLang } from './n8n-i18n'
 
 function buildJsonLd(lang: N8nLang) {
@@ -140,11 +140,6 @@ function AnchorHeading({ id, children }: { id: string; children: React.ReactNode
 
 export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
   const t = n8nContent[lang]
-  const [isDark, setIsDark] = useState(true)
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains('dark'))
-  }, [])
 
   // Meta tags + hreflang
   useEffect(() => {
@@ -228,44 +223,8 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
     }
   }, [lang, t])
 
-  const toggleTheme = () => {
-    const next = !isDark
-    setIsDark(next)
-    document.documentElement.classList.toggle('dark', next)
-    document.documentElement.classList.toggle('light', !next)
-    localStorage.setItem('theme', next ? 'dark' : 'light')
-  }
-
-  const altLabel = lang === 'es' ? 'EN' : 'ES'
-
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
-            <ArrowLeft className="w-4 h-4" />
-            {t.nav.back}
-          </Link>
-          <div className="flex items-center gap-2">
-            <Link
-              to={`/${t.altSlug}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              {altLabel}
-            </Link>
-            <button
-              onClick={toggleTheme}
-              className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun className="w-5 h-5 text-primary" /> : <Moon className="w-5 h-5 text-primary" />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
       <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-6 text-sm text-muted-foreground">

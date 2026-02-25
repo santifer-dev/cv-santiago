@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Sun, Moon, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 
 
@@ -1040,121 +1040,11 @@ function CertLogo({ logo }: { logo: string }) {
   return logos[logo] || null
 }
 
-// Banner sutil para sugerir cambio de idioma
-function getCookie(name: string): boolean {
-  if (typeof document === 'undefined') return false
-  return document.cookie.split('; ').some(c => c === `${name}=true`)
-}
-
-function setCookie(name: string) {
-  document.cookie = `${name}=true; max-age=31536000; SameSite=Lax; path=/`
-}
-
-function LanguageBanner({ lang, onSwitch, onDismiss }: { lang: Lang; onSwitch: () => void; onDismiss: () => void }) {
-  const prefersEnglish = typeof navigator !== 'undefined' &&
-    !navigator.language.toLowerCase().startsWith('es')
-
-  // Mostrar solo si el idioma preferido no coincide con la página
-  const shouldShow = (lang === 'es' && prefersEnglish) || (lang === 'en' && !prefersEnglish)
-
-  // Verificar si ya lo descartó
-  const [dismissed, setDismissed] = useState(() => getCookie('lang-banner-dismissed'))
-
-  const [visible, setVisible] = useState(false)
-
-  // Mostrar banner con delay para no ser intrusivo
-  useEffect(() => {
-    if (shouldShow && !dismissed) {
-      const timer = setTimeout(() => setVisible(true), 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [shouldShow, dismissed])
-
-  // Si el usuario cambia idioma con el toggle principal mientras el banner está visible, guardar preferencia
-  useEffect(() => {
-    if (visible && !shouldShow) {
-      setCookie('lang-banner-dismissed')
-      setVisible(false)
-      setDismissed(true)
-    }
-  }, [lang, visible, shouldShow])
-
-  const handleDismiss = () => {
-    setVisible(false)
-    setCookie('lang-banner-dismissed')
-    setDismissed(true)
-    onDismiss()
-  }
-
-  const handleSwitch = () => {
-    setVisible(false)
-    setCookie('lang-banner-dismissed')
-    onSwitch()
-  }
-
-  if (!visible) return null
-
-  const t = translations[lang]
-  const message = t.ui.languageBanner
-
-  const switchLabel = t.ui.languageBannerSwitch
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8, x: 20 }}
-      animate={{ opacity: 1, scale: 1, x: 0 }}
-      exit={{ opacity: 0, scale: 0.8, x: 20 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-      className="fixed top-20 right-6 md:top-[1.35rem] md:right-36 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full bg-card/95 backdrop-blur-sm border border-border shadow-lg"
-    >
-      <span className="text-sm text-foreground">{message}</span>
-      <button
-        onClick={handleSwitch}
-        className="px-3 py-1 text-sm font-medium rounded-full bg-primary text-primary-foreground hover:brightness-110 hover:shadow-lg hover:shadow-primary/25 active:brightness-95 transition-all duration-200"
-      >
-        {switchLabel}
-      </button>
-      <button
-        onClick={handleDismiss}
-        className="p-1 text-muted-foreground hover:text-foreground transition-colors"
-        aria-label="Dismiss"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </motion.div>
-  )
-}
-
 function App() {
   const location = useLocation()
-  const navigate = useNavigate()
   const lang: Lang = location.pathname === '/en' ? 'en' : 'es'
   const t = translations[lang]
   const hydrated = useHydrated()
-
-  // Always start dark to match SSR prerender (inline <script> in <head> handles actual CSS)
-  const [isDark, setIsDark] = useState(true)
-
-  // Sync React state with inline script's theme detection after hydration
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains('dark'))
-  }, [])
-
-  // Listen for system theme changes (only if user hasn't manually toggled)
-  useEffect(() => {
-    if (localStorage.getItem('theme')) return
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = (e: MediaQueryListEvent) => {
-      const dark = e.matches
-      setIsDark(dark)
-      document.documentElement.classList.toggle('dark', dark)
-      document.documentElement.classList.toggle('light', !dark)
-    }
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
 
   // Scroll to hash anchor on load/navigation
   useEffect(() => {
@@ -1191,10 +1081,6 @@ function App() {
     document.documentElement.lang = lang
   }, [lang])
 
-  const toggleLang = () => {
-    navigate(lang === 'es' ? '/en' : '/')
-  }
-
   return (
     <div className="min-h-screen bg-background transition-colors duration-200" role="main">
       {/* Skip navigation — accessible keyboard shortcut */}
@@ -1204,64 +1090,6 @@ function App() {
       >
         {lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}
       </a>
-
-      {/* Language suggestion banner */}
-      <AnimatePresence>
-        <LanguageBanner
-          lang={lang}
-          onSwitch={toggleLang}
-          onDismiss={() => {}}
-        />
-      </AnimatePresence>
-
-      {/* Controls */}
-      <div className="fixed top-6 right-6 z-50 flex gap-3">
-        <motion.button
-          initial={hydrated ? { opacity: 0, scale: 0.8 } : false}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          onClick={toggleLang}
-          className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
-          title={lang === 'es' ? 'Switch to English' : 'Cambiar a Español'}
-        >
-          <motion.span
-            key={lang}
-            initial={{ rotateY: 90, opacity: 0 }}
-            animate={{ rotateY: 0, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="text-sm font-bold text-primary"
-          >
-            {t.ui.languageToggle}
-          </motion.span>
-        </motion.button>
-        <motion.button
-          initial={hydrated ? { opacity: 0, scale: 0.8 } : false}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-          onClick={() => {
-            const next = !isDark
-            setIsDark(next)
-            document.documentElement.classList.toggle('dark', next)
-            document.documentElement.classList.toggle('light', !next)
-            localStorage.setItem('theme', next ? 'dark' : 'light')
-          }}
-          className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center shadow-lg hover:border-primary/50 hover:shadow-primary/20 hover:shadow-xl transition-colors"
-          aria-label="Toggle theme"
-        >
-          <motion.div
-            key={isDark ? 'dark' : 'light'}
-            initial={{ rotate: -90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            {isDark ? <Sun className="w-5 h-5 text-primary" /> : <Moon className="w-5 h-5 text-primary" />}
-          </motion.div>
-        </motion.button>
-      </div>
 
       {/* Hero Section */}
       <header id="main-content" className="relative overflow-hidden">

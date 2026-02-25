@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import N8nForPMs from './N8nForPMs.tsx'
+import GlobalNav from './GlobalNav.tsx'
 
 const FloatingChat = lazy(() => import('./FloatingChat'))
 
@@ -43,6 +44,7 @@ const root = document.getElementById('root')!
 const app = (
   <StrictMode>
     <BrowserRouter>
+      <GlobalNav />
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/en" element={<App />} />

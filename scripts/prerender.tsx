@@ -17,6 +17,7 @@ import { StaticRouter, Routes, Route } from 'react-router-dom';
 import Critters from 'critters';
 import App from '../src/App.tsx';
 import N8nForPMs from '../src/N8nForPMs.tsx';
+import GlobalNav from '../src/GlobalNav.tsx';
 import { n8nContent } from '../src/n8n-i18n.ts';
 import { seo } from '../src/i18n.ts';
 
@@ -42,6 +43,7 @@ function renderN8nPage(lang: 'es' | 'en'): string {
   const slug = n8nContent[lang].slug;
   return renderToString(
     <StaticRouter location={`/${slug}`}>
+      <GlobalNav />
       <Routes>
         <Route path={`/${slug}`} element={<N8nForPMs lang={lang} />} />
       </Routes>
