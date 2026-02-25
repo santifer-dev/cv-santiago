@@ -496,8 +496,8 @@ export const translations = {
           title: 'n8n for Product Managers',
           desc: 'Lightning session en Maven sobre automatización práctica para PMs con n8n. De tareas repetitivas a workflows inteligentes con IA — sin escribir código.',
           pdf: '',
-          materialUrl: '/n8n-for-pms',
-          materialLabel: 'Cheat Sheet',
+          materialUrl: '/n8n-para-pms',
+          materialLabel: 'Leer la guía',
           featured: false,
         },
         {
@@ -1189,7 +1189,7 @@ export const translations = {
           desc: 'Lightning session on Maven about practical automation for PMs with n8n. From repetitive tasks to AI-powered workflows — no code required.',
           pdf: '',
           materialUrl: '/n8n-for-pms',
-          materialLabel: 'Cheat Sheet',
+          materialLabel: 'Read the Guide',
           featured: false,
         },
         {

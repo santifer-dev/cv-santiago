@@ -5,10 +5,12 @@ import { Sun, Moon, Globe, ArrowLeft } from 'lucide-react'
 /**
  * GlobalNav — unified navigation across all pages.
  *
- * - Home (/, /en): floating controls top-right (fixed, no layout impact)
- * - Inner pages: sticky semi-transparent bar with ← santifer.io + same controls
+ * Controls (lang pill + theme button) are positioned identically everywhere:
+ * - Home: fixed at top-6 right-6 (floating, no layout impact)
+ * - Inner pages: inside a sticky bar with pt-6 pb-3 px-6, so controls land
+ *   at exactly the same screen position (24px from top & right edges)
  *
- * Controls (lang pill + theme button) are visually identical everywhere.
+ * The inner-page bar fades in for a smooth navigation feel.
  */
 
 const ALT_PATH: Record<string, string> = {
@@ -55,7 +57,7 @@ function useTheme() {
   return { isDark, toggleTheme }
 }
 
-/** Shared controls: Globe lang pill + theme circle — identical on every page */
+/** Shared controls: Globe lang pill + theme circle */
 function NavControls({ altPath, altLabel, isDark, toggleTheme }: {
   altPath: string
   altLabel: string
@@ -82,15 +84,14 @@ function NavControls({ altPath, altLabel, isDark, toggleTheme }: {
   )
 }
 
-/** Home pages: floating controls top-right, no layout impact */
-function HomeNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; isDark: boolean; toggleTheme: () => void; pathname: string }) {
+/** Home: floating controls at top-6 right-6, no layout impact */
+function HomeNav({ altPath, altLabel, isDark, toggleTheme }: {
+  altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
+}) {
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
 
   if (!hydrated) return null
-
-  const altPath = ALT_PATH[pathname] || (lang === 'es' ? '/en' : '/')
-  const altLabel = lang === 'es' ? 'EN' : 'ES'
 
   return (
     <div className="fixed top-6 right-6 z-50">
@@ -99,15 +100,25 @@ function HomeNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; i
   )
 }
 
-/** Inner pages: sticky bar with back link + same controls */
-function InnerNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; isDark: boolean; toggleTheme: () => void; pathname: string }) {
-  const altPath = ALT_PATH[pathname] || (lang === 'es' ? '/en' : '/')
-  const altLabel = lang === 'es' ? 'EN' : 'ES'
-
+/**
+ * Inner pages: sticky bar with back link + controls.
+ * Uses pt-6 px-6 so controls land at exact same position as home's
+ * fixed top-6 right-6. Bar fades in for smooth transition.
+ */
+function InnerNav({ altPath, altLabel, isDark, toggleTheme }: {
+  altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
+}) {
   return (
-    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="px-4 sm:px-6 py-3 flex items-center justify-between">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
+    <nav
+      className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border"
+      style={{ animation: 'nav-fade-in 0.35s ease-out' }}
+    >
+      <div className="pt-6 pb-3 px-6 flex items-center justify-between">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+          style={{ animation: 'nav-fade-in 0.4s ease-out' }}
+        >
           <ArrowLeft className="w-4 h-4" />
           santifer.io
         </Link>
@@ -121,9 +132,12 @@ export default function GlobalNav() {
   const { pathname, isHome, lang } = useLang()
   const { isDark, toggleTheme } = useTheme()
 
+  const altPath = ALT_PATH[pathname] || (lang === 'es' ? '/en' : '/')
+  const altLabel = lang === 'es' ? 'ES' : 'EN'
+
   if (isHome) {
-    return <HomeNav lang={lang} isDark={isDark} toggleTheme={toggleTheme} pathname={pathname} />
+    return <HomeNav altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
   }
 
-  return <InnerNav lang={lang} isDark={isDark} toggleTheme={toggleTheme} pathname={pathname} />
+  return <InnerNav altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
 }
