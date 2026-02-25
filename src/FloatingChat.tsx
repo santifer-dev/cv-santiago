@@ -47,6 +47,20 @@ function useIsMobile() {
   return isMobile;
 }
 
+/** Convert bare URLs in text to markdown links so ReactMarkdown renders them */
+function linkifyUrls(text: string): string {
+  // Match URLs not already inside markdown link syntax [...](...)
+  return text.replace(
+    /(?<!\]\()(?<!\()(https?:\/\/[^\s)]+|(?:[\w-]+\.)+(?:io|com|org|net|dev|app|co)(?:\/[^\s)]*)?)/g,
+    (match, _url, offset) => {
+      // Skip if already inside a markdown link: check for ]( before the match
+      const before = text.slice(Math.max(0, offset - 2), offset);
+      if (before.endsWith('](')) return match;
+      return `[${match}](${match.startsWith('http') ? match : `https://${match}`})`;
+    },
+  );
+}
+
 const STORAGE_KEY = 'santi-chat';
 
 function loadSession(fallbackGreeting: string): { messages: Message[]; sessionId: string; showPrompts: boolean } {
@@ -443,7 +457,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                             return url;
                           }}
                         >
-                          {message.content}
+                          {linkifyUrls(message.content)}
                         </ReactMarkdown>
                       ) : (
                         message.content
