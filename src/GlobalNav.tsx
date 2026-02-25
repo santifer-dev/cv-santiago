@@ -106,7 +106,7 @@ function InnerNav({ lang, isDark, toggleTheme, pathname }: { lang: 'es' | 'en'; 
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div className="px-4 sm:px-6 py-3 flex items-center justify-between">
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
           <ArrowLeft className="w-4 h-4" />
           santifer.io
