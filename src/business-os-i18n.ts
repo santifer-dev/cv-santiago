@@ -12,9 +12,9 @@ export const businessOsContent = {
       breadcrumbCurrent: 'Business OS',
     },
     header: {
-      kicker: 'Case Study — Santifer iRepair',
+      kicker: 'Case Study: Santifer iRepair',
       h1: 'Business OS para +30.000 Reparaciones',
-      subtitle: 'Cómo construí un sistema operativo de negocio completo con Airtable — 12 bases interconectadas, 2.100+ campos y 50+ automatizaciones que ahorran 170h/mes.',
+      subtitle: 'Cómo construí un sistema operativo de negocio completo con Airtable: 12 bases interconectadas, 2.100+ campos y 50+ automatizaciones que ahorran 170h/mes.',
       date: '25 feb 2026',
     },
     intro: {
@@ -22,9 +22,9 @@ export const businessOsContent = {
       body: 'Un negocio de reparación multiservicios no cabe en un ERP genérico. Tras evaluar RepairDesk (99$/mes) y Orderry, ninguna se adaptaba al modelo multiservicios. Necesitaba un sistema que fuera la fuente única de verdad para todo: pedidos, inventario, clientes, reservas, facturación y automatizaciones. Así que lo construí.',
     },
     internalLinks: {
-      jacobo: { text: 'Agente IA Jacobo — Case Study', href: '/agente-ia-jacobo' },
-      pseo: { text: 'SEO Programático — Case Study', href: '/seo-programatico' },
-      n8n: { text: 'n8n para PMs — Artículo', href: '/n8n-para-pms' },
+      jacobo: { text: 'Agente IA Jacobo | Case Study', href: '/agente-ia-jacobo' },
+      pseo: { text: 'SEO Programático | Case Study', href: '/seo-programatico' },
+      n8n: { text: 'n8n para PMs | Artículo', href: '/n8n-para-pms' },
     },
     sections: {
       dayInLife: {
@@ -32,7 +32,7 @@ export const businessOsContent = {
         body: 'Esto es lo que pasa cuando un cliente escribe "Quiero reparar mi iPhone 14 Pro":',
         steps: [
           { emoji: '1️⃣', text: 'Jacobo (agente IA omnicanal) detecta la intención de reparación, identifica el modelo y consulta stock de pantallas en Airtable en tiempo real.' },
-          { emoji: '2️⃣', text: 'Stock disponible → Jacobo responde con precio estimado y pregunta cuándo quiere venir. El cliente dice su preferencia en lenguaje natural, y un subagente de Jacobo consulta la disponibilidad de YouCanBookMe para ofrecer los huecos más cercanos — cero fricción, sin salir de la conversación.' },
+          { emoji: '2️⃣', text: 'Stock disponible → Jacobo responde con precio estimado y pregunta cuándo quiere venir. El cliente dice su preferencia en lenguaje natural, y un subagente de Jacobo consulta la disponibilidad de YouCanBookMe para ofrecer los huecos más cercanos. Cero fricción, sin salir de la conversación.' },
           { emoji: '3️⃣', text: 'Cliente confirma hora → la cita se crea en YouCanBookMe, la orden de trabajo se genera en Airtable y las piezas se auto-reservan del inventario — bloqueadas para esa reparación.' },
           { emoji: '4️⃣', text: 'El técnico ve la orden en su tablet con todo el detalle: modelo, reparación, piezas reservadas y ubicación exacta en el almacén.' },
           { emoji: '5️⃣', text: 'Reparación completada → factura generada automáticamente → puntos de fidelización añadidos al CRM → cliente recibe encuesta de satisfacción por WhatsApp.' },
@@ -404,7 +404,7 @@ export const businessOsContent = {
         body: 'Here\'s what happens when a customer texts "I want to repair my iPhone 14 Pro":',
         steps: [
           { emoji: '1️⃣', text: 'Jacobo (omnichannel AI agent) detects the repair intent, identifies the model and checks screen stock in Airtable in real time.' },
-          { emoji: '2️⃣', text: 'Stock available → Jacobo replies with an estimated price and asks when they\'d like to come. The customer states their preference in natural language, and a Jacobo sub-agent checks YouCanBookMe availability to offer the closest slots — zero friction, without leaving the conversation.' },
+          { emoji: '2️⃣', text: 'Stock available → Jacobo replies with an estimated price and asks when they\'d like to come. The customer states their preference in natural language, and a Jacobo sub-agent checks YouCanBookMe availability to offer the closest slots. Zero friction, without leaving the conversation.' },
           { emoji: '3️⃣', text: 'Customer confirms the time → the appointment is created in YouCanBookMe, the work order is generated in Airtable and the parts are auto-reserved from inventory — locked for that repair.' },
           { emoji: '4️⃣', text: 'The technician sees the work order on their tablet with full detail: model, repair, reserved parts and exact warehouse location.' },
           { emoji: '5️⃣', text: 'Repair completed → invoice auto-generated → loyalty points added to CRM → customer receives a satisfaction survey via WhatsApp.' },
