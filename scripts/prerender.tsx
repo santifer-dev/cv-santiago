@@ -5,27 +5,30 @@
  * matches exactly what React produces. This enables hydrateRoot() on the
  * client to adopt the existing DOM without replacing it (zero CLS).
  *
+ * Articles are loaded from the article registry. Only articles whose
+ * component files exist will be prerendered (new case studies added to the
+ * registry but not yet created will be skipped gracefully).
+ *
  * Usage: npx tsx scripts/prerender.tsx  (runs automatically via "npm run build")
  */
 
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import React from 'react';
+import React, { type ComponentType } from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter, Routes, Route } from 'react-router-dom';
 import Critters from 'critters';
 import App from '../src/App.tsx';
-import N8nForPMs from '../src/N8nForPMs.tsx';
 import GlobalNav from '../src/GlobalNav.tsx';
-import { n8nContent } from '../src/n8n-i18n.ts';
+import { articleRegistry, type ArticleConfig } from '../src/articles/registry.ts';
 import { seo } from '../src/i18n.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
 
 // ---------------------------------------------------------------------------
-// SSR render per language
+// SSR render per language (home page)
 // ---------------------------------------------------------------------------
 function renderApp(lang: 'es' | 'en'): string {
   const path = lang === 'en' ? '/en' : '/';
@@ -39,13 +42,12 @@ function renderApp(lang: 'es' | 'en'): string {
   );
 }
 
-function renderN8nPage(lang: 'es' | 'en'): string {
-  const slug = n8nContent[lang].slug;
+function renderArticlePage(slug: string, ArticleComponent: ComponentType<{ lang: 'es' | 'en' }>, lang: 'es' | 'en'): string {
   return renderToString(
     <StaticRouter location={`/${slug}`}>
       <GlobalNav />
       <Routes>
-        <Route path={`/${slug}`} element={<N8nForPMs lang={lang} />} />
+        <Route path={`/${slug}`} element={<ArticleComponent lang={lang} />} />
       </Routes>
     </StaticRouter>
   );
@@ -81,39 +83,14 @@ try {
 const esSeo = seo.es;
 
 const injectedEs = indexHtml
-  // Inject ES content into #root
   .replace('<div id="root"></div>', `<div id="root">${esHtml}</div>`)
-  // Update SEO meta tags from i18n (single source of truth)
-  .replace(
-    /<title>[^<]*<\/title>/,
-    `<title>${esc(esSeo.title)}</title>`,
-  )
-  .replace(
-    /<meta name="title" content="[^"]*" \/>/,
-    `<meta name="title" content="${esc(esSeo.title)}" />`,
-  )
-  .replace(
-    /<meta name="description" content="[^"]*" \/>/,
-    `<meta name="description" content="${esc(esSeo.description)}" />`,
-  )
-  // Update OG tags
-  .replace(
-    /<meta property="og:title" content="[^"]*" \/>/,
-    `<meta property="og:title" content="${esc(esSeo.title)}" />`,
-  )
-  .replace(
-    /<meta property="og:description" content="[^"]*" \/>/,
-    `<meta property="og:description" content="${esc(esSeo.description)}" />`,
-  )
-  // Update Twitter tags
-  .replace(
-    /<meta name="twitter:title" content="[^"]*" \/>/,
-    `<meta name="twitter:title" content="${esc(esSeo.title)}" />`,
-  )
-  .replace(
-    /<meta name="twitter:description" content="[^"]*" \/>/,
-    `<meta name="twitter:description" content="${esc(esSeo.description)}" />`,
-  );
+  .replace(/<title>[^<]*<\/title>/, `<title>${esc(esSeo.title)}</title>`)
+  .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(esSeo.title)}" />`)
+  .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(esSeo.description)}" />`)
+  .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(esSeo.title)}" />`)
+  .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(esSeo.description)}" />`)
+  .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(esSeo.title)}" />`)
+  .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(esSeo.description)}" />`);
 
 // --- EN version ---
 let enHtml: string;
@@ -127,104 +104,95 @@ try {
 const enSeo = seo.en;
 
 let enPage = indexHtml
-  // Inject EN content into #root
   .replace('<div id="root"></div>', `<div id="root">${enHtml}</div>`)
-  // Switch to EN lang
   .replace('<html lang="es" class="dark">', '<html lang="en" class="dark">')
-  // Update SEO meta tags
-  .replace(
-    /<title>[^<]*<\/title>/,
-    `<title>${esc(enSeo.title)}</title>`,
-  )
-  .replace(
-    /<meta name="title" content="[^"]*" \/>/,
-    `<meta name="title" content="${esc(enSeo.title)}" />`,
-  )
-  .replace(
-    /<meta name="description" content="[^"]*" \/>/,
-    `<meta name="description" content="${esc(enSeo.description)}" />`,
-  )
-  // Update canonical to /en
-  .replace(
-    /<link rel="canonical" href="[^"]*" \/>/,
-    '<link rel="canonical" href="https://santifer.io/en" />',
-  )
-  // Update OG tags
-  .replace(
-    /<meta property="og:url" content="[^"]*" \/>/,
-    '<meta property="og:url" content="https://santifer.io/en" />',
-  )
-  .replace(
-    /<meta property="og:title" content="[^"]*" \/>/,
-    `<meta property="og:title" content="${esc(enSeo.title)}" />`,
-  )
-  .replace(
-    /<meta property="og:description" content="[^"]*" \/>/,
-    `<meta property="og:description" content="${esc(enSeo.description)}" />`,
-  )
-  .replace(
-    /<meta property="og:locale" content="es_ES" \/>/,
-    '<meta property="og:locale" content="en_US" />',
-  )
-  .replace(
-    /<meta property="og:locale:alternate" content="en_US" \/>/,
-    '<meta property="og:locale:alternate" content="es_ES" />',
-  )
-  // Update Twitter tags
-  .replace(
-    /<meta name="twitter:url" content="[^"]*" \/>/,
-    '<meta name="twitter:url" content="https://santifer.io/en" />',
-  )
-  .replace(
-    /<meta name="twitter:title" content="[^"]*" \/>/,
-    `<meta name="twitter:title" content="${esc(enSeo.title)}" />`,
-  )
-  .replace(
-    /<meta name="twitter:description" content="[^"]*" \/>/,
-    `<meta name="twitter:description" content="${esc(enSeo.description)}" />`,
-  );
+  .replace(/<title>[^<]*<\/title>/, `<title>${esc(enSeo.title)}</title>`)
+  .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(enSeo.title)}" />`)
+  .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(enSeo.description)}" />`)
+  .replace(/<link rel="canonical" href="[^"]*" \/>/, '<link rel="canonical" href="https://santifer.io/en" />')
+  .replace(/<meta property="og:url" content="[^"]*" \/>/, '<meta property="og:url" content="https://santifer.io/en" />')
+  .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(enSeo.title)}" />`)
+  .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(enSeo.description)}" />`)
+  .replace(/<meta property="og:locale" content="es_ES" \/>/, '<meta property="og:locale" content="en_US" />')
+  .replace(/<meta property="og:locale:alternate" content="en_US" \/>/, '<meta property="og:locale:alternate" content="es_ES" />')
+  .replace(/<meta name="twitter:url" content="[^"]*" \/>/, '<meta name="twitter:url" content="https://santifer.io/en" />')
+  .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(enSeo.title)}" />`)
+  .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(enSeo.description)}" />`);
 
-// --- n8n pages (ES + EN) ---
-function buildN8nPage(lang: 'es' | 'en'): string {
-  const n8n = n8nContent[lang];
-  const url = `https://santifer.io/${n8n.slug}`;
-  const altUrl = `https://santifer.io/${n8n.altSlug}`;
+// ---------------------------------------------------------------------------
+// Article pages — build from registry
+// ---------------------------------------------------------------------------
+interface ArticlePage {
+  slug: string;
+  html: string;
+}
+
+function buildArticlePage(
+  config: ArticleConfig,
+  lang: 'es' | 'en',
+  ArticleComponent: ComponentType<{ lang: 'es' | 'en' }>,
+): string {
+  const slug = config.slugs[lang];
+  const altSlug = config.slugs[lang === 'es' ? 'en' : 'es'];
+  const url = `https://santifer.io/${slug}`;
+  const altUrl = `https://santifer.io/${altSlug}`;
   const altLang = lang === 'es' ? 'en' : 'es';
-  const htmlLang = lang === 'es' ? 'es' : 'en';
+  const htmlLang = lang;
   const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
   const ogLocaleAlt = lang === 'es' ? 'en_US' : 'es_ES';
+  const articleSeo = config.seo[lang];
+  const xDefaultHref = `https://santifer.io/${config.xDefaultSlug || config.slugs.es}`;
 
-  let n8nHtml: string;
+  let renderedHtml: string;
   try {
-    n8nHtml = renderN8nPage(lang);
+    renderedHtml = renderArticlePage(slug, ArticleComponent, lang);
   } catch (err) {
-    console.error(`[prerender] SSR failed for ${n8n.slug}, falling back to empty root:`, err);
-    n8nHtml = '';
+    console.error(`[prerender] SSR failed for ${slug}, falling back to empty root:`, err);
+    renderedHtml = '';
   }
 
-  // hreflang links
-  const hreflangLinks = `<link rel="alternate" hreflang="${lang}" href="${url}" /><link rel="alternate" hreflang="${altLang}" href="${altUrl}" /><link rel="alternate" hreflang="x-default" href="https://santifer.io/n8n-para-pms" />`;
+  const hreflangLinks = `<link rel="alternate" hreflang="${lang}" href="${url}" /><link rel="alternate" hreflang="${altLang}" href="${altUrl}" /><link rel="alternate" hreflang="x-default" href="${xDefaultHref}" />`;
 
   return indexHtml
-    .replace('<div id="root"></div>', `<div id="root">${n8nHtml}</div>`)
+    .replace('<div id="root"></div>', `<div id="root">${renderedHtml}</div>`)
     .replace('<html lang="es" class="dark">', `<html lang="${htmlLang}" class="dark">`)
-    .replace(/<title>[^<]*<\/title>/, `<title>${esc(n8n.seo.title)}</title>`)
-    .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(n8n.seo.title)}" />`)
-    .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(n8n.seo.description)}" />`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${esc(articleSeo.title)}</title>`)
+    .replace(/<meta name="title" content="[^"]*" \/>/, `<meta name="title" content="${esc(articleSeo.title)}" />`)
+    .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${esc(articleSeo.description)}" />`)
     .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${url}" />${hreflangLinks}`)
     .replace(/<meta property="og:type" content="[^"]*" \/>/, '<meta property="og:type" content="article" />')
     .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${url}" />`)
-    .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(n8n.seo.title)}" />`)
-    .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(n8n.seo.description)}" />`)
+    .replace(/<meta property="og:title" content="[^"]*" \/>/, `<meta property="og:title" content="${esc(articleSeo.title)}" />`)
+    .replace(/<meta property="og:description" content="[^"]*" \/>/, `<meta property="og:description" content="${esc(articleSeo.description)}" />`)
     .replace(/<meta property="og:locale" content="es_ES" \/>/, `<meta property="og:locale" content="${ogLocale}" />`)
     .replace(/<meta property="og:locale:alternate" content="en_US" \/>/, `<meta property="og:locale:alternate" content="${ogLocaleAlt}" />`)
     .replace(/<meta name="twitter:url" content="[^"]*" \/>/, `<meta name="twitter:url" content="${url}" />`)
-    .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(n8n.seo.title)}" />`)
-    .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(n8n.seo.description)}" />`);
+    .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${esc(articleSeo.title)}" />`)
+    .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(articleSeo.description)}" />`);
 }
 
-const n8nEsPage = buildN8nPage('es');
-const n8nEnPage = buildN8nPage('en');
+// Load article components and build pages
+const articlePages: ArticlePage[] = [];
+
+for (const config of articleRegistry) {
+  let ArticleComponent: ComponentType<{ lang: 'es' | 'en' }>;
+  try {
+    const mod = await config.component();
+    ArticleComponent = mod.default;
+  } catch {
+    console.log(`[prerender] Skipping ${config.id} — component not found yet`);
+    continue;
+  }
+
+  const seen = new Set<string>();
+  for (const lang of ['es', 'en'] as const) {
+    const slug = config.slugs[lang];
+    if (seen.has(slug)) continue; // same slug for both languages
+    seen.add(slug);
+    const html = buildArticlePage(config, lang, ArticleComponent);
+    articlePages.push({ slug, html });
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Critical CSS inlining with Critters
@@ -232,63 +200,57 @@ const n8nEnPage = buildN8nPage('en');
 const critters = new Critters({
   path: distDir,
   publicPath: '/',
-  inlineFonts: false,     // fonts are preloaded separately
-  preload: 'media',       // media="print" onload="this.media='all'" — most reliable async CSS
+  inlineFonts: false,
+  preload: 'media',
   compress: true,
   reduceInlineStyles: true,
 });
 
-// Remove duplicate image preloads added by critters (we already have one in <head>)
 function dedupePreloads(html: string): string {
-  // Remove critters-added image preload (no type= attribute) — keep our manual one (has type="image/webp")
   return html.replace(/<link rel="preload" as="image" href="\/foto-avatar\.webp">/g, '');
 }
 
-async function inlineCriticalCSS() {
+async function writePage(html: string, outputPath: string, label: string) {
+  const dir = dirname(outputPath);
+  mkdirSync(dir, { recursive: true });
   try {
-    const processedEs = dedupePreloads(await critters.process(injectedEs));
-    writeFileSync(indexPath, processedEs, 'utf-8');
-    console.log('[prerender] ES: dist/index.html updated (with critical CSS)');
+    const processed = dedupePreloads(await critters.process(html));
+    writeFileSync(outputPath, processed, 'utf-8');
+    console.log(`[prerender] ${label} (with critical CSS)`);
+  } catch {
+    writeFileSync(outputPath, html, 'utf-8');
+    console.log(`[prerender] ${label} (no critical CSS)`);
+  }
+}
 
-    const processedEn = dedupePreloads(await critters.process(enPage));
-    const enDir = resolve(distDir, 'en');
-    mkdirSync(enDir, { recursive: true });
-    writeFileSync(resolve(enDir, 'index.html'), processedEn, 'utf-8');
-    console.log('[prerender] EN: dist/en/index.html created (with critical CSS)');
+async function inlineCriticalCSS() {
+  // Home pages
+  await writePage(injectedEs, indexPath, 'ES: dist/index.html updated');
+  await writePage(enPage, resolve(distDir, 'en', 'index.html'), 'EN: dist/en/index.html created');
 
-    const processedN8nEs = dedupePreloads(await critters.process(n8nEsPage));
-    const n8nEsDir = resolve(distDir, 'n8n-para-pms');
-    mkdirSync(n8nEsDir, { recursive: true });
-    writeFileSync(resolve(n8nEsDir, 'index.html'), processedN8nEs, 'utf-8');
-    console.log('[prerender] n8n-para-pms: dist/n8n-para-pms/index.html created (with critical CSS)');
-
-    const processedN8nEn = dedupePreloads(await critters.process(n8nEnPage));
-    const n8nEnDir = resolve(distDir, 'n8n-for-pms');
-    mkdirSync(n8nEnDir, { recursive: true });
-    writeFileSync(resolve(n8nEnDir, 'index.html'), processedN8nEn, 'utf-8');
-    console.log('[prerender] n8n-for-pms: dist/n8n-for-pms/index.html created (with critical CSS)');
-  } catch (err) {
-    // Fallback: write without critical CSS inlining
-    console.error('[prerender] Critters failed, writing without critical CSS:', err);
-    writeFileSync(indexPath, injectedEs, 'utf-8');
-    console.log('[prerender] ES: dist/index.html updated (no critical CSS)');
-
-    const enDir = resolve(distDir, 'en');
-    mkdirSync(enDir, { recursive: true });
-    writeFileSync(resolve(enDir, 'index.html'), enPage, 'utf-8');
-    console.log('[prerender] EN: dist/en/index.html created (no critical CSS)');
-
-    const n8nEsDir = resolve(distDir, 'n8n-para-pms');
-    mkdirSync(n8nEsDir, { recursive: true });
-    writeFileSync(resolve(n8nEsDir, 'index.html'), n8nEsPage, 'utf-8');
-    console.log('[prerender] n8n-para-pms: dist/n8n-para-pms/index.html created (no critical CSS)');
-
-    const n8nEnDir = resolve(distDir, 'n8n-for-pms');
-    mkdirSync(n8nEnDir, { recursive: true });
-    writeFileSync(resolve(n8nEnDir, 'index.html'), n8nEnPage, 'utf-8');
-    console.log('[prerender] n8n-for-pms: dist/n8n-for-pms/index.html created (no critical CSS)');
+  // Article pages
+  for (const { slug, html } of articlePages) {
+    await writePage(html, resolve(distDir, slug, 'index.html'), `${slug}: dist/${slug}/index.html created`);
   }
 }
 
 await inlineCriticalCSS();
+
+// ---------------------------------------------------------------------------
+// 404 page — Vercel serves this with HTTP 404 status automatically
+// ---------------------------------------------------------------------------
+const notFoundHtml = indexHtml
+  .replace('<div id="root"></div>', `<div id="root"><div style="min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 1.5rem"><p style="font-size:6rem;font-weight:bold;color:var(--primary);margin-bottom:1rem;font-family:var(--font-display)">404</p><h1 style="font-size:1.5rem;font-weight:600;color:var(--foreground);margin-bottom:0.5rem">Page not found</h1><p style="color:var(--muted-foreground);margin-bottom:2rem;max-width:28rem">The page you're looking for doesn't exist or has been moved.</p><a href="/" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:0.75rem;background:var(--primary);color:var(--primary-foreground);font-weight:500;text-decoration:none">← Back to home</a></div></div>`)
+  .replace(/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, nofollow" />')
+  .replace(/<title>[^<]*<\/title>/, '<title>404 — Page not found | santifer.io</title>');
+
+// Add noindex if no robots meta exists
+if (!notFoundHtml.includes('name="robots"')) {
+  const withNoindex = notFoundHtml.replace('</head>', '<meta name="robots" content="noindex, nofollow" /></head>');
+  writeFileSync(resolve(distDir, '404.html'), withNoindex, 'utf-8');
+} else {
+  writeFileSync(resolve(distDir, '404.html'), notFoundHtml, 'utf-8');
+}
+console.log('[prerender] 404: dist/404.html created');
+
 console.log('[prerender] Done.');

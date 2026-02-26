@@ -1,140 +1,56 @@
-import { useState, useEffect } from 'react'
-import { Download, Copy, Check, ExternalLink, Clock, ChevronRight } from 'lucide-react'
+import { useEffect } from 'react'
 import { n8nContent, CLASSIFICATION_PROMPT, type N8nLang } from './n8n-i18n'
+import { buildArticleJsonLd } from './articles/json-ld'
+import {
+  AnchorHeading,
+  CopyButton,
+  DownloadButton,
+  ArticleLayout,
+  ArticleHeader,
+  ArticleFooter,
+  FaqSection,
+  ResourcesList,
+  LessonsSection,
+  CaseStudyCta,
+} from './articles/components'
 
 function buildJsonLd(lang: N8nLang) {
   const t = n8nContent[lang]
-  const url = `https://santifer.io/${t.slug}`
-  const altUrl = `https://santifer.io/${t.altSlug}`
-  const inLanguage = lang === 'es' ? 'es' : 'en'
-
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'TechArticle',
-        '@id': `${url}/#article`,
-        headline: t.header.h1 + ' — Cheat Sheet',
-        alternativeHeadline: t.seo.title,
-        description: t.seo.description,
-        author: { '@id': 'https://santifer.io/#person' },
-        publisher: {
-          '@type': 'Organization',
-          name: 'AI Product Academy',
-          url: 'https://maven.com/marily-nika/ai-pm-bootcamp',
-        },
-        datePublished: '2026-02-24',
-        dateModified: '2026-02-24',
-        keywords: ['n8n', 'product manager', 'automation', 'AI', 'workflow', 'sprint report', 'feedback classification', 'no-code'],
-        url,
-        mainEntityOfPage: url,
-        image: [
-          'https://santifer.io/workflows/n8n-sprint-report-automation-workflow.webp',
-          'https://santifer.io/workflows/n8n-ai-feedback-classification-workflow.webp',
-        ],
-        inLanguage,
-        isPartOf: { '@id': 'https://santifer.io/#website' },
-        about: [
-          { '@type': 'SoftwareApplication', name: 'n8n', url: 'https://n8n.io', applicationCategory: 'Workflow Automation' },
-          { '@type': 'Thing', name: 'Product Management Automation' },
-        ],
-        proficiencyLevel: 'Beginner',
-        dependencies: 'n8n Cloud (free tier), Airtable, Slack',
-        workTranslation: { '@id': `${altUrl}/#article` },
-      },
-      {
-        '@type': 'Person',
-        '@id': 'https://santifer.io/#person',
-        name: 'Santiago Fernández de Valderrama Aparicio',
-        url: 'https://santifer.io',
-        jobTitle: 'AI Product Manager',
-        sameAs: [
-          'https://www.linkedin.com/in/santifer',
-          'https://github.com/santifer-dev',
-        ],
-      },
-      {
-        '@type': 'WebSite',
-        '@id': 'https://santifer.io/#website',
-        name: 'santifer.io',
-        url: 'https://santifer.io',
-      },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: t.nav.breadcrumbHome, item: 'https://santifer.io' },
-          { '@type': 'ListItem', position: 2, name: t.nav.breadcrumbCurrent, item: url },
-        ],
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: t.faq.items.map((item) => ({
-          '@type': 'Question',
-          name: item.q,
-          acceptedAnswer: { '@type': 'Answer', text: item.a },
-        })),
-      },
-      {
-        '@type': 'HowTo',
-        name: lang === 'es' ? 'Cómo Importar Workflow Templates de n8n' : 'How to Import n8n Workflow Templates',
-        description: t.import.description,
-        inLanguage,
-        step: [
-          { '@type': 'HowToStep', position: 1, name: lang === 'es' ? 'Regístrate en n8n' : 'Sign up for n8n', text: lang === 'es' ? 'Crea una cuenta gratuita en n8n.io Cloud.' : 'Create a free account at n8n.io Cloud.' },
-          { '@type': 'HowToStep', position: 2, name: lang === 'es' ? 'Descarga el JSON del workflow' : 'Download the workflow JSON', text: lang === 'es' ? 'Descarga el archivo JSON del workflow template desde esta página.' : 'Download the workflow template JSON file from this page.' },
-          { '@type': 'HowToStep', position: 3, name: lang === 'es' ? 'Importa en n8n' : 'Import into n8n', text: lang === 'es' ? 'En n8n, pulsa el botón +, selecciona "Import from File" y elige el JSON descargado.' : 'In n8n, click the + button, select "Import from File", and choose the downloaded JSON file.' },
-          { '@type': 'HowToStep', position: 4, name: lang === 'es' ? 'Conecta tus credenciales' : 'Connect your credentials', text: lang === 'es' ? 'Conecta tus credenciales de Slack, Airtable e IA (Anthropic/OpenAI) a los nodos del workflow importado.' : 'Connect your own Slack, Airtable, and AI (Anthropic/OpenAI) credentials to the imported workflow nodes.' },
-        ],
-        tool: [
-          { '@type': 'HowToTool', name: 'n8n Cloud (free tier)' },
-          { '@type': 'HowToTool', name: 'Slack workspace' },
-          { '@type': 'HowToTool', name: 'Airtable account' },
-        ],
-      },
+  return buildArticleJsonLd({
+    lang,
+    url: `https://santifer.io/${t.slug}`,
+    altUrl: `https://santifer.io/${t.altSlug}`,
+    headline: t.header.h1 + ' — Cheat Sheet',
+    alternativeHeadline: t.seo.title,
+    description: t.seo.description,
+    datePublished: '2026-02-24',
+    dateModified: '2026-02-24',
+    keywords: ['n8n', 'product manager', 'automation', 'AI', 'workflow', 'sprint report', 'feedback classification', 'no-code'],
+    images: [
+      'https://santifer.io/workflows/n8n-sprint-report-automation-workflow.webp',
+      'https://santifer.io/workflows/n8n-ai-feedback-classification-workflow.webp',
     ],
-  }
-}
-
-function CopyButton({ text, copyLabel, copiedLabel }: { text: string; copyLabel: string; copiedLabel: string }) {
-  const [copied, setCopied] = useState(false)
-  const handleCopy = () => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-  return (
-    <button
-      onClick={handleCopy}
-      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-    >
-      {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-      {copied ? copiedLabel : copyLabel}
-    </button>
-  )
-}
-
-function DownloadButton({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      download
-      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors font-medium text-foreground"
-    >
-      <Download className="w-4 h-4 text-primary" />
-      {label}
-    </a>
-  )
-}
-
-function AnchorHeading({ id, children }: { id: string; children: React.ReactNode }) {
-  return (
-    <h2 id={id} className="group font-display text-2xl md:text-3xl font-bold text-foreground mt-16 mb-6 scroll-mt-24">
-      <a href={`#${id}`} className="hover:text-primary transition-colors">
-        {children}
-        <span className="ml-2 opacity-0 group-hover:opacity-100 text-muted-foreground transition-opacity">#</span>
-      </a>
-    </h2>
-  )
+    breadcrumbHome: t.nav.breadcrumbHome,
+    breadcrumbCurrent: t.nav.breadcrumbCurrent,
+    faq: t.faq.items,
+    articleType: 'TechArticle',
+    about: [
+      { '@type': 'SoftwareApplication', name: 'n8n', url: 'https://n8n.io', applicationCategory: 'Workflow Automation' },
+      { '@type': 'Thing', name: 'Product Management Automation' },
+    ],
+    extra: { proficiencyLevel: 'Beginner', dependencies: 'n8n Cloud (free tier), Airtable, Slack' },
+    howTo: {
+      name: lang === 'es' ? 'Cómo Importar Workflow Templates de n8n' : 'How to Import n8n Workflow Templates',
+      description: t.import.description,
+      steps: [
+        { name: lang === 'es' ? 'Regístrate en n8n' : 'Sign up for n8n', text: lang === 'es' ? 'Crea una cuenta gratuita en n8n.io Cloud.' : 'Create a free account at n8n.io Cloud.' },
+        { name: lang === 'es' ? 'Descarga el JSON del workflow' : 'Download the workflow JSON', text: lang === 'es' ? 'Descarga el archivo JSON del workflow template desde esta página.' : 'Download the workflow template JSON file from this page.' },
+        { name: lang === 'es' ? 'Importa en n8n' : 'Import into n8n', text: lang === 'es' ? 'En n8n, pulsa el botón +, selecciona "Import from File" y elige el JSON descargado.' : 'In n8n, click the + button, select "Import from File", and choose the downloaded JSON file.' },
+        { name: lang === 'es' ? 'Conecta tus credenciales' : 'Connect your credentials', text: lang === 'es' ? 'Conecta tus credenciales de Slack, Airtable e IA (Anthropic/OpenAI) a los nodos del workflow importado.' : 'Connect your own Slack, Airtable, and AI (Anthropic/OpenAI) credentials to the imported workflow nodes.' },
+      ],
+      tools: [{ name: 'n8n Cloud (free tier)' }, { name: 'Slack workspace' }, { name: 'Airtable account' }],
+    },
+  })
 }
 
 export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
@@ -222,57 +138,18 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
     }
   }, [lang, t])
 
-  return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
-        {/* Header */}
-        <header className="mb-10">
-          <p className="text-primary font-medium text-sm mb-3 tracking-wide uppercase">
-            {t.header.kicker.includes('<a>') ? (
-              t.header.kicker.split(/<a>|<\/a>/).map((part, i) =>
-                i === 1 ? (
-                  <a key={i} href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms" target="_blank" rel="noopener noreferrer nofollow" className="hover:underline">{part}</a>
-                ) : (
-                  <span key={i}>{part}</span>
-                )
-              )
-            ) : t.header.kicker}
-          </p>
-          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-foreground leading-tight mb-4">
-            {t.header.h1}
-          </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed mb-6">
-            {t.header.subtitle}
-          </p>
+  const BOOTCAMP_URL = 'https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms'
 
-          {/* Author byline */}
-          <div className="flex items-center gap-3 pb-6 border-b border-border">
-            <img
-              src="/foto-avatar-sm.webp"
-              alt="Santiago Fernández de Valderrama"
-              className="w-10 h-10 rounded-full"
-              width={40}
-              height={40}
-            />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <a
-                  href="https://linkedin.com/in/santifer"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-foreground hover:text-primary transition-colors"
-                >
-                  Santiago Fernández de Valderrama
-                </a>
-                <ExternalLink className="w-3 h-3 text-muted-foreground" />
-              </div>
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <span>{t.header.date}</span>
-                <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{t.readingTime}</span>
-              </div>
-            </div>
-          </div>
-        </header>
+  return (
+    <ArticleLayout>
+        <ArticleHeader
+          kicker={t.header.kicker}
+          kickerLink={BOOTCAMP_URL}
+          h1={t.header.h1}
+          subtitle={t.header.subtitle}
+          date={t.header.date}
+          readingTime={t.readingTime}
+        />
 
         {/* Content */}
         <article className="prose-custom">
@@ -485,21 +362,13 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           </div>
 
           {/* Bootcamp CTA */}
-          <div className="my-10 relative rounded-2xl p-[1.5px] bg-gradient-theme">
-            <div className="p-6 sm:p-8 rounded-[calc(1rem-1.5px)] bg-card">
-              <p className="font-display font-semibold text-foreground text-lg mb-2">{t.bootcampCta.heading}</p>
-              <p className="text-muted-foreground leading-relaxed mb-4">{t.bootcampCta.body}</p>
-              <a
-                href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
-              >
-                {t.bootcampCta.cta}
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
+          <CaseStudyCta
+            heading={t.bootcampCta.heading}
+            body={t.bootcampCta.body}
+            ctaLabel={t.bootcampCta.cta}
+            ctaHref={BOOTCAMP_URL}
+            external
+          />
 
           {/* Get Started */}
           <AnchorHeading id="get-started">{t.getStarted.heading}</AnchorHeading>
@@ -548,32 +417,10 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           </blockquote>
 
           {/* Lessons Learned */}
-          <AnchorHeading id="lessons">{t.lessons.heading}</AnchorHeading>
-          <div className="space-y-4 mb-8">
-            {t.lessons.items.map((lesson, i) => (
-              <div key={i} className="flex gap-3">
-                <span className="text-primary font-bold text-lg shrink-0">{i + 1}.</span>
-                <div>
-                  <p className="font-medium text-foreground">{lesson.title}</p>
-                  <p className="text-muted-foreground">{lesson.detail}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <LessonsSection heading={t.lessons.heading} items={t.lessons.items} />
 
-          {/* FAQ visible */}
-          <AnchorHeading id="faq">{t.faq.heading}</AnchorHeading>
-          <div className="space-y-4 mb-8">
-            {t.faq.items.map((item) => (
-              <details key={item.q} className="group bg-card border border-border rounded-lg">
-                <summary className="px-5 py-4 cursor-pointer font-medium text-foreground flex items-center justify-between">
-                  {item.q}
-                  <ChevronRight className="w-4 h-4 text-muted-foreground group-open:rotate-90 transition-transform" />
-                </summary>
-                <p className="px-5 pb-4 text-muted-foreground">{item.a}</p>
-              </details>
-            ))}
-          </div>
+          {/* FAQ */}
+          <FaqSection heading={t.faq.heading} items={t.faq.items} />
 
           {/* Import Workflows */}
           <AnchorHeading id="import">{t.import.heading}</AnchorHeading>
@@ -592,56 +439,16 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           </div>
 
           {/* Resources */}
-          <AnchorHeading id="resources">{t.resources.heading}</AnchorHeading>
-          <ul className="space-y-2 text-muted-foreground mb-8">
-            {t.resources.items.map((item) => (
-              <li key={item.url} className="flex items-center gap-2">
-                <ExternalLink className="w-3.5 h-3.5 text-primary shrink-0" />
-                <a href={item.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">{item.label}</a>
-              </li>
-            ))}
-          </ul>
+          <ResourcesList heading={t.resources.heading} items={t.resources.items} />
         </article>
 
-        {/* Footer */}
-        <footer className="mt-16 pt-8 border-t border-border">
-          <div className="flex items-center gap-3 mb-6">
-            <img
-              src="/foto-avatar-sm.webp"
-              alt="Santiago Fernández de Valderrama"
-              className="w-12 h-12 rounded-full"
-              width={48}
-              height={48}
-            />
-            <div>
-              <p className="font-medium text-foreground">Santiago Fernández de Valderrama</p>
-              <p className="text-sm text-muted-foreground">
-                {t.footer.role} · {t.footer.fellowAt}{' '}
-                <a
-                  href="https://maven.com/marily-nika/ai-pm-bootcamp?utm_source=santifer&utm_medium=cheatsheet&utm_campaign=n8n-for-pms"
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="text-primary hover:underline"
-                >
-                  {t.footer.fellowLink}
-                </a>
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-3 mb-8">
-            <a href="https://santifer.io" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-card border border-border text-sm hover:border-primary/50 transition-colors text-muted-foreground hover:text-foreground">
-              santifer.io
-            </a>
-            <a href="https://linkedin.com/in/santifer" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-card border border-border text-sm hover:border-primary/50 transition-colors text-muted-foreground hover:text-foreground">
-              LinkedIn
-            </a>
-            <a href="https://github.com/santifer-dev" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-card border border-border text-sm hover:border-primary/50 transition-colors text-muted-foreground hover:text-foreground">
-              GitHub
-            </a>
-          </div>
-          <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Santiago Fernández de Valderrama. {t.footer.copyright}</p>
-        </footer>
-      </main>
-    </div>
+        <ArticleFooter
+          role={t.footer.role}
+          fellowAt={t.footer.fellowAt}
+          fellowLink={t.footer.fellowLink}
+          fellowUrl={BOOTCAMP_URL}
+          copyright={t.footer.copyright}
+        />
+    </ArticleLayout>
   )
 }

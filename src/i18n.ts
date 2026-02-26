@@ -329,7 +329,7 @@ export const translations = {
               text: 'Cita previa online con verificación de stock: confirma cita o genera pedido urgente',
             },
           ],
-          footer: 'Walkthrough de arquitectura disponible selectivamente',
+          footer: 'Leer el caso de éxito',
         },
         jacobo: {
           title: 'Agente AI Omnicanal "Jacobo"',
@@ -357,7 +357,8 @@ export const translations = {
               text: 'HITL handoff: escala a humano con contexto completo',
             },
           ],
-          soldWith: 'Playbook disponible bajo petición',
+          soldWith: 'Leer el caso de éxito',
+          caseStudyUrl: '/agente-ia-jacobo',
         },
         webSeo: {
           title: 'Web Programática + SEO Automatizado',
@@ -382,12 +383,15 @@ export const translations = {
             },
             { icon: 'bot', text: 'Optimización de crawl budget' },
           ],
-          codeAvailable: 'Código disponible bajo petición',
+          codeAvailable: 'Leer el caso de éxito',
+          caseStudyUrl: '/seo-programatico',
         },
         erp: {
           title: 'ERP Interno',
           desc: 'Pedidos, inventario, órdenes + purchase orders automáticos de stock mínimo',
           metric: '20+ h / mes',
+          caseStudyUrl: '/business-os-para-airtable',
+          caseStudyLabel: 'Leer el caso de éxito',
         },
         gpts: {
           title: 'GPTs Custom',
@@ -1023,7 +1027,7 @@ export const translations = {
               text: 'Online booking with stock check: confirms appointment or triggers urgent order',
             },
           ],
-          footer: 'Architecture walkthrough available selectively',
+          footer: 'Read the case study',
         },
         jacobo: {
           title: 'Omnichannel AI Agent "Jacobo"',
@@ -1051,7 +1055,8 @@ export const translations = {
               text: 'HITL handoff: escalates to human with full context',
             },
           ],
-          soldWith: 'Playbook available on request',
+          soldWith: 'Read the case study',
+          caseStudyUrl: '/ai-agent-jacobo',
         },
         webSeo: {
           title: 'Programmatic Web + Automated SEO',
@@ -1076,12 +1081,15 @@ export const translations = {
             },
             { icon: 'bot', text: 'Crawl budget optimization' },
           ],
-          codeAvailable: 'Source code available on request',
+          codeAvailable: 'Read the case study',
+          caseStudyUrl: '/programmatic-seo',
         },
         erp: {
           title: 'Internal ERP',
           desc: 'Orders, inventory, work orders + automatic min-stock purchase orders',
           metric: '20+ h / mo',
+          caseStudyUrl: '/business-os-for-airtable',
+          caseStudyLabel: 'Read the case study',
         },
         gpts: {
           title: 'Custom GPTs',

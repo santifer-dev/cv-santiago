@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Sun, Moon, Globe, House, X, ChevronRight } from 'lucide-react'
 import { translations, type Lang } from './i18n'
+import { getAltPaths, getPageTitles, getSectionLabels, getEsSlugs } from './articles/registry'
 
 /**
  * GlobalNav — unified navigation across all pages.
@@ -16,45 +17,11 @@ import { translations, type Lang } from './i18n'
  * when there's no bar (home, no banner), controls float fixed at top-6 right-6.
  */
 
-const ALT_PATH: Record<string, string> = {
-  '/': '/en',
-  '/en': '/',
-  '/n8n-para-pms': '/n8n-for-pms',
-  '/n8n-for-pms': '/n8n-para-pms',
-}
-
+const ALT_PATH = getAltPaths()
 const BANNER_DISMISSED_KEY = 'lang-banner-dismissed'
-
-const PAGE_TITLE: Record<string, string> = {
-  '/n8n-para-pms': 'n8n para PMs',
-  '/n8n-for-pms': 'n8n for PMs',
-}
-
-/** Short labels for breadcrumb display when scrolled to a section */
-const SECTION_LABELS: Record<string, Record<string, string>> = {
-  '/n8n-para-pms': {
-    'time-sinks': 'Tareas que Roban Tiempo',
-    'workflow-1': 'Workflow 1',
-    'workflow-2': 'Workflow 2',
-    'the-pattern': 'El Patrón',
-    'get-started': 'Empieza',
-    'lessons': 'Lecciones',
-    'faq': 'FAQ',
-    'import': 'Importar',
-    'resources': 'Recursos',
-  },
-  '/n8n-for-pms': {
-    'time-sinks': 'Time Sinks',
-    'workflow-1': 'Workflow 1',
-    'workflow-2': 'Workflow 2',
-    'the-pattern': 'The Pattern',
-    'get-started': 'Get Started',
-    'lessons': 'Lessons',
-    'faq': 'FAQ',
-    'import': 'Import',
-    'resources': 'Resources',
-  },
-}
+const PAGE_TITLE = getPageTitles()
+const SECTION_LABELS = getSectionLabels()
+const ES_SLUGS = getEsSlugs()
 
 /** Observes h2[id] elements and returns the currently visible section ID */
 function useActiveSection(pathname: string, enabled: boolean) {
@@ -107,7 +74,7 @@ function useActiveSection(pathname: string, enabled: boolean) {
 function useLang() {
   const { pathname } = useLocation()
   const isHome = pathname === '/' || pathname === '/en'
-  const lang: 'es' | 'en' = (pathname === '/' || pathname === '/n8n-para-pms') ? 'es' : 'en'
+  const lang: 'es' | 'en' = ES_SLUGS.has(pathname) ? 'es' : 'en'
   const pageTitle = PAGE_TITLE[pathname] ?? null
   return { pathname, isHome, lang, pageTitle }
 }

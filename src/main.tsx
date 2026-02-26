@@ -1,12 +1,18 @@
-import { StrictMode, lazy, Suspense, useState, useEffect, Component, type ReactNode } from 'react'
+import { StrictMode, lazy, Suspense, useState, useEffect, Component, type ReactNode, type ComponentType } from 'react'
 import { hydrateRoot, createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
-import N8nForPMs from './N8nForPMs.tsx'
 import GlobalNav from './GlobalNav.tsx'
+import { articleRegistry, getEsSlugs } from './articles/registry'
 
 const FloatingChat = lazy(() => import('./FloatingChat'))
+
+// Lazy-load article components from registry
+const articleComponents: Record<string, React.LazyExoticComponent<ComponentType<{ lang: 'es' | 'en' }>>> = {}
+for (const article of articleRegistry) {
+  articleComponents[article.id] = lazy(article.component)
+}
 
 class ChatErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
   state = { hasError: false }
@@ -36,7 +42,8 @@ function GlobalChat() {
 
   if (!hydrated) return null
 
-  const lang = (pathname === '/' || pathname === '/n8n-para-pms') ? 'es' : 'en'
+  const esSlugs = getEsSlugs()
+  const lang = esSlugs.has(pathname) ? 'es' : 'en'
 
   return (
     <ChatErrorBoundary>
@@ -55,18 +62,59 @@ console.log('%cThe %cbest %cwork %cis %cinvisible.', 'color: #94a3b8; font-size:
 console.log('%cYou just found some of it.', 'color: #94a3b8; font-size: 13px;')
 console.log('%c I build the details. Let\'s solve something hard → hi@santifer.io ', 'background: #f97316; color: #1a1a1a; font-size: 13px; font-weight: bold; padding: 4px 8px; border-radius: 3px;')
 
+function NotFound() {
+  const { pathname } = useLocation()
+  const isEn = pathname.startsWith('/en') || /^\/[a-z]+-[a-z]+-[a-z]+/.test(pathname)
+
+  useEffect(() => {
+    let robots = document.querySelector('meta[name="robots"]') as HTMLMetaElement
+    if (!robots) { robots = document.createElement('meta'); robots.name = 'robots'; document.head.appendChild(robots) }
+    robots.content = 'noindex, nofollow'
+    document.title = '404 — Page not found | santifer.io'
+    return () => { robots.content = 'index, follow' }
+  }, [])
+
+  return (
+    <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6">
+      <p className="text-8xl font-display font-bold text-primary mb-4">404</p>
+      <h1 className="text-2xl font-display font-semibold text-foreground mb-2">
+        {isEn ? 'Page not found' : 'Página no encontrada'}
+      </h1>
+      <p className="text-muted-foreground mb-8 max-w-md">
+        {isEn
+          ? "The page you're looking for doesn't exist or has been moved."
+          : 'La página que buscas no existe o ha sido movida.'}
+      </p>
+      <Link
+        to={isEn ? '/en' : '/'}
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+      >
+        {isEn ? '← Back to home' : '← Volver al inicio'}
+      </Link>
+    </div>
+  )
+}
+
 const root = document.getElementById('root')!
 const app = (
   <StrictMode>
     <BrowserRouter>
       <GlobalNav />
       <PageTransition>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/en" element={<App />} />
-          <Route path="/n8n-para-pms" element={<N8nForPMs lang="es" />} />
-          <Route path="/n8n-for-pms" element={<N8nForPMs lang="en" />} />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/en" element={<App />} />
+            {articleRegistry.map((article) => {
+              const ArticleComponent = articleComponents[article.id]
+              return [
+                <Route key={`${article.id}-es`} path={`/${article.slugs.es}`} element={<ArticleComponent lang="es" />} />,
+                <Route key={`${article.id}-en`} path={`/${article.slugs.en}`} element={<ArticleComponent lang="en" />} />,
+              ]
+            })}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </PageTransition>
       <GlobalChat />
     </BrowserRouter>

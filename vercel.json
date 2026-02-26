@@ -45,22 +45,15 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/en",
-      "destination": "/en/index.html"
-    },
-    {
-      "source": "/n8n-para-pms",
-      "destination": "/n8n-para-pms/index.html"
-    },
-    {
-      "source": "/n8n-for-pms",
-      "destination": "/n8n-for-pms/index.html"
-    },
-    {
-      "source": "/((?!api|assets|en|n8n-para-pms|n8n-for-pms|.*\\..*).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/n8n-para-pms", "destination": "/n8n-para-pms/index.html" },
+    { "source": "/n8n-for-pms", "destination": "/n8n-for-pms/index.html" },
+    { "source": "/agente-ia-jacobo", "destination": "/agente-ia-jacobo/index.html" },
+    { "source": "/ai-agent-jacobo", "destination": "/ai-agent-jacobo/index.html" },
+    { "source": "/business-os-para-airtable", "destination": "/business-os-para-airtable/index.html" },
+    { "source": "/business-os-for-airtable", "destination": "/business-os-for-airtable/index.html" },
+    { "source": "/seo-programatico", "destination": "/seo-programatico/index.html" },
+    { "source": "/programmatic-seo", "destination": "/programmatic-seo/index.html" }
   ],
   "crons": [
     {

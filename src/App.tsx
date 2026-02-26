@@ -1274,7 +1274,7 @@ function App() {
                       )
                     })}
                   </ul>
-                  <a href="#contact" className="block text-xs font-medium italic mt-auto pt-4 text-gold hover:underline transition-colors duration-200">{t.experience.santifer.businessOS.footer}</a>
+                  <Link to={t.experience.santifer.erp.caseStudyUrl} className="block text-xs font-medium italic mt-auto pt-4 text-gold hover:underline transition-colors duration-200">{t.experience.santifer.businessOS.footer}</Link>
                 </div>
                 <div className="grid grid-cols-3 lg:flex lg:flex-col gap-2 lg:gap-3 mt-4 lg:mt-0">
                   {t.experience.santifer.businessOS.metrics.map((metric, i) => (
@@ -1318,7 +1318,7 @@ function App() {
                     )
                   })}
                 </ul>
-                <a href="#contact" className="text-xs font-medium text-primary italic mt-auto pt-4 hover:underline">{t.experience.santifer.jacobo.soldWith}</a>
+                <a href={lang === 'es' ? 'mailto:hola@santifer.io?subject=Jacobo AI Agent' : 'mailto:hi@santifer.io?subject=Jacobo AI Agent'} className="text-xs font-medium text-primary italic mt-auto pt-4 hover:underline">{t.experience.santifer.jacobo.soldWith}</a>
               </div>
             </AnimatedSection>
 
@@ -1350,7 +1350,7 @@ function App() {
                     )
                   })}
                 </ul>
-                <a href="#contact" className="text-xs font-medium text-accent italic mt-auto pt-4 hover:underline">{t.experience.santifer.webSeo.codeAvailable}</a>
+                <a href={lang === 'es' ? 'mailto:hola@santifer.io?subject=SEO Programático' : 'mailto:hi@santifer.io?subject=Programmatic SEO'} className="text-xs font-medium text-accent italic mt-auto pt-4 hover:underline">{t.experience.santifer.webSeo.codeAvailable}</a>
               </div>
             </AnimatedSection>
 
@@ -1367,12 +1367,12 @@ function App() {
 
             {/* ERP card */}
             <AnimatedSection delay={0.3}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+              <Link to={t.experience.santifer.erp.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
                 <Database className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.erp.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.erp.desc}</p>
                 <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.erp.metric}</span>
-              </div>
+              </Link>
             </AnimatedSection>
 
             {/* GPTs card */}
