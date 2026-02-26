@@ -5,7 +5,7 @@ import { buildArticleJsonLd } from './articles/json-ld'
 function ReelCard({ reelId, caption }: { reelId: string; caption: string }) {
   return (
     <a
-      href={`https://www.instagram.com/reel/${reelId}/`}
+      href={`https://www.instagram.com/santifer/reel/${reelId}/`}
       target="_blank"
       rel="noopener noreferrer"
       className="block rounded-xl overflow-hidden border border-border bg-card group"
