@@ -302,7 +302,7 @@ export const translations = {
           modules: [
             {
               icon: 'database',
-              text: 'ERP completo con 496 campos y 20+ validaciones automáticas',
+              text: 'ERP completo con 496 campos y 50+ validaciones automáticas',
             },
             {
               icon: 'users',
@@ -1003,7 +1003,7 @@ export const translations = {
           modules: [
             {
               icon: 'database',
-              text: 'Full ERP with 496 fields and 20+ automatic validations',
+              text: 'Full ERP with 496 fields and 50+ automatic validations',
             },
             {
               icon: 'users',
