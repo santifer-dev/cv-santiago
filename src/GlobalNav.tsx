@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Sun, Moon, Globe, House, X, ChevronRight } from 'lucide-react'
+import { Sun, Moon, House, X, ChevronRight } from 'lucide-react'
 import { translations, type Lang } from './i18n'
 import { getAltPaths, getPageTitles, getSectionLabels, getEsSlugs } from './articles/registry'
 
@@ -163,17 +163,46 @@ function useLanguageBanner(lang: Lang) {
   return { showBanner: visible, dismiss, animateBanner: visible && isFirstAppearance.current }
 }
 
-/** Shared controls: Globe lang pill + theme circle */
-function NavControls({ altPath, altLabel, isDark, toggleTheme }: {
-  altPath: string; altLabel: string; isDark: boolean; toggleTheme: () => void
+/** Circular flag icons — Spain (red-yellow-red) and UK (Union Jack simplified) */
+function FlagES({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" aria-hidden="true">
+      <clipPath id="flagCircleES"><circle cx="8" cy="8" r="8" /></clipPath>
+      <g clipPath="url(#flagCircleES)">
+        <rect y="0" width="16" height="4" fill="#c60b1e" />
+        <rect y="4" width="16" height="8" fill="#ffc400" />
+        <rect y="12" width="16" height="4" fill="#c60b1e" />
+      </g>
+    </svg>
+  )
+}
+
+function FlagEN({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" aria-hidden="true">
+      <clipPath id="flagCircleEN"><circle cx="8" cy="8" r="8" /></clipPath>
+      <g clipPath="url(#flagCircleEN)">
+        <rect width="16" height="16" fill="#012169" />
+        <path d="M0 0L16 16M16 0L0 16" stroke="#fff" strokeWidth="2.5" />
+        <path d="M0 0L16 16M16 0L0 16" stroke="#c8102e" strokeWidth="1.5" />
+        <path d="M8 0V16M0 8H16" stroke="#fff" strokeWidth="4" />
+        <path d="M8 0V16M0 8H16" stroke="#c8102e" strokeWidth="2.5" />
+      </g>
+    </svg>
+  )
+}
+
+/** Shared controls: flag lang pill + theme circle */
+function NavControls({ altPath, altLabel, lang, isDark, toggleTheme }: {
+  altPath: string; altLabel: string; lang: Lang; isDark: boolean; toggleTheme: () => void
 }) {
   return (
     <div className="flex items-center gap-2">
       <Link
         to={altPath}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+        className="inline-flex items-center justify-center gap-1.5 w-[4.5rem] py-1.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
       >
-        <Globe className="w-3.5 h-3.5" />
+        {lang === 'es' ? <FlagES className="w-3.5 h-3.5" /> : <FlagEN className="w-3.5 h-3.5" />}
         {altLabel}
       </Link>
       <button
@@ -222,7 +251,7 @@ export default function GlobalNav() {
     navigate(altPath)
   }
 
-  const controls = <NavControls altPath={altPath} altLabel={altLabel} isDark={isDark} toggleTheme={toggleTheme} />
+  const controls = <NavControls altPath={altPath} altLabel={altLabel} lang={lang} isDark={isDark} toggleTheme={toggleTheme} />
 
   const fade = (duration: string) => ({ animation: `nav-fade-in ${duration} ease-out` })
 
@@ -232,12 +261,12 @@ export default function GlobalNav() {
       className="flex items-center gap-2.5 text-sm"
       style={animateBanner ? fade('0.4s') : undefined}
     >
-      <span className="text-muted-foreground hidden sm:inline">{t.ui.languageBanner}</span>
+      <span className="text-muted-foreground hidden lg:inline">{t.ui.languageBanner}</span>
       <button
         onClick={switchLang}
         className="inline-flex items-center gap-1 font-medium text-primary hover:text-primary/80 transition-colors"
       >
-        {t.ui.languageBannerSwitchPrefix}<Globe className="w-3.5 h-3.5 mx-0.5" />{t.ui.languageBannerSwitchLang}
+        {t.ui.languageBannerSwitchPrefix}{lang === 'es' ? <FlagEN className="w-3.5 h-3.5 mx-0.5" /> : <FlagES className="w-3.5 h-3.5 mx-0.5" />}{t.ui.languageBannerSwitchLang}
       </button>
       <button
         onClick={dismiss}
@@ -257,56 +286,49 @@ export default function GlobalNav() {
           className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
           style={animateBar ? fade('0.35s') : undefined}
         />
-        <div className="relative pt-4 pb-3 px-6 flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            {/* Left: back link on inner pages, empty on home */}
-            <div className="min-w-0 flex items-center">
-              {!isHome && (
-                <nav
-                  aria-label="Breadcrumb"
-                  className="inline-flex items-center gap-1.5 text-sm"
-                  style={animateBackLink ? fade('0.4s') : undefined}
+        <div className="relative pt-4 pb-3 px-6 flex items-center justify-between">
+          {/* Left: back link on inner pages, empty on home */}
+          <div className="min-w-0 flex items-center">
+            {!isHome && (
+              <nav
+                aria-label="Breadcrumb"
+                className="inline-flex items-center gap-1.5 text-sm"
+                style={animateBackLink ? fade('0.4s') : undefined}
+              >
+                <Link
+                  to={lang === 'en' ? '/en' : '/'}
+                  className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors shrink-0"
                 >
-                  <Link
-                    to={lang === 'en' ? '/en' : '/'}
-                    className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors shrink-0"
-                  >
-                    <House className="w-4 h-4" />
-                    <span className="hidden sm:inline">santifer.io</span>
-                  </Link>
-                  {pageTitle && (
-                    <>
-                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
-                      <button
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className={`hover:text-foreground transition-colors cursor-pointer truncate ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
-                      >
-                        {pageTitle}
-                      </button>
-                    </>
-                  )}
-                  {activeSectionLabel && (
-                    <>
-                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0 hidden sm:block" />
-                      <span className="text-foreground font-medium truncate max-w-[140px] sm:max-w-none hidden sm:inline">
-                        {activeSectionLabel}
-                      </span>
-                    </>
-                  )}
-                </nav>
-              )}
-            </div>
-            {/* Right: controls */}
-            <div className="flex items-center gap-2 shrink-0">
-              {controls}
-            </div>
+                  <House className="w-4 h-4" />
+                  <span className="hidden sm:inline">santifer.io</span>
+                </Link>
+                {pageTitle && (
+                  <>
+                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+                    <button
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className={`hover:text-foreground transition-colors cursor-pointer truncate ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
+                    >
+                      {pageTitle}
+                    </button>
+                  </>
+                )}
+                {activeSectionLabel && (
+                  <>
+                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0 hidden sm:block" />
+                    <span className="text-foreground font-medium truncate max-w-[140px] sm:max-w-none hidden sm:inline">
+                      {activeSectionLabel}
+                    </span>
+                  </>
+                )}
+              </nav>
+            )}
           </div>
-          {/* Banner: second row on mobile, inline on desktop */}
-          {bannerMessage && (
-            <div className="flex justify-end">
-              {bannerMessage}
-            </div>
-          )}
+          {/* Right: banner + controls on same line */}
+          <div className="flex items-center gap-3 shrink-0">
+            {bannerMessage}
+            {controls}
+          </div>
         </div>
       </nav>
     )

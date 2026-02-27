@@ -677,7 +677,7 @@ export const translations = {
       contact: 'Contactar',
     },
     ui: {
-      languageBanner: '🇬🇧 This site is available in English',
+      languageBanner: 'This site is available in English',
       languageBannerSwitch: 'Switch to EN',
       languageBannerSwitchPrefix: 'Switch to',
       languageBannerSwitchLang: 'EN',
@@ -1375,7 +1375,7 @@ export const translations = {
       contact: 'Contact',
     },
     ui: {
-      languageBanner: '🇪🇸 Este sitio está disponible en español',
+      languageBanner: 'Este sitio está disponible en español',
       languageBannerSwitch: 'Cambiar a ES',
       languageBannerSwitchPrefix: 'Cambiar a',
       languageBannerSwitchLang: 'ES',
