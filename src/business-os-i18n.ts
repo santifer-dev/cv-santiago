@@ -19,7 +19,7 @@ export const businessOsContent = {
     },
     intro: {
       hook: '30.000+ reparaciones. 12 bases. 2.100 campos. Cero ERPs comerciales. Todo construido sobre Airtable.',
-      body: 'Un negocio de reparación multiservicios no cabe en un ERP genérico. Tras evaluar RepairDesk (99$/mes) y Orderry, ninguna se adaptaba al modelo multiservicios. Necesitaba un sistema que fuera la fuente única de verdad para todo: pedidos, inventario, clientes, reservas, facturación y automatizaciones. Así que lo construí.',
+      body: 'Un negocio de reparación multiservicios no cabe en un ERP genérico. En 2019, evalué RepairDesk (99$/mes), Orderry y RepairShopr: todas existían, pero ninguna cubría el modelo multiservicios (accesorios, segunda mano, permutas), ni ofrecía CRM con gamificación, automatizaciones complejas o SEO programático. Necesitaba un sistema que fuera la fuente única de verdad para todo: pedidos, inventario, clientes, reservas, facturación y automatizaciones. Así que lo construí.',
     },
     internalLinks: {
       jacobo: { text: 'Agente IA Jacobo | Case Study', href: '/agente-ia-jacobo' },
@@ -54,11 +54,11 @@ export const businessOsContent = {
         reasons: [
           {
             tool: 'RepairDesk (99$/mes)',
-            issue: 'Diseñado para talleres de reparación puros. No soportaba el modelo multiservicios (accesorios, segunda mano, permuta) ni la lógica de negocio personalizada.',
+            issue: 'Ya existía en 2019. Cubre ticketing e inventario, pero está diseñado para talleres de reparación puros. No soportaba el modelo multiservicios (accesorios, segunda mano, permutas), ni CRM con tiers/gamificación, ni automatizaciones complejas.',
           },
           {
-            tool: 'Orderry',
-            issue: 'Buena base, pero sin capacidad real de automatización. Las integraciones eran limitadas y no permitían flujos personalizados.',
+            tool: 'RepairShopr / Orderry',
+            issue: 'También disponibles en 2019. RepairShopr tenía email marketing básico ("Marketr") y Zapier, pero flujos rígidos. Orderry, buena base sin capacidad real de automatización. Ninguno ofrecía SEO programático ni integración con agentes IA.',
           },
           {
             tool: 'ERP tradicional (Odoo, SAP B1)',
@@ -255,7 +255,7 @@ export const businessOsContent = {
           },
           {
             title: '¿Por qué automatizaciones nativas de Airtable y no Zapier/Make?',
-            detail: 'Las automatizaciones de Airtable viven dentro de la misma base, acceden directamente a los datos y no tienen coste por ejecución. Para la lógica de negocio del día a día (50+ automatizaciones), eso es imbatible. n8n solo se usa para Jacobo (el agente IA), donde se necesita orquestación compleja con modelos de lenguaje y tool calling.',
+            detail: 'Las automatizaciones de Airtable viven dentro de la misma base, acceden directamente a los datos y no tienen coste por ejecución. Para la lógica de negocio del día a día (50+ automatizaciones), eso es imbatible. Make se usa como pegamento para integraciones específicas: notificaciones de reseñas nuevas en Google My Business (integración oficial), webhooks con proveedores y sincronización con pasarelas de pago. n8n se usa para Jacobo (el agente IA), donde se necesita orquestación compleja con modelos de lenguaje y tool calling.',
           },
           {
             title: '¿Cómo se gestionan 2.100+ campos sin caos?',
@@ -263,7 +263,7 @@ export const businessOsContent = {
           },
           {
             title: 'Logic placement: dónde vive cada regla',
-            detail: 'Simple → automatizaciones nativas de Airtable (0 coste/ejecución). Orquestación multi-sistema → Make o n8n, según complejidad: Make para integraciones webhook-driven con APIs externas (proveedores, pagos, envíos), n8n para orquestación de agentes IA con modelos de lenguaje y tool calling. Cálculo pesado → código custom. Regla: push logic as close to the data as possible.',
+            detail: 'Simple → automatizaciones nativas de Airtable (0 coste/ejecución). Pegamento entre SaaS → Make, rápido y eficiente para integraciones con APIs externas (Google My Business, proveedores, pagos). Orquestación IA → n8n para agentes con modelos de lenguaje y tool calling. Cálculo pesado → código custom. Regla: push logic as close to the data as possible.',
           },
           {
             title: 'ID strategy: record IDs + códigos secuenciales',
@@ -321,11 +321,11 @@ export const businessOsContent = {
       items: [
         {
           q: '¿Airtable escala para +30.000 registros?',
-          a: 'Sí, con matices. Airtable maneja bien decenas de miles de registros por tabla. La clave es diseñar las bases con vistas filtradas y no cargar todo en una sola vista. Para volúmenes mayores (100K+), hay que considerar archivado periódico o migración a Postgres.',
+          a: 'Sí, con matices. Con el plan Business (125K registros por base), Airtable maneja bien decenas de miles de registros. La clave es diseñar las bases con vistas filtradas y no cargar todo en una sola vista. Para volúmenes cercanos al límite, hay que considerar archivado periódico o migración a Postgres.',
         },
         {
           q: '¿Cuánto cuesta esto vs. un SaaS como RepairDesk?',
-          a: 'Airtable Pro (~50$/mes) + integraciones (YouCanBookMe, WATI) ≈ 100-150$/mes. RepairDesk es 99$/mes pero no cubre CRM avanzado, automatizaciones complejas, ni el modelo multiservicios. El ahorro real está en las 170h/mes de trabajo manual eliminado.',
+          a: 'Airtable Business (~45$/mes por usuario, plan de 125K registros/base) + integraciones (YouCanBookMe, WATI, Make) ≈ 120-170$/mes. RepairDesk es 99$/mes pero no cubre CRM avanzado, automatizaciones complejas ni el modelo multiservicios. El ahorro real está en las 170h/mes de trabajo manual eliminado.',
         },
         {
           q: '¿Qué pasa si Airtable cambia sus precios o API?',
@@ -349,11 +349,11 @@ export const businessOsContent = {
         },
         {
           q: '¿Cuáles son las desventajas de Airtable?',
-          a: 'Las principales: límite de 100K registros por tabla (requiere archivado), pricing que escala rápido con usuarios, y dependencia de vendor. La mitigación: un diseño inteligente de datos con bases separadas por dominio y sincronizando solo la información necesaria entre ellas, no todo de golpe. Para este Business OS, las ventajas (velocidad de iteración, flexibilidad, interfaz amigable) superan con creces las desventajas.',
+          a: 'Las principales: límite de 125K registros por base en el plan Business (requiere archivado si creces mucho), pricing que escala rápido con usuarios, y dependencia de vendor. La mitigación: un diseño inteligente de datos con bases separadas por dominio y sincronizando solo la información necesaria entre ellas, no todo de golpe. Para este Business OS, las ventajas (velocidad de iteración, flexibilidad, interfaz amigable) superan con creces las desventajas.',
         },
         {
           q: '¿Por qué las automatizaciones nativas de Airtable en vez de Zapier?',
-          a: 'Las automatizaciones de Airtable viven dentro de la propia base, no tienen coste por ejecución y acceden directamente a los datos sin APIs intermedias. Para la lógica de negocio del día a día (50+ automatizaciones), es la opción más eficiente. n8n solo se usa para Jacobo (el agente IA), donde se necesita orquestación compleja con modelos de lenguaje.',
+          a: 'Las automatizaciones de Airtable viven dentro de la propia base, no tienen coste por ejecución y acceden directamente a los datos sin APIs intermedias. Para la lógica de negocio del día a día (50+ automatizaciones), es la opción más eficiente. Make se usa para pegamento entre SaaS (reseñas de Google My Business, webhooks de proveedores) por su rapidez y robustez. n8n se usa para Jacobo (el agente IA), donde se necesita orquestación compleja con modelos de lenguaje.',
         },
       ],
     },
@@ -391,7 +391,7 @@ export const businessOsContent = {
     },
     intro: {
       hook: '30,000+ repairs. 12 bases. 2,100 fields. Zero off-the-shelf ERPs. All built on Airtable.',
-      body: 'A multi-service repair business doesn\'t fit in a generic ERP. After evaluating RepairDesk ($99/mo) and Orderry, none fit the multi-service model. I needed a system that was the single source of truth for everything: orders, inventory, customers, bookings, billing and automations. So I built it.',
+      body: 'A multi-service repair business doesn\'t fit in a generic ERP. In 2019, I evaluated RepairDesk ($99/mo), Orderry and RepairShopr: all existed, but none covered the multi-service model (accessories, refurbished, trade-ins), nor offered CRM with gamification, complex automations or programmatic SEO. I needed a system that was the single source of truth for everything: orders, inventory, customers, bookings, billing and automations. So I built it.',
     },
     internalLinks: {
       jacobo: { text: 'AI Agent Jacobo — Case Study', href: '/ai-agent-jacobo' },
@@ -426,11 +426,11 @@ export const businessOsContent = {
         reasons: [
           {
             tool: 'RepairDesk ($99/mo)',
-            issue: 'Designed for pure repair shops. Didn\'t support the multi-service model (accessories, refurbished, trade-ins) or custom business logic.',
+            issue: 'Already existed in 2019. Covers ticketing and inventory, but designed for pure repair shops. Didn\'t support the multi-service model (accessories, refurbished, trade-ins), CRM with tiers/gamification, or complex automations.',
           },
           {
-            tool: 'Orderry',
-            issue: 'Good foundation, but no real automation capability. Integrations were limited and didn\'t allow custom flows.',
+            tool: 'RepairShopr / Orderry',
+            issue: 'Also available in 2019. RepairShopr had basic email marketing ("Marketr") and Zapier, but rigid flows. Orderry, good foundation but no real automation capability. Neither offered programmatic SEO or AI agent integration.',
           },
           {
             tool: 'Traditional ERP (Odoo, SAP B1)',
@@ -627,7 +627,7 @@ export const businessOsContent = {
           },
           {
             title: 'Why native Airtable automations over Zapier/Make?',
-            detail: 'Airtable automations live inside the base itself, access data directly, and have no per-execution cost. For day-to-day business logic (50+ automations), that\'s unbeatable. n8n is only used for Jacobo (the AI agent), where complex orchestration with language models and tool calling is needed.',
+            detail: 'Airtable automations live inside the base itself, access data directly, and have no per-execution cost. For day-to-day business logic (50+ automations), that\'s unbeatable. Make is used as glue for specific SaaS integrations: new Google My Business review notifications (official integration), supplier webhooks and payment gateway syncs. n8n is used for Jacobo (the AI agent), where complex orchestration with language models and tool calling is needed.',
           },
           {
             title: 'How do you manage 2,100+ fields without chaos?',
@@ -635,7 +635,7 @@ export const businessOsContent = {
           },
           {
             title: 'Logic placement: where each rule lives',
-            detail: 'Simple → native Airtable automations (zero cost per execution). Multi-system orchestration → Make or n8n, depending on complexity: Make for webhook-driven integrations with external APIs (suppliers, payment providers, shipping), n8n for AI agent orchestration with LLMs and tool calling. Heavy computation → custom code. Rule: push logic as close to the data as possible.',
+            detail: 'Simple → native Airtable automations (zero cost per execution). SaaS glue → Make, fast and robust for integrations with external APIs (Google My Business, suppliers, payments). AI orchestration → n8n for agents with LLMs and tool calling. Heavy computation → custom code. Rule: push logic as close to the data as possible.',
           },
           {
             title: 'ID strategy: record IDs + sequential codes',
@@ -693,11 +693,11 @@ export const businessOsContent = {
       items: [
         {
           q: 'Does Airtable scale to 30,000+ records?',
-          a: 'Yes, with caveats. Airtable handles tens of thousands of records per table well. The key is designing bases with filtered views and not loading everything in a single view. For higher volumes (100K+), consider periodic archiving or migration to Postgres.',
+          a: 'Yes, with caveats. On the Business plan (125K records per base), Airtable handles tens of thousands of records well. The key is designing bases with filtered views and not loading everything in a single view. As you approach the limit, consider periodic archiving or migration to Postgres.',
         },
         {
           q: 'How much does this cost vs. SaaS like RepairDesk?',
-          a: 'Airtable Pro (~$50/mo) + integrations (YouCanBookMe, WATI) ≈ $100-150/mo. RepairDesk is $99/mo but doesn\'t cover advanced CRM, complex automations, or the multi-service model. The real savings are in the 170h/month of eliminated manual work.',
+          a: 'Airtable Business (~$45/mo per user, 125K records/base plan) + integrations (YouCanBookMe, WATI, Make) ≈ $120-170/mo. RepairDesk is $99/mo but doesn\'t cover advanced CRM, complex automations, or the multi-service model. The real savings are in the 170h/month of eliminated manual work.',
         },
         {
           q: 'What if Airtable changes its pricing or API?',
@@ -721,11 +721,11 @@ export const businessOsContent = {
         },
         {
           q: 'What are the disadvantages of Airtable?',
-          a: 'The main ones: 100K record limit per table (requires archiving), pricing that scales fast with users, and vendor lock-in. The mitigation: intelligent data design with separate bases per domain, syncing only the necessary information between them — not everything at once. For this Business OS, the advantages (iteration speed, flexibility, friendly UI) far outweigh the disadvantages.',
+          a: 'The main ones: 125K record limit per base on the Business plan (requires archiving if you grow significantly), pricing that scales fast with users, and vendor lock-in. The mitigation: intelligent data design with separate bases per domain, syncing only the necessary information between them, not everything at once. For this Business OS, the advantages (iteration speed, flexibility, friendly UI) far outweigh the disadvantages.',
         },
         {
           q: 'Why native Airtable automations instead of Zapier?',
-          a: 'Airtable automations live inside the base itself, have no per-execution cost, and access data directly without intermediate APIs. For day-to-day business logic (50+ automations), it\'s the most efficient option. n8n is only used for Jacobo (the AI agent), where complex orchestration with language models is needed.',
+          a: 'Airtable automations live inside the base itself, have no per-execution cost, and access data directly without intermediate APIs. For day-to-day business logic (50+ automations), it\'s the most efficient option. Make is used as SaaS glue (Google My Business reviews, supplier webhooks) for its speed and robustness. n8n is used for Jacobo (the AI agent), where complex orchestration with language models is needed.',
         },
       ],
     },
