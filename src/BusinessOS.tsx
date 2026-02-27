@@ -796,8 +796,9 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
         {/* Impact — 170h/Month Breakdown */}
         <AnchorHeading id="impact">{t.sections.impact.heading}</AnchorHeading>
         <p className="text-muted-foreground leading-relaxed mb-6">{t.sections.impact.body}</p>
-        <div className="overflow-x-auto mb-4">
-          <table className="w-full min-w-[500px] text-sm border border-border rounded-lg overflow-hidden">
+        {/* Desktop table */}
+        <div className="hidden sm:block overflow-x-auto mb-4">
+          <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-card">
                 <th className="text-left p-3 text-foreground font-display font-semibold">{lang === 'es' ? 'Módulo' : 'Module'}</th>
@@ -821,6 +822,24 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
               </tr>
             </tbody>
           </table>
+        </div>
+        {/* Mobile cards */}
+        <div className="sm:hidden space-y-3 mb-4">
+          {t.sections.impact.savings.map((row) => (
+            <div key={row.module} className="bg-card border border-border rounded-lg p-4">
+              <p className="text-foreground font-medium text-sm mb-2">{row.module}</p>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-muted-foreground line-through">{row.before}</span>
+                <span className="text-muted-foreground">→</span>
+                <span className="text-primary font-medium">{row.after}</span>
+              </div>
+              <p className="text-xs text-foreground font-semibold mt-1">{lang === 'es' ? 'Ahorro' : 'Saved'}: {row.monthly}</p>
+            </div>
+          ))}
+          <div className="bg-primary/5 border border-primary/30 rounded-lg p-4 flex items-center justify-between">
+            <span className="text-foreground font-display font-bold">Total</span>
+            <span className="text-primary font-display font-bold text-lg">{t.sections.impact.total}</span>
+          </div>
         </div>
         <div className="bg-primary/5 border border-primary/20 rounded-lg p-5 mb-8">
           <p className="text-foreground font-medium">{t.sections.impact.punchline}</p>
