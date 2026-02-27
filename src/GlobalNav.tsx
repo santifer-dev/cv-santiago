@@ -260,7 +260,7 @@ export default function GlobalNav() {
         <div className="relative pt-4 pb-3 px-6 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             {/* Left: back link on inner pages, empty on home */}
-            <div className="min-w-0">
+            <div className="min-w-0 flex items-center">
               {!isHome && (
                 <nav
                   aria-label="Breadcrumb"
