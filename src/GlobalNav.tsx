@@ -31,17 +31,18 @@ function useActiveSection(pathname: string, enabled: boolean) {
     setActiveId(null)
     if (!enabled) return
 
-    // Small delay to let React render the new page's headings
-    const timer = setTimeout(() => {
+    let io: IntersectionObserver | null = null
+    let mo: MutationObserver | null = null
+
+    function setup() {
       const h1 = document.querySelector('h1')
       const headings = Array.from(document.querySelectorAll('h2[id]'))
-      if (headings.length === 0) return
+      if (headings.length === 0) return false
 
-      const observer = new IntersectionObserver(
+      io = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting) {
-              // h1 visible → no active section
               if (entry.target.tagName === 'H1') {
                 setActiveId(null)
                 return
@@ -54,17 +55,23 @@ function useActiveSection(pathname: string, enabled: boolean) {
         { rootMargin: '-64px 0px -75% 0px' }
       )
 
-      if (h1) observer.observe(h1)
+      if (h1) io.observe(h1)
+      headings.forEach((h) => io!.observe(h))
+      return true
+    }
 
-      headings.forEach((h) => observer.observe(h))
-      // Store cleanup for the observer
-      cleanupRef.current = () => observer.disconnect()
-    }, 100)
+    // Try immediately (component may already be rendered)
+    if (!setup()) {
+      // Lazy component not mounted yet — watch for h2[id] to appear
+      mo = new MutationObserver(() => {
+        if (setup()) mo!.disconnect()
+      })
+      mo.observe(document.body, { childList: true, subtree: true })
+    }
 
-    const cleanupRef = { current: () => {} }
     return () => {
-      clearTimeout(timer)
-      cleanupRef.current()
+      io?.disconnect()
+      mo?.disconnect()
     }
   }, [pathname, enabled])
 

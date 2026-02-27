@@ -348,7 +348,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                 {/* HP0: Repair Lifecycle */}
                 {idx === 0 && (
                   <>
-                    <div className="grid grid-cols-2 gap-3 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                       <figure className="rounded-lg overflow-hidden border border-border">
                         <div className="aspect-[3/4] overflow-hidden">
                           <img
@@ -797,7 +797,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
         <AnchorHeading id="impact">{t.sections.impact.heading}</AnchorHeading>
         <p className="text-muted-foreground leading-relaxed mb-6">{t.sections.impact.body}</p>
         <div className="overflow-x-auto mb-4">
-          <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
+          <table className="w-full min-w-[500px] text-sm border border-border rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-card">
                 <th className="text-left p-3 text-foreground font-display font-semibold">{lang === 'es' ? 'Módulo' : 'Module'}</th>
