@@ -263,7 +263,7 @@ export const businessOsContent = {
           },
           {
             title: 'Logic placement: dónde vive cada regla',
-            detail: 'Simple → automatizaciones nativas de Airtable (0 coste/ejecución). Pegamento entre SaaS → Make, rápido y eficiente para integraciones con APIs externas (Google My Business, proveedores, pagos). Orquestación IA → n8n para agentes con modelos de lenguaje y tool calling. Cálculo pesado → código custom. Regla: push logic as close to the data as possible.',
+            detail: 'Simple → automatizaciones nativas de Airtable (0 coste/ejecución, pero con techo de 100.000 runs/mes en el plan Business; si lo agotas, se paran en seco). Pegamento entre SaaS → Make, rápido y robusto para integraciones con APIs externas (Google My Business, proveedores, pagos), y con créditos comprables si necesitas más capacidad. Orquestación IA → n8n para agentes con modelos de lenguaje y tool calling. Cálculo pesado → código custom. Regla: push logic as close to the data as possible.',
           },
           {
             title: 'ID strategy: record IDs + códigos secuenciales',
@@ -297,6 +297,10 @@ export const businessOsContent = {
           {
             title: 'Documenta las reglas de negocio, no el código.',
             detail: 'Las automatizaciones de Airtable son visuales y autoexplicativas. Lo que necesita documentación son las reglas: "¿Por qué el margen mínimo es 30%?" y "¿Cuándo se reactiva un cliente inactivo?".',
+          },
+          {
+            title: 'Construir para hoy, crecer con la plataforma.',
+            detail: 'El Business OS no nació con 12 bases y 50+ automatizaciones. En 2019, Airtable no tenía automatizaciones nativas, ni sync entre bases, ni Interface Designer. Todo vivía en una sola base: OTs, inventario, clientes, facturación. Funcionaba, pero a medida que crecían los datos y los procesos, la base se convertía en un monolito difícil de mantener. Cada nueva funcionalidad de la plataforma desbloqueaba una reorganización: cuando llegó sync entre bases, separé los dominios en bases independientes con sus propias fuentes de verdad (ERP, CRM, Piezas, CMS), sincronizando solo lo necesario mediante linked records. Las automatizaciones (2022) eliminaron los flujos manuales. Interface Designer (2023) dio a los empleados interfaces limpias en vez de tablas crudas. Y el filtrado dinámico de linked records (2024) permitió que al seleccionar un modelo en una OT, el campo de piezas solo mostrara las compatibles, en vez de las 500+ del catálogo completo. La decisión fue pragmática: construir con la mejor herramienta disponible y refactorizar cuando la plataforma lo permitiera.',
           },
         ],
       },
@@ -353,7 +357,7 @@ export const businessOsContent = {
         },
         {
           q: '¿Por qué las automatizaciones nativas de Airtable en vez de Zapier?',
-          a: 'Las automatizaciones de Airtable viven dentro de la propia base, no tienen coste por ejecución y acceden directamente a los datos sin APIs intermedias. Para la lógica de negocio del día a día (50+ automatizaciones), es la opción más eficiente. Make se usa para pegamento entre SaaS (reseñas de Google My Business, webhooks de proveedores) por su rapidez y robustez. n8n se usa para Jacobo (el agente IA), donde se necesita orquestación compleja con modelos de lenguaje.',
+          a: 'Las automatizaciones de Airtable viven dentro de la propia base, no tienen coste por ejecución y acceden directamente a los datos sin APIs intermedias. Para la lógica de negocio del día a día (50+ automatizaciones), es la opción más eficiente. El límite está en los 100.000 runs/mes del plan Business: si lo agotas, se paran sin opción de comprar más. Por eso las integraciones con sistemas externos (reseñas de Google My Business, webhooks de proveedores) van por Make, donde puedes comprar créditos adicionales si necesitas más capacidad. n8n se usa para Jacobo (el agente IA), donde se necesita orquestación compleja con modelos de lenguaje.',
         },
       ],
     },
@@ -635,7 +639,7 @@ export const businessOsContent = {
           },
           {
             title: 'Logic placement: where each rule lives',
-            detail: 'Simple → native Airtable automations (zero cost per execution). SaaS glue → Make, fast and robust for integrations with external APIs (Google My Business, suppliers, payments). AI orchestration → n8n for agents with LLMs and tool calling. Heavy computation → custom code. Rule: push logic as close to the data as possible.',
+            detail: 'Simple → native Airtable automations (zero cost per execution, but capped at 100,000 runs/month on the Business plan; hit the limit and they stop cold). SaaS glue → Make, fast and robust for integrations with external APIs (Google My Business, suppliers, payments), with purchasable credits if you need more capacity. AI orchestration → n8n for agents with LLMs and tool calling. Heavy computation → custom code. Rule: push logic as close to the data as possible.',
           },
           {
             title: 'ID strategy: record IDs + sequential codes',
@@ -669,6 +673,10 @@ export const businessOsContent = {
           {
             title: 'Document the business rules, not the code.',
             detail: 'Airtable automations are visual and self-explanatory. What needs documentation are the rules: "Why is the minimum margin 30%?" and "When does an inactive customer get reactivated?".',
+          },
+          {
+            title: 'Build for today, grow with the platform.',
+            detail: 'The Business OS didn\'t start as 12 bases with 50+ automations. In 2019, Airtable had no native automations, no base syncing, no Interface Designer. Everything lived in a single base: work orders, inventory, customers, billing. It worked, but as data and processes grew, the base became a monolith that was hard to maintain. Each new platform capability unlocked a reorganization: when base syncing arrived, I separated domains into independent bases with their own sources of truth (ERP, CRM, Parts, CMS), syncing only what was needed via linked records. Automations (2022) eliminated manual workflows. Interface Designer (2023) gave employees clean interfaces instead of raw tables. And dynamic filtering of linked records (2024) meant that selecting a model on a work order would only show compatible parts, instead of the full 500+ catalog. The decision was pragmatic: build with the best available tool and refactor when the platform allowed it.',
           },
         ],
       },
@@ -725,7 +733,7 @@ export const businessOsContent = {
         },
         {
           q: 'Why native Airtable automations instead of Zapier?',
-          a: 'Airtable automations live inside the base itself, have no per-execution cost, and access data directly without intermediate APIs. For day-to-day business logic (50+ automations), it\'s the most efficient option. Make is used as SaaS glue (Google My Business reviews, supplier webhooks) for its speed and robustness. n8n is used for Jacobo (the AI agent), where complex orchestration with language models is needed.',
+          a: 'Airtable automations live inside the base itself, have no per-execution cost, and access data directly without intermediate APIs. For day-to-day business logic (50+ automations), it\'s the most efficient option. The limit is 100,000 runs/month on the Business plan: hit it and they stop, with no option to buy more. That\'s why external system integrations (Google My Business reviews, supplier webhooks) go through Make, where you can purchase additional credits if you need more capacity. n8n is used for Jacobo (the AI agent), where complex orchestration with language models is needed.',
         },
       ],
     },
