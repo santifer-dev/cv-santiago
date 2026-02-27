@@ -257,7 +257,7 @@ export default function GlobalNav() {
           className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
           style={animateBar ? fade('0.35s') : undefined}
         />
-        <div className="relative pt-6 pb-3 px-6 flex flex-col gap-2">
+        <div className="relative py-3 px-6 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             {/* Left: back link on inner pages, empty on home */}
             <div className="min-w-0">
