@@ -1235,6 +1235,11 @@ function App() {
                   ))}
                 </div>
               </div>
+
+              {/* Deep dive CTA */}
+              <Link to={t.experience.santifer.caseStudyUrl} className="inline-flex items-center gap-2 mt-6 text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 group/cta">
+                <span className="px-4 py-2 rounded-lg bg-primary/10 border border-primary/30 group-hover/cta:bg-primary/20 group-hover/cta:border-primary/50 transition-all duration-200">{t.experience.santifer.caseStudyLabel}</span>
+              </Link>
             </div>
           </AnimatedSection>
 
@@ -1274,7 +1279,7 @@ function App() {
                       )
                     })}
                   </ul>
-                  <Link to={t.experience.santifer.erp.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-6 text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200 group/cta">
+                  <Link to={t.experience.santifer.caseStudyUrl} className="inline-flex items-center gap-2 mt-auto pt-6 text-sm font-medium text-gold hover:text-gold/80 transition-colors duration-200 group/cta">
                     <span className="px-4 py-2 rounded-lg bg-gold/10 border border-gold/30 group-hover/cta:bg-gold/20 group-hover/cta:border-gold/50 transition-all duration-200">{t.experience.santifer.businessOS.footer}</span>
                     <ChevronRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform duration-200" />
                   </Link>
@@ -1370,52 +1375,67 @@ function App() {
 
             {/* ERP card */}
             <AnimatedSection delay={0.3}>
-              <Link to={t.experience.santifer.erp.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+              <Link to={t.experience.santifer.erp.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Database className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.erp.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.erp.desc}</p>
-                <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.erp.metric}</span>
+                <div className="flex items-center justify-between mt-auto pt-3">
+                  <span className="text-xs font-medium text-primary">{t.experience.santifer.erp.metric}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
+                </div>
               </Link>
             </AnimatedSection>
 
             {/* GPTs card */}
             <AnimatedSection delay={0.35}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+              <Link to={t.experience.santifer.gpts.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Bot className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.gpts.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.gpts.desc}</p>
-                <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.gpts.metric}</span>
-              </div>
+                <div className="flex items-center justify-between mt-auto pt-3">
+                  <span className="text-xs font-medium text-primary">{t.experience.santifer.gpts.metric}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
+                </div>
+              </Link>
             </AnimatedSection>
 
             {/* Reservas card */}
             <AnimatedSection delay={0.4}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+              <Link to={t.experience.santifer.reservas.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Timer className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.reservas.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.reservas.desc}</p>
-                <span className="text-xs font-medium text-accent mt-auto pt-3">{t.experience.santifer.reservas.metric}</span>
-              </div>
+                <div className="flex items-center justify-between mt-auto pt-3">
+                  <span className="text-xs font-medium text-accent">{t.experience.santifer.reservas.metric}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
+                </div>
+              </Link>
             </AnimatedSection>
 
             {/* CRM card */}
             <AnimatedSection delay={0.45}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+              <Link to={t.experience.santifer.crm.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Users className="w-5 h-5 text-accent mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.crm.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.crm.desc}</p>
-                <span className="text-xs font-medium text-primary mt-auto pt-3">{t.experience.santifer.crm.metric}</span>
-              </div>
+                <div className="flex items-center justify-between mt-auto pt-3">
+                  <span className="text-xs font-medium text-primary">{t.experience.santifer.crm.metric}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
+                </div>
+              </Link>
             </AnimatedSection>
 
             {/* GenAI Marketing card */}
             <AnimatedSection delay={0.5}>
-              <div className="h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 transition-colors duration-200 flex flex-col">
+              <Link to={t.experience.santifer.genAI.caseStudyUrl} className="block h-full p-5 rounded-2xl bg-card border border-border hover:border-primary/30 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 transition-all duration-200 flex flex-col group/card">
                 <Sparkles className="w-5 h-5 text-primary mb-3" />
                 <p className="font-medium text-sm mb-1">{t.experience.santifer.genAI.title}</p>
                 <p className="text-sm text-muted-foreground">{t.experience.santifer.genAI.desc}</p>
-                <span className="text-xs font-medium text-accent mt-auto pt-3">{t.experience.santifer.genAI.metric}</span>
-              </div>
+                <div className="flex items-center justify-between mt-auto pt-3">
+                  <span className="text-xs font-medium text-accent">{t.experience.santifer.genAI.metric}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/0 group-hover/card:text-primary group-hover/card:translate-x-0.5 transition-all duration-200" />
+                </div>
+              </Link>
             </AnimatedSection>
           </div>
 

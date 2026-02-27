@@ -169,6 +169,24 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
     }
   }, [lang, t])
 
+  // Scroll to hash anchor (e.g. #repair-lifecycle from home page links)
+  // Two-pass: instant jump early, then corrective smooth scroll after images settle
+  useEffect(() => {
+    const hash = window.location.hash
+    if (!hash) return
+    const el = document.querySelector(hash)
+    if (!el) return
+    // First pass: instant jump as soon as element exists
+    const t1 = setTimeout(() => {
+      el.scrollIntoView({ behavior: 'instant' })
+    }, 50)
+    // Second pass: correct for layout shift from lazy images
+    const t2 = setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth' })
+    }, 600)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [])
+
   return (
     <ArticleLayout>
       <ArticleHeader
@@ -312,8 +330,10 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
         <AnchorHeading id="e2e-flows">{t.sections.e2eFlows.heading}</AnchorHeading>
         <p className="text-muted-foreground leading-relaxed mb-6">{t.sections.e2eFlows.body}</p>
         <div className="space-y-4 mb-8">
-          {t.sections.e2eFlows.items.map((flow, idx) => (
-            <details key={flow.name} open className="bg-card border border-border rounded-lg group">
+          {t.sections.e2eFlows.items.map((flow, idx) => {
+            const flowIds = ['repair-lifecycle', 'procurement', 'content-pipeline', 'customer-lifecycle']
+            return (
+            <details key={flow.name} id={flowIds[idx]} open className="bg-card border border-border rounded-lg group scroll-mt-20">
               <summary className="flex items-center gap-3 p-5 cursor-pointer select-none">
                 <span className="text-lg">{flow.icon}</span>
                 <div className="flex-1">
@@ -646,7 +666,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                 )}
               </div>
             </details>
-          ))}
+          )})}
         </div>
         <CaseStudyCta
           heading={t.sections.dayInLife.pseoCta.heading}
@@ -659,8 +679,10 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
         <AnchorHeading id="cross-cutting">{t.sections.crossCutting.heading}</AnchorHeading>
         <p className="text-muted-foreground leading-relaxed mb-6">{t.sections.crossCutting.body}</p>
         <div className="space-y-4 mb-8">
-          {t.sections.crossCutting.items.map((cap, idx) => (
-            <details key={cap.name} open className="bg-card border border-border rounded-lg group">
+          {t.sections.crossCutting.items.map((cap, idx) => {
+            const capIds = ['data-guardrails', 'event-notifications', 'ai-query-layer']
+            return (
+            <details key={cap.name} id={capIds[idx]} open className="bg-card border border-border rounded-lg group scroll-mt-20">
               <summary className="flex items-center gap-3 p-5 cursor-pointer select-none">
                 <span className="text-lg">{cap.icon}</span>
                 <div className="flex-1">
@@ -790,7 +812,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                 )}
               </div>
             </details>
-          ))}
+          )})}
         </div>
 
         {/* Impact — 170h/Month Breakdown */}

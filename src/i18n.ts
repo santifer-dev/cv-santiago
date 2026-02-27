@@ -267,6 +267,8 @@ export const translations = {
         location: 'Sevilla, España',
         role: 'Fundador & Product Lead (AI Automation)',
         period: '2009 - 2025 · Retail / Servicios B2B-B2C',
+        caseStudyUrl: '/business-os-para-airtable',
+        caseStudyLabel: 'Cómo convertí el caos en un sistema →',
         exit: 'Exit 2025',
         exitDesc:
           'Construí, escalé y vendí el negocio como venta en funcionamiento',
@@ -390,28 +392,31 @@ export const translations = {
           title: 'ERP Interno',
           desc: 'Pedidos, inventario, órdenes + purchase orders automáticos de stock mínimo',
           metric: '20+ h / mes',
-          caseStudyUrl: '/business-os-para-airtable',
-          caseStudyLabel: 'Leer el caso de éxito',
+          caseStudyUrl: '/business-os-para-airtable#repair-lifecycle',
         },
         gpts: {
           title: 'GPTs Custom',
           desc: 'Stock, ubicación y precios via OpenAPI (voz / lenguaje natural)',
           metric: '10+ h / mes',
+          caseStudyUrl: '/business-os-para-airtable#ai-query-layer',
         },
         reservas: {
           title: 'Cita Previa Exprés',
           desc: 'Marca de la casa. YCBM → Airtable (stock check) → WhatsApp confirmación',
           metric: '90% auto',
+          caseStudyUrl: '/business-os-para-airtable#repair-lifecycle',
         },
         crm: {
           title: 'CRM + Contenido Social',
           desc: 'Lead scoring, mensajes automáticos, gamificación (Bronze→Platinum)',
           metric: '60+ h / mes',
+          caseStudyUrl: '/business-os-para-airtable#customer-lifecycle',
         },
         genAI: {
           title: 'IA Generativa Marketing',
           desc: 'Imágenes (ChatGPT), video (HeyGen, Sora), música (Suno). Digital + signage en tienda',
           metric: 'Early adopter',
+          caseStudyUrl: '/business-os-para-airtable#content-pipeline',
         },
       },
       lico: {
@@ -673,7 +678,7 @@ export const translations = {
     },
     cta: {
       title: '¿Hablamos?',
-      desc: 'Busco un rol senior remoto (EU / USA) donde pueda liderar producto, desbloquear equipos con automatización y entregar resultados que se puedan medir.',
+      desc: 'Busco un rol remoto (EU / USA) donde pueda liderar producto, desbloquear equipos con automatización y entregar resultados que se puedan medir.',
       contact: 'Contactar',
     },
     ui: {
@@ -969,6 +974,8 @@ export const translations = {
         location: 'Seville, Spain',
         role: 'Founder & Product Lead (AI Automation)',
         period: '2009 - 2025 · Retail / Services B2B-B2C',
+        caseStudyUrl: '/business-os-for-airtable',
+        caseStudyLabel: 'How I turned chaos into a system →',
         exit: 'Exit 2025',
         exitDesc: 'Built, scaled, and sold the business as a going concern',
         highlights: [
@@ -1088,28 +1095,31 @@ export const translations = {
           title: 'Internal ERP',
           desc: 'Orders, inventory, work orders + automatic min-stock purchase orders',
           metric: '20+ h / mo',
-          caseStudyUrl: '/business-os-for-airtable',
-          caseStudyLabel: 'Read the case study',
+          caseStudyUrl: '/business-os-for-airtable#repair-lifecycle',
         },
         gpts: {
           title: 'Custom GPTs',
           desc: 'Stock, location & pricing via OpenAPI (voice / natural language)',
           metric: '10+ h / mo',
+          caseStudyUrl: '/business-os-for-airtable#ai-query-layer',
         },
         reservas: {
           title: 'Express Booking',
           desc: 'House signature. YCBM → Airtable (stock check) → WhatsApp confirmation',
           metric: '90% auto',
+          caseStudyUrl: '/business-os-for-airtable#repair-lifecycle',
         },
         crm: {
           title: 'CRM + Social Content',
           desc: 'Lead scoring, automated messages, gamification (Bronze→Platinum)',
           metric: '60+ h / mo',
+          caseStudyUrl: '/business-os-for-airtable#customer-lifecycle',
         },
         genAI: {
           title: 'Generative AI Marketing',
           desc: 'Images (ChatGPT), video (HeyGen, Sora), music (Suno). Digital + in-store signage',
           metric: 'Early adopter',
+          caseStudyUrl: '/business-os-for-airtable#content-pipeline',
         },
       },
       lico: {
@@ -1371,7 +1381,7 @@ export const translations = {
     },
     cta: {
       title: "Let's talk",
-      desc: 'Looking for a senior remote role (EU / USA) where I can own product delivery, unblock teams through automation, and ship results you can measure.',
+      desc: 'Looking for a remote role (EU / USA) where I can own product delivery, unblock teams through automation, and ship results you can measure.',
       contact: 'Contact',
     },
     ui: {
