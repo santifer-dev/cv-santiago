@@ -257,49 +257,56 @@ export default function GlobalNav() {
           className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border"
           style={animateBar ? fade('0.35s') : undefined}
         />
-        <div className="relative pt-6 pb-3 px-6 flex items-center justify-between">
-          {/* Left: back link on inner pages, empty on home */}
-          <div>
-            {!isHome && (
-              <nav
-                aria-label="Breadcrumb"
-                className="inline-flex items-center gap-1.5 text-sm"
-                style={animateBackLink ? fade('0.4s') : undefined}
-              >
-                <Link
-                  to={lang === 'en' ? '/en' : '/'}
-                  className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+        <div className="relative pt-6 pb-3 px-6 flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            {/* Left: back link on inner pages, empty on home */}
+            <div className="min-w-0">
+              {!isHome && (
+                <nav
+                  aria-label="Breadcrumb"
+                  className="inline-flex items-center gap-1.5 text-sm"
+                  style={animateBackLink ? fade('0.4s') : undefined}
                 >
-                  <House className="w-4 h-4" />
-                  <span className="hidden sm:inline">santifer.io</span>
-                </Link>
-                {pageTitle && (
-                  <>
-                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
-                    <button
-                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className={`hover:text-foreground transition-colors cursor-pointer ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
-                    >
-                      {pageTitle}
-                    </button>
-                  </>
-                )}
-                {activeSectionLabel && (
-                  <>
-                    <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
-                    <span className="text-foreground font-medium truncate max-w-[140px] sm:max-w-none">
-                      {activeSectionLabel}
-                    </span>
-                  </>
-                )}
-              </nav>
-            )}
+                  <Link
+                    to={lang === 'en' ? '/en' : '/'}
+                    className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                  >
+                    <House className="w-4 h-4" />
+                    <span className="hidden sm:inline">santifer.io</span>
+                  </Link>
+                  {pageTitle && (
+                    <>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0" />
+                      <button
+                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        className={`hover:text-foreground transition-colors cursor-pointer truncate ${activeSectionLabel ? 'text-muted-foreground' : 'text-foreground font-medium'}`}
+                      >
+                        {pageTitle}
+                      </button>
+                    </>
+                  )}
+                  {activeSectionLabel && (
+                    <>
+                      <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/50 shrink-0 hidden sm:block" />
+                      <span className="text-foreground font-medium truncate max-w-[140px] sm:max-w-none hidden sm:inline">
+                        {activeSectionLabel}
+                      </span>
+                    </>
+                  )}
+                </nav>
+              )}
+            </div>
+            {/* Right: controls */}
+            <div className="flex items-center gap-2 shrink-0">
+              {controls}
+            </div>
           </div>
-          {/* Right: banner message + controls, all grouped together */}
-          <div className="flex items-center gap-4">
-            {bannerMessage}
-            {controls}
-          </div>
+          {/* Banner: second row on mobile, inline on desktop */}
+          {bannerMessage && (
+            <div className="flex justify-end">
+              {bannerMessage}
+            </div>
+          )}
         </div>
       </nav>
     )
