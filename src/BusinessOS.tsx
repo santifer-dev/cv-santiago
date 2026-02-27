@@ -215,7 +215,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <figure className="bg-card border border-border rounded-lg overflow-hidden">
             <img
               src="/business-os/counter-organized-front.webp"
@@ -735,7 +735,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                 {/* CC3: Generative AI Applied */}
                 {idx === 3 && (
                   <>
-                    <div className="grid grid-cols-2 gap-3 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                       <figure className="rounded-lg overflow-hidden border border-border">
                         <img
                           src="/business-os/digital-signage-storefront.webp"
@@ -752,11 +752,11 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                           loading="lazy"
                         />
                       </figure>
-                      <figcaption className="col-span-2 text-xs text-muted-foreground">
+                      <figcaption className="sm:col-span-2 text-xs text-muted-foreground">
                         {lang === 'es' ? 'Digital signage en escaparate — imágenes generadas con IA desde el catálogo de Airtable' : 'Storefront digital signage — AI-generated images from the Airtable catalog'}
                       </figcaption>
                     </div>
-                    <div className="grid grid-cols-2 gap-3 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                       {[
                         {
                           id: 'DHBkRjoI84t',
