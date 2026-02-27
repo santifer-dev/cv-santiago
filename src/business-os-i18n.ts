@@ -19,7 +19,7 @@ export const businessOsContent = {
     },
     intro: {
       hook: '30.000+ reparaciones. 12 bases. 2.100 campos. Cero ERPs comerciales. Todo construido sobre Airtable.',
-      body: 'Un negocio de reparación multiservicios no cabe en un ERP genérico. En 2019, evalué RepairDesk (99$/mes), Orderry y RepairShopr: todas existían, pero ninguna cubría el modelo multiservicios (accesorios, segunda mano, permutas), ni ofrecía CRM con gamificación, automatizaciones complejas o SEO programático. Necesitaba un sistema que fuera la fuente única de verdad para todo: pedidos, inventario, clientes, reservas, facturación y automatizaciones. Así que lo construí.',
+      body: 'Un negocio de reparación multiservicios no cabe en un ERP genérico. En 2019, evalué RepairDesk (99$/mes), Orderry y RepairShopr: todas existían, pero ninguna cubría el modelo multiservicios (reparaciones + accesorios), ni ofrecía CRM con gamificación, automatizaciones complejas o SEO programático. Necesitaba un sistema que fuera la fuente única de verdad para todo: pedidos, inventario, clientes, reservas, facturación y automatizaciones. Así que lo construí.',
     },
     internalLinks: {
       jacobo: { text: 'Agente IA Jacobo | Case Study', href: '/agente-ia-jacobo' },
@@ -54,7 +54,7 @@ export const businessOsContent = {
         reasons: [
           {
             tool: 'RepairDesk (99$/mes)',
-            issue: 'Ya existía en 2019. Cubre ticketing e inventario, pero está diseñado para talleres de reparación puros. No soportaba el modelo multiservicios (accesorios, segunda mano, permutas), ni CRM con tiers/gamificación, ni automatizaciones complejas.',
+            issue: 'Ya existía en 2019. Cubre ticketing e inventario, pero está diseñado para talleres de reparación puros. No soportaba el modelo multiservicios (reparaciones + accesorios), ni CRM con tiers/gamificación, ni automatizaciones complejas.',
           },
           {
             tool: 'RepairShopr / Orderry',
@@ -247,7 +247,7 @@ export const businessOsContent = {
           },
           {
             title: '¿Por qué custom en vez de SaaS?',
-            detail: 'El SaaS impone su modelo de datos. Cuando tu negocio es multiservicios (reparación + accesorios + segunda mano + permutas), ningún vertical SaaS cubre todo. El coste de adaptación supera al de construcción.',
+            detail: 'El SaaS impone su modelo de datos. Cuando tu negocio es multiservicios (reparaciones + accesorios), ningún vertical SaaS cubre todo. El coste de adaptación supera al de construcción.',
           },
           {
             title: '¿Cuándo NO construir custom?',
@@ -395,7 +395,7 @@ export const businessOsContent = {
     },
     intro: {
       hook: '30,000+ repairs. 12 bases. 2,100 fields. Zero off-the-shelf ERPs. All built on Airtable.',
-      body: 'A multi-service repair business doesn\'t fit in a generic ERP. In 2019, I evaluated RepairDesk ($99/mo), Orderry and RepairShopr: all existed, but none covered the multi-service model (accessories, refurbished, trade-ins), nor offered CRM with gamification, complex automations or programmatic SEO. I needed a system that was the single source of truth for everything: orders, inventory, customers, bookings, billing and automations. So I built it.',
+      body: 'A multi-service repair business doesn\'t fit in a generic ERP. In 2019, I evaluated RepairDesk ($99/mo), Orderry and RepairShopr: all existed, but none covered the multi-service model (repairs + accessories), nor offered CRM with gamification, complex automations or programmatic SEO. I needed a system that was the single source of truth for everything: orders, inventory, customers, bookings, billing and automations. So I built it.',
     },
     internalLinks: {
       jacobo: { text: 'AI Agent Jacobo — Case Study', href: '/ai-agent-jacobo' },
@@ -430,7 +430,7 @@ export const businessOsContent = {
         reasons: [
           {
             tool: 'RepairDesk ($99/mo)',
-            issue: 'Already existed in 2019. Covers ticketing and inventory, but designed for pure repair shops. Didn\'t support the multi-service model (accessories, refurbished, trade-ins), CRM with tiers/gamification, or complex automations.',
+            issue: 'Already existed in 2019. Covers ticketing and inventory, but designed for pure repair shops. Didn\'t support the multi-service model (repairs + accessories), CRM with tiers/gamification, or complex automations.',
           },
           {
             tool: 'RepairShopr / Orderry',
@@ -623,7 +623,7 @@ export const businessOsContent = {
           },
           {
             title: 'Why custom over SaaS?',
-            detail: 'SaaS imposes its data model. When your business is multi-service (repair + accessories + refurbished + trade-ins), no vertical SaaS covers everything. The adaptation cost exceeds the build cost.',
+            detail: 'SaaS imposes its data model. When your business is multi-service (repairs + accessories), no vertical SaaS covers everything. The adaptation cost exceeds the build cost.',
           },
           {
             title: 'When NOT to build custom?',

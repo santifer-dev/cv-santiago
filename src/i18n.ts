@@ -1,15 +1,15 @@
 export const seo = {
   es: {
     title:
-      'Santiago Fernández | AI Product Manager · Solutions Architect · FDE',
+      'santifer | Builder · AI PM · Solutions Architect · AI FDE',
     description:
-      'Fundador reconvertido a AI Product Manager. Automatización inteligente, arquitectura de soluciones enterprise, plataformas no-code. Abierto a roles remotos EU / USA.',
+      'AI Product Manager & Solutions Architect. De automatizar mi propio negocio (2,100+ campos, 170h/mes) a llevar esa mentalidad a equipos más grandes. LLMs, agentes, no-code enterprise.',
   },
   en: {
     title:
-      'santifer | AI Product Manager · Solutions Architect · FDE',
+      'santifer | Builder · AI PM · Solutions Architect · AI FDE',
     description:
-      'Founder turned AI Product Manager. Intelligent automation, enterprise solution architecture, no-code platforms. Open to remote roles in EU / USA.',
+      'AI Product Manager & Solutions Architect. From automating my own business (2,100+ fields, 170h/mo saved) to bringing that mindset to bigger teams. LLMs, agents, no-code.',
   },
 };
 
