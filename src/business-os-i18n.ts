@@ -298,10 +298,19 @@ export const businessOsContent = {
             title: 'Documenta las reglas de negocio, no el código.',
             detail: 'Las automatizaciones de Airtable son visuales y autoexplicativas. Lo que necesita documentación son las reglas: "¿Por qué el margen mínimo es 30%?" y "¿Cuándo se reactiva un cliente inactivo?".',
           },
-          {
-            title: 'Construir para hoy, crecer con la plataforma.',
-            detail: 'El Business OS no nació con 12 bases y 50+ automatizaciones. En 2019, Airtable no tenía automatizaciones nativas, ni sync entre bases, ni Interface Designer. Todo vivía en una sola base: OTs, inventario, clientes, facturación. Funcionaba, pero a medida que crecían los datos y los procesos, la base se convertía en un monolito difícil de mantener. Cada nueva funcionalidad de la plataforma desbloqueaba una reorganización: cuando llegó sync entre bases, separé los dominios en bases independientes con sus propias fuentes de verdad (ERP, CRM, Piezas, CMS), sincronizando solo lo necesario mediante linked records. Las automatizaciones (2022) eliminaron los flujos manuales. Interface Designer (2023) dio a los empleados interfaces limpias en vez de tablas crudas. Y el filtrado dinámico de linked records (2024) permitió que al seleccionar un modelo en una OT, el campo de piezas solo mostrara las compatibles, en vez de las 500+ del catálogo completo. La decisión fue pragmática: construir con la mejor herramienta disponible y refactorizar cuando la plataforma lo permitiera.',
-          },
+        ],
+      },
+      platformEvolution: {
+        heading: 'Evolución de la Plataforma',
+        tagline: 'Construir con lo mejor disponible. Refactorizar cuando la plataforma lo permita.',
+        bridge: ['Construir este sistema me enseñó hasta dónde podía llegar.', 'Así que vendí el negocio y fui a {por más}.'],
+        steps: [
+          { year: '2019', event: 'Base única + Zapier', detail: 'OTs, inventario, clientes y facturación en una sola base. Zapier conectaba los flujos externos.' },
+          { year: '2021', event: 'Sync entre bases → bounded domains', detail: 'Dominios separados en bases independientes (ERP, CRM, Piezas, CMS). Solo se sincroniza lo necesario.' },
+          { year: '2022', event: 'Automatizaciones nativas reemplazan Make', detail: 'Migración de Make a automatizaciones nativas de Airtable. 50+ flujos internos sin dependencias externas.' },
+          { year: '2023', event: 'Interface Designer → adiós a las tablas crudas', detail: 'Todo el equipo trabaja con interfaces diseñadas por rol, no con tablas. Más rápido, menos errores.' },
+          { year: '2024', event: 'Filtrado dinámico → solo piezas compatibles', detail: 'Al seleccionar un modelo en una OT, el campo de piezas solo muestra las compatibles — no las 1.000+ del catálogo.' },
+          { year: '2025', event: 'Jacobo AI Agent → the payoff', detail: 'Agente omnicanal (voz + WhatsApp) que reserva, presupuesta y resuelve. Lanzado en semanas, no meses.', punchline: 'Cinco años de arquitectura limpia lo hicieron {inevitable}.' },
         ],
       },
       replicability: {
@@ -674,10 +683,19 @@ export const businessOsContent = {
             title: 'Document the business rules, not the code.',
             detail: 'Airtable automations are visual and self-explanatory. What needs documentation are the rules: "Why is the minimum margin 30%?" and "When does an inactive customer get reactivated?".',
           },
-          {
-            title: 'Build for today, grow with the platform.',
-            detail: 'The Business OS didn\'t start as 12 bases with 50+ automations. In 2019, Airtable had no native automations, no base syncing, no Interface Designer. Everything lived in a single base: work orders, inventory, customers, billing. It worked, but as data and processes grew, the base became a monolith that was hard to maintain. Each new platform capability unlocked a reorganization: when base syncing arrived, I separated domains into independent bases with their own sources of truth (ERP, CRM, Parts, CMS), syncing only what was needed via linked records. Automations (2022) eliminated manual workflows. Interface Designer (2023) gave employees clean interfaces instead of raw tables. And dynamic filtering of linked records (2024) meant that selecting a model on a work order would only show compatible parts, instead of the full 500+ catalog. The decision was pragmatic: build with the best available tool and refactor when the platform allowed it.',
-          },
+        ],
+      },
+      platformEvolution: {
+        heading: 'Platform Evolution',
+        tagline: 'Build with the best available tool. Refactor when the platform allows it.',
+        bridge: ['Building this system showed me what I could do at scale.', 'So I sold the business and went to {find out}.'],
+        steps: [
+          { year: '2019', event: 'Single base + Zapier', detail: 'Work orders, inventory, customers, and billing in one base. Zapier connected external flows.' },
+          { year: '2021', event: 'Base syncing → bounded domains', detail: 'Domains separated into independent bases (ERP, CRM, Parts, CMS). Only sync what\'s needed.' },
+          { year: '2022', event: 'Native automations replace Make', detail: 'Migrated from Make to Airtable native automations. 50+ internal flows with zero external dependencies.' },
+          { year: '2023', event: 'Interface Designer → goodbye raw tables', detail: 'The whole team works with role-based designed interfaces, not tables. Faster, fewer errors.' },
+          { year: '2024', event: 'Dynamic filtering → compatible parts only', detail: 'Selecting a model on a work order filters parts to compatible ones only — not the full 1,000+ catalog.' },
+          { year: '2025', event: 'Jacobo AI Agent → the payoff', detail: 'Omnichannel voice + WhatsApp agent. Shipped in weeks, not months.', punchline: 'Five years of clean architecture made it {inevitable}.' },
         ],
       },
       replicability: {

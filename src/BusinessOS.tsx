@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { motion } from 'motion/react'
 import { type N8nLang as Lang } from './n8n-i18n'
 import { buildArticleJsonLd } from './articles/json-ld'
 
@@ -1047,6 +1048,63 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
             </div>
           ))}
         </div>
+
+        {/* Platform Evolution Timeline */}
+        <AnchorHeading id="platform-evolution">{t.sections.platformEvolution.heading}</AnchorHeading>
+        <p className="text-muted-foreground leading-relaxed mb-6 italic">{t.sections.platformEvolution.tagline}</p>
+        <div className="rounded-xl bg-primary/5 border border-primary/20 p-6 sm:p-8 mb-8">
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute left-[1.35rem] top-3 bottom-3 w-px bg-primary/20" aria-hidden="true" />
+            <div className="space-y-6">
+              {t.sections.platformEvolution.steps.map((step: { year: string; event: string; detail: string; punchline?: string }) => (
+                <div key={step.year} className="relative flex gap-4">
+                  {/* Year pill */}
+                  <div className="flex flex-col items-center shrink-0 z-10">
+                    <span className="inline-flex items-center justify-center w-11 h-7 rounded-full bg-primary/15 text-primary text-xs font-bold font-display tracking-tight">{step.year}</span>
+                  </div>
+                  {/* Content */}
+                  <div className="pt-0.5 min-w-0">
+                    <p className="font-display font-semibold text-foreground leading-snug">{step.event}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{step.detail}</p>
+                    {step.punchline && (() => {
+                      const parts = (step as { punchline: string }).punchline.split(/\{|\}/)
+                      return (
+                        <p className="text-sm font-medium text-primary mt-2 italic">
+                          {parts.map((part: string, i: number) =>
+                            i === 1 ? <span key={i} className="underline decoration-primary/40 underline-offset-2">{part}</span> : part
+                          )}
+                        </p>
+                      )
+                    })()}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Personal bridge — isolated with reveal-on-scroll */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.5, delay: 0.2, ease: 'easeOut' }}
+          className="text-center py-8 mb-8 space-y-2"
+        >
+          {(t.sections.platformEvolution.bridge as readonly string[]).map((line: string, idx: number) => {
+            const parts = line.split(/\{|\}/)
+            return (
+              <p key={idx} className="font-display text-lg sm:text-xl font-semibold text-foreground leading-snug">
+                {parts.length > 1
+                  ? parts.map((part: string, i: number) =>
+                      i === 1 ? <span key={i} className="text-primary">{part}</span> : part
+                    )
+                  : line}
+              </p>
+            )
+          })}
+        </motion.div>
 
         {/* Lessons */}
         <LessonsSection heading={t.sections.lessons.heading} items={t.sections.lessons.items} />
