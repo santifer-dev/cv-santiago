@@ -1942,6 +1942,16 @@ function App() {
                     <span className="badge px-2 py-0.5 bg-accent/10 text-accent">{t.claudeCode.badge}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{t.claudeCode.desc}</p>
+                  {t.claudeCode.highlights && (
+                    <ul className="mt-3 space-y-1.5">
+                      {(t.claudeCode.highlights as readonly string[]).map((h: string, i: number) => (
+                        <li key={i} className="text-xs text-muted-foreground flex gap-2">
+                          <span className="text-accent mt-0.5 shrink-0">›</span>
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                   {t.claudeCode.certs && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {t.claudeCode.certs.map((cert: { title: string; url: string }, i: number) => (

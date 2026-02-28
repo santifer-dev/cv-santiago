@@ -252,7 +252,13 @@ export const translations = {
     claudeCode: {
       title: 'Claude Code Power User',
       badge: 'High-Agency · AI-Fluency',
-      desc: 'Herramienta principal de desarrollo. Custom skills reutilizables (deploy automatizado, traducción técnica, diseño), agentes especializados por proyecto, e integración de MCPs (GitHub, Vercel, etc.). Mentalidad high-agency: sé qué construir y cómo orquestar la IA para entregarlo.',
+      desc: 'Mi workflow diario es un laboratorio de orquestación multi-agente. Los problemas que resuelvo (gestión de contexto, comunicación entre agentes, memoria persistente) son los mismos que enfrentan los clientes enterprise.',
+      highlights: [
+        'Multi-agent orchestration: 5+ agentes especializados en paralelo via tmux, cada uno con su contexto, skills y hooks',
+        'Inter-agent IPC: protocolo async de comunicación entre agentes via JSON — se consultan entre sí para decisiones cross-domain',
+        'Memory persistence: hook pre-compact que cristaliza conocimiento con Haiku antes de cada compactación — memoria que sobrevive sesiones',
+        'Custom skills reutilizables: deploy automatizado, traducción técnica, diseño, SEO, consultoría de carrera',
+      ],
       certs: [
         { title: 'Building with the Claude API', url: 'https://verify.skilljar.com/c/s4bu5znz53vm' },
         { title: 'Advanced MCP Topics', url: 'https://verify.skilljar.com/c/eiovmq5qaeyd' },
@@ -959,7 +965,13 @@ export const translations = {
     claudeCode: {
       title: 'Claude Code Power User',
       badge: 'High-Agency · AI-Fluency',
-      desc: 'Primary dev tool. I build reusable custom skills (automated deploy, tech translation, design systems), configure per-project agents, and wire up MCPs (GitHub, Vercel, etc.). High-agency mindset: I know what to build and how to orchestrate AI to ship it.',
+      desc: 'My daily workflow is a multi-agent orchestration lab. The problems I solve (context management, inter-agent communication, memory persistence) are the same ones enterprise customers face.',
+      highlights: [
+        'Multi-agent orchestration: 5+ specialized agents running in parallel via tmux, each with its own context, skills, and hooks',
+        'Inter-agent IPC: async communication protocol between agents via JSON — they consult each other for cross-domain decisions',
+        'Memory persistence: pre-compact hook that crystallizes knowledge with Haiku before each compaction — memory that survives sessions',
+        'Reusable custom skills: automated deploy, tech translation, design systems, SEO, career consulting',
+      ],
       certs: [
         { title: 'Building with the Claude API', url: 'https://verify.skilljar.com/c/s4bu5znz53vm' },
         { title: 'Advanced MCP Topics', url: 'https://verify.skilljar.com/c/eiovmq5qaeyd' },
