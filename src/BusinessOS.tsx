@@ -608,16 +608,16 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                     <div className="space-y-3 mt-3">
                       <div className="bg-background/50 rounded-lg border border-border p-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold text-white shrink-0">M</div>
-                          <span className="text-sm font-medium text-foreground">Marisa</span>
+                          <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center text-xs font-bold text-white shrink-0">J</div>
+                          <span className="text-sm font-medium text-foreground">Jose A. Fernández</span>
                           <div className="flex gap-0.5 ml-auto">
                             {[1,2,3,4,5].map(s => <svg key={s} viewBox="0 0 20 20" className="w-3.5 h-3.5 text-yellow-400" fill="currentColor"><path d="M10 1l2.47 5.01L18 6.94l-4 3.89.94 5.51L10 13.88l-4.94 2.46.94-5.51-4-3.89 5.53-.93L10 1z"/></svg>)}
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground italic mb-3">
                           {lang === 'es'
-                            ? '"Se nos estropeó un iPhone 8 y fuimos al servicio oficial de Apple. Nos dijeron que no tenía arreglo. Llevamos el móvil a Santifer y en 48 horas estaba como nuevo. Totalmente recomendable."'
-                            : '"Our iPhone 8 broke and we went to the official Apple service. They said it couldn\'t be fixed. We took the phone to Santifer and in 48 hours it was like new. Totally recommended."'}
+                            ? '"La experiencia ha sido muy positiva. El plazo de reparación es 1 hora y lo cumplieron, el precio es razonable, la calidad de la reparación es muy buena. El contacto y la gestión a través del chatbot que tienen en WhatsApp funciona muy bien."'
+                            : '"The experience was very positive. The 1-hour repair time was met, the price is reasonable, and the repair quality is great. The contact and management through their WhatsApp chatbot works really well."'}
                         </p>
                         <div className="bg-primary/5 border-l-2 border-primary/30 pl-3 py-2">
                           <p className="text-xs text-muted-foreground mb-1 font-medium">
@@ -625,27 +625,27 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {lang === 'es'
-                              ? '"¡Gracias Marisa! Nos alegra que tu iPhone 8 esté funcionando perfectamente. El problema de placa base que traía tiene solución con microsoldadura — algo que el servicio oficial no ofrece. ¡Un saludo!"'
-                              : '"Thanks Marisa! Glad your iPhone 8 is working perfectly. The motherboard issue it had can be solved with micro-soldering — something the official service doesn\'t offer. Cheers!"'}
+                              ? '"¡Gracias Jose Antonio! Nos alegra que la reparación de tu iPad cumpliera el plazo y que el chatbot de WhatsApp te resultara cómodo para gestionar la cita y el seguimiento. Aquí nos tienes para lo que necesites."'
+                              : '"Thanks Jose Antonio! Glad the iPad repair met the deadline and that the WhatsApp chatbot made booking and tracking easy for you. Here whenever you need us."'}
                           </p>
                           <p className="text-[10px] text-primary/50 mt-1.5 flex items-center gap-1">
                             <svg viewBox="0 0 24 24" className="w-3 h-3 text-[#18BFFF]" fill="currentColor"><path d="M11.992 1.966c-.434 0-.87.086-1.28.257L1.779 5.917c-.503.208-.49.908.012 1.116l8.982 3.558a3.266 3.266 0 0 0 2.454 0l8.982-3.558c.503-.196.503-.908.012-1.116l-8.957-3.694a3.255 3.255 0 0 0-1.272-.257zM23.4 8.056a.589.589 0 0 0-.222.045l-10.012 3.877a.612.612 0 0 0-.38.564v8.896a.6.6 0 0 0 .821.552L23.62 18.1a.583.583 0 0 0 .38-.551V8.653a.6.6 0 0 0-.6-.596zM.676 8.095a.644.644 0 0 0-.48.19C.086 8.396 0 8.53 0 8.69v8.355c0 .442.515.737.908.54l6.27-3.006.307-.147 2.969-1.436c.466-.22.43-.908-.061-1.092L.883 8.138a.57.57 0 0 0-.207-.044z"/></svg>
-                            {lang === 'es' ? 'Contexto del CRM: iPhone 8, microsoldadura placa base, técnico: Álvaro' : 'CRM context: iPhone 8, motherboard micro-soldering, technician: Álvaro'}
+                            {lang === 'es' ? 'Contexto del CRM: iPad, cita gestionada vía Jacobo (chatbot WhatsApp), reparación express 1h' : 'CRM context: iPad, appointment via Jacobo (WhatsApp chatbot), 1h express repair'}
                           </p>
                         </div>
                       </div>
                       <div className="bg-background/50 rounded-lg border border-border p-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <div className="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center text-xs font-bold text-white shrink-0">B</div>
-                          <span className="text-sm font-medium text-foreground">Bea</span>
+                          <div className="w-7 h-7 rounded-full bg-sky-600 flex items-center justify-center text-xs font-bold text-white shrink-0">C</div>
+                          <span className="text-sm font-medium text-foreground">Cristian</span>
                           <div className="flex gap-0.5 ml-auto">
                             {[1,2,3,4,5].map(s => <svg key={s} viewBox="0 0 20 20" className="w-3.5 h-3.5 text-yellow-400" fill="currentColor"><path d="M10 1l2.47 5.01L18 6.94l-4 3.89.94 5.51L10 13.88l-4.94 2.46.94-5.51-4-3.89 5.53-.93L10 1z"/></svg>)}
                           </div>
                         </div>
                         <p className="text-sm text-muted-foreground italic mb-3">
                           {lang === 'es'
-                            ? '"Es la segunda vez que voy a reparar otro modelo de teléfono. Muy bien organizado, el servicio excelente y el precio muy bueno."'
-                            : '"This is the second time I\'ve gone to repair a different phone model. Very well organized, excellent service and great price."'}
+                            ? '"(Edito mi reseña anterior): Tras comentar el problema del detalle en el acabado, el responsable del taller me contactó personalmente para ofrecer una solución inmediata. Ofreció cita para esa misma tarde. El resultado ahora es excelente. Errores puede haber en cualquier sitio, pero la profesionalidad se demuestra en cómo se solucionan."'
+                            : '"(Editing my previous review): After mentioning the finishing issue, the workshop manager personally contacted me to offer an immediate solution. He offered an appointment that same afternoon. The result is now excellent. Mistakes can happen anywhere, but professionalism shows in how they\'re resolved."'}
                         </p>
                         <div className="bg-primary/5 border-l-2 border-primary/30 pl-3 py-2">
                           <p className="text-xs text-muted-foreground mb-1 font-medium">
@@ -653,12 +653,12 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {lang === 'es'
-                              ? '"¡Gracias Bea! Nos encanta verte de vuelta. Ya sabes que como clienta Gold tienes prioridad en citas y garantía extendida. ¡Hasta la próxima!"'
-                              : '"Thanks Bea! Love having you back. As a Gold customer you know you get priority booking and extended warranty. See you next time!"'}
+                              ? '"Gracias por actualizar tu reseña, Cristian. El sistema nos alertó de tu valoración inicial y revisamos tu historial: cristal iPhone con detalle en el acabado. Te contactamos directamente para rectificar esa misma tarde. Para nosotros es fundamental responder cuando algo no queda perfecto a la primera."'
+                              : '"Thanks for updating your review, Cristian. Our system flagged your initial rating and we reviewed your history: iPhone glass with a finishing detail. We contacted you directly to fix it that same afternoon. For us, responding when something isn\'t perfect the first time is essential."'}
                           </p>
                           <p className="text-[10px] text-primary/50 mt-1.5 flex items-center gap-1">
                             <svg viewBox="0 0 24 24" className="w-3 h-3 text-[#18BFFF]" fill="currentColor"><path d="M11.992 1.966c-.434 0-.87.086-1.28.257L1.779 5.917c-.503.208-.49.908.012 1.116l8.982 3.558a3.266 3.266 0 0 0 2.454 0l8.982-3.558c.503-.196.503-.908.012-1.116l-8.957-3.694a3.255 3.255 0 0 0-1.272-.257zM23.4 8.056a.589.589 0 0 0-.222.045l-10.012 3.877a.612.612 0 0 0-.38.564v8.896a.6.6 0 0 0 .821.552L23.62 18.1a.583.583 0 0 0 .38-.551V8.653a.6.6 0 0 0-.6-.596zM.676 8.095a.644.644 0 0 0-.48.19C.086 8.396 0 8.53 0 8.69v8.355c0 .442.515.737.908.54l6.27-3.006.307-.147 2.969-1.436c.466-.22.43-.908-.061-1.092L.883 8.138a.57.57 0 0 0-.207-.044z"/></svg>
-                            {lang === 'es' ? 'Contexto del CRM: clienta recurrente, tier Gold, 2ª reparación, Samsung Galaxy S21' : 'CRM context: returning customer, Gold tier, 2nd repair, Samsung Galaxy S21'}
+                            {lang === 'es' ? 'Contexto del CRM: alerta reseña negativa, cristal iPhone, ticket reabierto, resolución mismo día' : 'CRM context: negative review alert, iPhone glass, ticket reopened, same-day resolution'}
                           </p>
                         </div>
                       </div>

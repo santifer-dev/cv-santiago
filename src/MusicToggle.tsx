@@ -233,18 +233,18 @@ const SEEN_KEY = 'ambient-seen';
 const AUTO_SHOW_DELAY = 10_000;
 
 export default function MusicToggle() {
-  const [playing, setPlaying] = useState(() => {
-    try { return localStorage.getItem(STORAGE_KEY) === 'on'; } catch { return false; }
-  });
+  const [playing, setPlaying] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [autoShow, setAutoShow] = useState(false);
   const [incoming, setIncoming] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const interactedRef = useRef(false);
   const chatOpenRef = useRef(false);
+  const wasPlayingRef = useRef(false);
 
   // Detect lang reactively from route
   const { pathname } = useLocation();
@@ -258,6 +258,8 @@ export default function MusicToggle() {
     audio.preload = 'none';
     audio.crossOrigin = 'anonymous';
     audioRef.current = audio;
+    // Remember if user had music on last session (visual hint only, no autoplay)
+    try { wasPlayingRef.current = localStorage.getItem(STORAGE_KEY) === 'on'; } catch {}
     return () => { audio.pause(); audio.src = ''; };
   }, []);
 
@@ -294,6 +296,11 @@ export default function MusicToggle() {
     const handleChatDuck = (e: Event) => {
       const open = (e as CustomEvent).detail?.open;
       chatOpenRef.current = open;
+      setChatOpen(open);
+      if (open) {
+        setAutoShow(false);
+        setIncoming(false);
+      }
       const audio = audioRef.current;
       if (!audio || !playing) return;
       fadeTo(audio, open ? VOL_CHAT_OPEN : VOL_DEFAULT, FADE_MS);
@@ -333,6 +340,7 @@ export default function MusicToggle() {
 
   const toggle = useCallback(() => {
     interactedRef.current = true;
+    setHovered(false);
     setAutoShow(false);
     setIncoming(false);
     try { localStorage.setItem(SEEN_KEY, '1'); } catch {}
@@ -340,6 +348,9 @@ export default function MusicToggle() {
   }, []);
 
   const showTooltip = hovered || autoShow;
+
+  // Hide completely on touch devices when chat is fullscreen
+  if (chatOpen && typeof window !== 'undefined' && !window.matchMedia('(hover: hover)').matches) return null;
 
   return (
     <motion.button
@@ -349,9 +360,9 @@ export default function MusicToggle() {
       whileTap={{ scale: 0.95 }}
       transition={{ type: 'spring', stiffness: 260, damping: 20 }}
       onClick={toggle}
-      onMouseEnter={() => { setHovered(true); interactedRef.current = true; }}
-      onMouseLeave={() => setHovered(false)}
-      className={`fixed z-50 w-12 h-12 rounded-full flex items-center justify-center bg-card shadow-md hover:shadow-lg transition-shadow ${incoming ? 'border-2 border-primary' : 'border border-border/50'}`}
+      onMouseEnter={() => { if (window.matchMedia('(hover: hover)').matches) { setHovered(true); interactedRef.current = true; } }}
+      onMouseLeave={() => { if (window.matchMedia('(hover: hover)').matches) setHovered(false); }}
+      className={`fixed z-50 w-10 h-10 rounded-full flex items-center justify-center bg-card shadow-md hover:shadow-lg transition-shadow ${incoming ? 'border-2 border-primary' : 'border border-border/50'}`}
       style={{
         bottom: 'max(1.5rem, env(safe-area-inset-bottom, 0px) + 0.5rem)',
         left: 'max(1.5rem, env(safe-area-inset-left, 0px) + 0.5rem)',

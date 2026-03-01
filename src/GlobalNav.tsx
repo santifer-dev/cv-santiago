@@ -200,7 +200,7 @@ function NavControls({ altPath, altLabel, lang, isDark, toggleTheme }: {
     <div className="flex items-center gap-2">
       <Link
         to={altPath}
-        className="inline-flex items-center justify-center gap-1.5 w-[4.5rem] py-1.5 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+        className="inline-flex items-center justify-center gap-1.5 w-[4.5rem] h-10 rounded-full bg-card border border-border text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
       >
         {lang === 'es' ? <FlagES className="w-3.5 h-3.5" /> : <FlagEN className="w-3.5 h-3.5" />}
         {altLabel}
