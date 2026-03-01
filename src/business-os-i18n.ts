@@ -303,7 +303,7 @@ export const businessOsContent = {
       platformEvolution: {
         heading: 'Evolución de la Plataforma',
         tagline: 'Construir con lo mejor disponible. Refactorizar cuando la plataforma lo permita.',
-        bridge: ['Construir este sistema me enseñó hasta dónde podía llegar.', 'Así que vendí el negocio y fui a {por más}.', 'Sigue operando bajo la marca Santifer iRepair — con los mismos sistemas. Solo que {sin mí}.'],
+        bridge: ['Estos sistemas siguen operando bajo la marca Santifer iRepair.', 'Sólo que {sin mí}.', 'Construir este sistema me enseñó hasta dónde podía llegar.', 'Así que vendí el negocio y fui a {por más}.'],
         steps: [
           { year: '2019', event: 'Base única + Zapier', detail: 'OTs, inventario, clientes y facturación en una sola base. Zapier conectaba los flujos externos.' },
           { year: '2021', event: 'Sync entre bases → bounded domains', detail: 'Dominios separados en bases independientes (ERP, CRM, Piezas, CMS). Solo se sincroniza lo necesario.' },
@@ -688,7 +688,7 @@ export const businessOsContent = {
       platformEvolution: {
         heading: 'Platform Evolution',
         tagline: 'Build with the best available tool. Refactor when the platform allows it.',
-        bridge: ['Building this system showed me what I could do at scale.', 'So I sold the business and went to {find out}.', 'It still operates under the Santifer iRepair brand — same systems. Just {without me}.'],
+        bridge: ['These systems still operate under the Santifer iRepair brand.', 'Just {without me}.', 'Building this system showed me what I could do at scale.', 'So I sold the business and went to {find out}.'],
         steps: [
           { year: '2019', event: 'Single base + Zapier', detail: 'Work orders, inventory, customers, and billing in one base. Zapier connected external flows.' },
           { year: '2021', event: 'Base syncing → bounded domains', detail: 'Domains separated into independent bases (ERP, CRM, Parts, CMS). Only sync what\'s needed.' },

@@ -1095,7 +1095,7 @@ export default function BusinessOS({ lang = 'en' }: { lang?: Lang }) {
           {(t.sections.platformEvolution.bridge as readonly string[]).map((line: string, idx: number) => {
             const parts = line.split(/\{|\}/)
             return (
-              <p key={idx} className="font-display text-lg sm:text-xl font-semibold text-foreground leading-snug">
+              <p key={idx} className={`font-display text-lg sm:text-xl font-semibold text-foreground leading-snug${idx === 2 ? ' mt-6' : ''}`}>
                 {parts.length > 1
                   ? parts.map((part: string, i: number) =>
                       i === 1 ? <span key={i} className="text-primary">{part}</span> : part
