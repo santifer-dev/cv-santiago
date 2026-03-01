@@ -55,6 +55,17 @@ function GlobalChat() {
   )
 }
 
+function GlobalMusic() {
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+  if (!hydrated) return null
+  return (
+    <Suspense fallback={null}>
+      <MusicToggle />
+    </Suspense>
+  )
+}
+
 // Console easter egg
 const ASCII_ART = `\n ███████╗ █████╗ ███╗   ██╗████████╗██╗███████╗███████╗██████╗ \n ██╔════╝██╔══██╗████╗  ██║╚══██╔══╝██║██╔════╝██╔════╝██╔══██╗\n ███████╗███████║██╔██╗ ██║   ██║   ██║█████╗  █████╗  ██████╔╝\n ╚════██║██╔══██║██║╚██╗██║   ██║   ██║██╔══╝  ██╔══╝  ██╔══██╗\n ███████║██║  ██║██║ ╚████║   ██║   ██║██║     ███████╗██║  ██║\n ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝\n`
 console.log(`%c${ASCII_ART}`, 'color: #f97316; font-size: 12px; font-family: monospace;')
@@ -118,9 +129,7 @@ const app = (
         </Suspense>
       </PageTransition>
       <GlobalChat />
-      <Suspense fallback={null}>
-        <MusicToggle />
-      </Suspense>
+      <GlobalMusic />
     </BrowserRouter>
   </StrictMode>
 )
