@@ -468,3 +468,21 @@ section[id], footer[id] {
     stroke-dasharray: none;
   }
 }
+
+/* Music toggle muted bars breathing */
+@keyframes muted-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.65); }
+}
+
+/* Terminal cursor blink for comm tooltip */
+@keyframes terminal-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Incoming transmission pulse on music button */
+@keyframes incoming-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
+  50% { box-shadow: 0 0 12px 4px hsl(var(--primary) / 0.2); }
+}

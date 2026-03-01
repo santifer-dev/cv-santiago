@@ -7,6 +7,7 @@ import GlobalNav from './GlobalNav.tsx'
 import { articleRegistry, getEsSlugs } from './articles/registry'
 
 const FloatingChat = lazy(() => import('./FloatingChat'))
+const MusicToggle = lazy(() => import('./MusicToggle'))
 
 // Lazy-load article components from registry
 const articleComponents: Record<string, React.LazyExoticComponent<ComponentType<{ lang: 'es' | 'en' }>>> = {}
@@ -117,6 +118,9 @@ const app = (
         </Suspense>
       </PageTransition>
       <GlobalChat />
+      <Suspense fallback={null}>
+        <MusicToggle />
+      </Suspense>
     </BrowserRouter>
   </StrictMode>
 )

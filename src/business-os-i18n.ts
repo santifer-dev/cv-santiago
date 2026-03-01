@@ -303,7 +303,7 @@ export const businessOsContent = {
       platformEvolution: {
         heading: 'Evolución de la Plataforma',
         tagline: 'Construir con lo mejor disponible. Refactorizar cuando la plataforma lo permita.',
-        bridge: ['Construir este sistema me enseñó hasta dónde podía llegar.', 'Así que vendí el negocio y fui a {por más}.'],
+        bridge: ['Construir este sistema me enseñó hasta dónde podía llegar.', 'Así que vendí el negocio y fui a {por más}.', 'Sigue operando bajo la marca Santifer iRepair — con los mismos sistemas. Solo que {sin mí}.'],
         steps: [
           { year: '2019', event: 'Base única + Zapier', detail: 'OTs, inventario, clientes y facturación en una sola base. Zapier conectaba los flujos externos.' },
           { year: '2021', event: 'Sync entre bases → bounded domains', detail: 'Dominios separados en bases independientes (ERP, CRM, Piezas, CMS). Solo se sincroniza lo necesario.' },
@@ -326,7 +326,7 @@ export const businessOsContent = {
     },
     cta: {
       heading: '¿Tienes un problema operativo que no cabe en un SaaS?',
-      body: 'Ya sea para tu propia empresa, para los clientes de tu plataforma, o para un equipo que necesita a alguien que construya desde dentro — estos patrones funcionan. Cuéntame el problema y te digo si puedo resolverlo.',
+      body: 'Construí un sistema que gestionó +30.000 reparaciones, automatizó 170h/mes y sobrevivió una venta de empresa — intacto. Ya sea para tu propia empresa, para los clientes de tu plataforma, o para un equipo que necesita a alguien que construya desde dentro — cuéntame el problema.',
       label: 'Hablemos',
     },
     faq: {
@@ -349,8 +349,8 @@ export const businessOsContent = {
           a: 'Años de prueba y error. Pero con un patrón clave: cada módulo nuevo tardaba la mitad que el anterior, porque el aprendizaje acumulado aceleraba todo. El sistema creció orgánicamente mientras el negocio operaba — nunca hubo un "paramos todo y construimos".',
         },
         {
-          q: '¿Quién mantiene el sistema?',
-          a: 'Yo, dedicando ~4h/semana. Pero no es solo mantenimiento — son mejoras continuas y nuevas funcionalidades basadas en el feedback de los empleados y lo que pide el mercado. El sistema evoluciona constantemente.',
+          q: '¿Quién mantiene el sistema ahora?',
+          a: 'El comprador. Vendí el negocio en 2025 como going-concern: marca, sistemas y flujos de trabajo incluidos. Que el comprador lo adquiriera como activo operativo — sin necesidad de reconstruir nada — es la validación definitiva de la arquitectura.',
         },
         {
           q: '¿Se puede replicar para otro negocio?',
@@ -688,7 +688,7 @@ export const businessOsContent = {
       platformEvolution: {
         heading: 'Platform Evolution',
         tagline: 'Build with the best available tool. Refactor when the platform allows it.',
-        bridge: ['Building this system showed me what I could do at scale.', 'So I sold the business and went to {find out}.'],
+        bridge: ['Building this system showed me what I could do at scale.', 'So I sold the business and went to {find out}.', 'It still operates under the Santifer iRepair brand — same systems. Just {without me}.'],
         steps: [
           { year: '2019', event: 'Single base + Zapier', detail: 'Work orders, inventory, customers, and billing in one base. Zapier connected external flows.' },
           { year: '2021', event: 'Base syncing → bounded domains', detail: 'Domains separated into independent bases (ERP, CRM, Parts, CMS). Only sync what\'s needed.' },
@@ -711,7 +711,7 @@ export const businessOsContent = {
     },
     cta: {
       heading: 'Got an operational problem that doesn\'t fit in a SaaS?',
-      body: 'Whether it\'s for your own company, for your platform\'s customers, or for a team that needs someone to build from the inside — these patterns work. Tell me the problem and I\'ll tell you if I can solve it.',
+      body: 'I built a system that managed 30,000+ repairs, automated 170h/month, and survived a business sale — intact. Whether it\'s for your own company, your platform\'s customers, or a team that needs someone to build from the inside — tell me the problem.',
       label: 'Get in touch',
     },
     faq: {
@@ -734,8 +734,8 @@ export const businessOsContent = {
           a: 'Years of trial and error. But with a key pattern: each new module took half the time of the previous one, because accumulated learning accelerated everything. The system grew organically while the business operated — there was never a "stop everything and build" moment.',
         },
         {
-          q: 'Who maintains the system?',
-          a: 'Me, dedicating ~4h/week. But it\'s not just maintenance — it\'s continuous improvements and new features based on employee feedback and market demands. The system is constantly evolving.',
+          q: 'Who maintains the system now?',
+          a: 'The buyer. I sold the business in 2025 as a going concern: brand, systems, and workflows included. The fact that the buyer acquired it as a running operation — without needing to rebuild anything — is the ultimate validation of the architecture.',
         },
         {
           q: 'Can this be replicated for another business?',
