@@ -316,7 +316,7 @@ export default function MusicToggle() {
     if (seen || playing) return;
 
     const showTimer = setTimeout(() => {
-      if (interactedRef.current || chatOpenRef.current) return;
+      if (interactedRef.current || chatOpenRef.current || window.innerWidth < 640) return;
       setAutoShow(true);
       setIncoming(true);
     }, AUTO_SHOW_DELAY);

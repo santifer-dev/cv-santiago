@@ -227,7 +227,7 @@ export default function GlobalNav() {
   const altLabel = lang === 'es' ? 'ES' : 'EN'
 
   const t = translations[lang]
-  const hasBar = !isHome || showBanner
+  const hasBar = !isHome
 
   // Breadcrumb: show active section label or fall back to page title
   const sectionLabels = SECTION_LABELS[pathname]
@@ -334,12 +334,23 @@ export default function GlobalNav() {
     )
   }
 
-  // No bar: floating controls only
+  // Home: controls always fixed at same position, banner bar grows behind them
   if (!hydrated) return null
 
   return (
-    <div className="fixed top-6 right-6 z-50">
-      {controls}
-    </div>
+    <>
+      {/* Translucent bar — appears/disappears without moving controls */}
+      {showBanner && (
+        <div
+          className="fixed top-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-b border-border"
+          style={{ height: 'calc(1rem + 2.5rem + 0.75rem)', ...(animateBanner ? fade('0.35s') : {}) }}
+        />
+      )}
+      {/* Controls + banner — always at same fixed position */}
+      <div className="fixed top-4 right-6 z-50 flex items-center gap-3">
+        {bannerMessage}
+        {controls}
+      </div>
+    </>
   )
 }

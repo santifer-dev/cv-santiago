@@ -1173,17 +1173,17 @@ function App() {
               <p className="text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-6">
                 {t.summary.p2} <span className="text-foreground font-medium">{t.summary.p2Highlight}</span>{t.summary.p2End}
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
                 {t.coreCompetencies.items.map((item, i) => (
                   <div
                     key={i}
-                    className="p-4 rounded-xl bg-background/50 border border-border hover:border-accent/30 transition-colors group"
+                    className="p-3 sm:p-4 rounded-xl bg-background/50 border border-border hover:border-accent/30 transition-colors group"
                   >
-                    <div className="flex items-start gap-2 mb-1 min-h-[2.5rem]">
-                      <Zap className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                    <div className="flex items-center sm:items-start gap-2 sm:mb-1 sm:min-h-[2.5rem]">
+                      <Zap className="w-4 h-4 text-accent shrink-0" />
                       <span className="text-sm font-semibold group-hover:text-accent transition-colors leading-tight">{item.title}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground pl-6">{item.desc}</p>
+                    <p className="text-sm text-muted-foreground pl-6 hidden sm:block">{item.desc}</p>
                   </div>
                 ))}
               </div>
