@@ -644,7 +644,7 @@ export const jacoboContent = {
           coda: 'Jacobo no fue un experimento. Fue la pieza que cerró un ciclo de 16 años: construir un negocio, sistematizarlo hasta que funcionara solo, y venderlo como empresa en marcha. Los sistemas que construí — incluido Jacobo — siguen operando hoy bajo nuevo dueño.',
           crossLink: {
             text: 'Jacobo se construyó sobre el Business OS que diseñé durante 5 años — lee el case study completo →',
-            href: '/business-os',
+            href: '/business-os-para-airtable',
           },
         },
         lessons: {
@@ -1528,11 +1528,11 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
             'Response times swung wildly depending on the day\'s workload',
             'Data lived in three places: Airtable, the calendar, and inventory',
             'Availability stopped at store closing time',
-            'A part-time support hire cost more than the business could justify',
+            'Hiring part-time support didn\'t pencil out',
             'Customers reached out via WhatsApp and landline. The solution had to cover both with shared logic, not duplicate the work',
           ],
           alternatives: {
-            body: 'Three things were clear from day one: Airtable was the brain (the Business OS had been the SSOT for years), I needed real tool calling against that data, and the agent had to work across voice + chat sharing the same backend. The open question was which orchestration layer to use:',
+            body: 'The constraints were fixed: Airtable was the brain (the Business OS had been the SSOT for years), I needed real tool calling against live data, and the agent had to cover voice + chat from the same backend. The only open question was which orchestration layer to use:',
             items: [
               {
                 tool: 'Tidio / Intercom',
@@ -1552,7 +1552,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         architecture: {
           heading: 'The Architecture',
-          body: 'Jacobo isn\'t a chatbot with a long prompt. It\'s a system of specialized sub-agents, each deployed as an independent webhook in n8n, orchestrated via tool calling from a central router. Every workflow you see in this article is downloadable — you can import it directly into n8n.',
+          body: 'Jacobo isn\'t a chatbot with a long prompt. It\'s a system of specialized sub-agents, each deployed as an independent webhook in n8n, orchestrated via tool calling from a central router. Every workflow in this article is importable directly into n8n — grab them at the end.',
           whySubAgents: {
             heading: 'Why sub-agents instead of a monolithic prompt?',
             reasons: [
@@ -1690,7 +1690,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
             heading: 'Pseudo-Streaming on WhatsApp',
             body: 'WhatsApp doesn\'t support streaming. A wall of text feels like a bot; sequential messages feel like someone typing. The router splits each response on line breaks and sends each chunk with a 1-second delay via the WATI API. Result: the "typing..." experience with zero streaming infrastructure.',
           },
-          stackIntro: 'Jacobo relies on 8 services covering the full path from customer entry to human escalation. Each one plays a unique role — none is replaceable without rearchitecting the system.',
+          stackIntro: 'Jacobo runs on 8 services, end-to-end from first contact to human handoff. Every one is load-bearing — swap any of them and you\'re rearchitecting.',
           stack: [
             {
               name: 'WATI',
@@ -1728,7 +1728,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         e2eFlows: {
           heading: 'End-to-End Flows',
-          body: 'Each flow traces the happy path from customer inquiry to resolution. Sub-agents involved are tagged at each step.',
+          body: 'Each flow walks the happy path from inquiry to resolution, with the sub-agents involved called out at each step.',
           items: [
             {
               icon: '🔧',
@@ -1792,7 +1792,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         deepDiveBooking: {
           heading: 'Deep Dive: Natural Language Booking',
-          body: 'The appointments sub-agent is the most complex workflow in the system. Its job: turn "tomorrow morning" into a confirmed appointment with reserved parts. No forms, no calendar picker.',
+          body: 'The appointments sub-agent has one job: turn "tomorrow morning" into a confirmed booking with reserved parts. No forms, no calendar picker.',
           challenge: {
             heading: 'The challenge: bridging two worlds',
             body: 'The customer speaks natural language ("Thursday mid-morning, or else Friday afternoon"). The YouCanBookMe API speaks Unix timestamps. The sub-agent bridges the gap and finds the intersection.',
@@ -1960,7 +1960,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         results: {
           heading: 'Results',
-          body: 'Production metrics after 6 months in operation (workflows are downloadable at the end to verify the architecture):',
+          body: 'Production metrics after 6 months live:',
           metrics: [
             {
               value: '~90%',
@@ -2013,11 +2013,11 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
               },
             ],
           },
-          roi: 'The ROI goes beyond direct savings. It\'s 24/7 availability, appointments that used to vanish after hours, and technicians who now repair instead of answering the phone.',
+          roi: 'The real return isn\'t just the cost saving. It\'s the technician who\'s actually repairing phones instead of answering them, and the appointment that used to fall through the cracks at 10pm — now confirmed automatically.',
         },
         decisions: {
           heading: 'Architecture Decision Records (ADRs)',
-          body: 'Every technical decision has a why behind it. Here are the ones that shaped the system:',
+          body: 'The decisions that shaped the system — and why I made each one:',
           items: [
             {
               title: 'Multi-model (GPT-4.1 + MiniMax + GPT-4.1 mini) vs single LLM',
@@ -2071,7 +2071,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         platformEvolution: {
           heading: 'Platform Evolution',
-          tagline: 'Jacobo wasn\'t a weekend hack. It was the inevitable result of 5 years building a robust Business OS underneath.',
+          tagline: 'Jacobo wasn\'t a weekend hack. It was the inevitable result of 5 years building a proper Business OS underneath.',
           steps: [
             {
               year: '2019-2024',
@@ -2081,7 +2081,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
             {
               year: 'Jan 2025',
               event: 'Training and deliberate design',
-              detail: 'Before writing a line of code, I studied AI agent architectures. I knew I needed tool calling, that Airtable was the SSOT, and that the agent had to span voice and chat sharing the same backend.',
+              detail: 'Before writing a line of code, I studied AI agent architectures. I knew I needed tool calling, that Airtable was the SSOT, and that the same backend had to serve both voice and chat.',
             },
             {
               year: 'Feb 2025',
@@ -2104,10 +2104,10 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
               detail: 'Jacobo ran 24/7 for months. It was part of the business sale as an operational asset: the buyer acquired it running. Five years of clean architecture made this exit possible.',
             },
           ],
-          coda: 'Jacobo wasn\'t an experiment. It was the piece that closed a 16-year cycle: build a business, systematize it until it runs itself, and sell it as a going concern. The systems I built — including Jacobo — are still running today under new ownership.',
+          coda: 'Jacobo wasn\'t an experiment. It closed the loop on 16 years: build a business, systematize it until it runs itself, sell it as a going concern. The systems I built — Jacobo included — are still running today under new ownership.',
           crossLink: {
             text: 'Jacobo was built on top of the Business OS I designed over 5 years — read the full case study →',
-            href: '/business-os',
+            href: '/business-os-for-airtable',
           },
         },
         lessons: {
@@ -2141,7 +2141,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         whatIdDoDifferently: {
           heading: 'What I\'d Do Differently',
-          body: 'Jacobo ran in production for months. With hindsight, here\'s what I\'d do differently:',
+          body: 'Jacobo ran in production for months. Here\'s what I\'d change:',
           items: [
             {
               title: 'Structured evaluation from day 1',
@@ -2159,7 +2159,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         enterprisePatterns: {
           heading: 'Transferable Enterprise Patterns',
-          body: 'Jacobo was built for an SMB, but the architecture patterns are enterprise-grade. Here\'s what I shipped vs. what I\'d layer on at scale:',
+          body: 'Jacobo was built for an SMB. The patterns scale. Here\'s what I shipped vs. what I\'d add at enterprise scale:',
           builtVsEnterprise: [
             {
               pattern: 'Sub-agent routing with tool calling',
@@ -2216,7 +2216,7 @@ Presupuesto reparándolo todo junto: \${totalConDescuento.toFixed(2)} €\`;`,
         },
         promptEngineering: {
           heading: 'Prompt Engineering in Production',
-          body: 'No fine-tuning. For a repair shop agent, iterating on the prompt with hard rules is more pragmatic, cheaper, and faster than training a custom model. Every rule below was born from a real production incident.',
+          body: 'No fine-tuning. For a repair shop agent, iterating on the prompt with hard rules is more pragmatic, cheaper, and faster than training a custom model. Every rule below has a production incident behind it.',
           whyNotFineTuning: {
             heading: 'Why hard rules in the prompt instead of fine-tuning?',
             reasons: [

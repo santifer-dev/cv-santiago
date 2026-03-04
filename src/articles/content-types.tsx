@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-import { ChevronRight } from 'lucide-react'
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from 'react'
+import { ChevronRight, List } from 'lucide-react'
 
 // ---------------------------------------------------------------------------
 // Editor Mode
@@ -848,5 +848,152 @@ export function DetailCard({ icon, title, description, children, className, edit
         {children}
       </div>
     </EditorLabel>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// 19. FloatingToc — auto-generated table of contents from DOM headings
+// ---------------------------------------------------------------------------
+
+interface TocItem { id: string; label: string; children?: TocItem[] }
+
+function useAutoToc(): TocItem[] {
+  const [sections, setSections] = useState<TocItem[]>([])
+
+  useEffect(() => {
+    const headings = Array.from(
+      document.querySelectorAll<HTMLElement>('main h2[id], main h3[id]'),
+    )
+    const tree: TocItem[] = []
+    let currentH2: TocItem | null = null
+
+    for (const el of headings) {
+      const id = el.id
+      const clone = el.cloneNode(true) as HTMLElement
+      clone.querySelectorAll('span').forEach(s => {
+        if (s.textContent?.trim() === '#') s.remove()
+      })
+      const label = clone.textContent?.trim() ?? id
+      if (el.tagName === 'H2') {
+        currentH2 = { id, label, children: [] }
+        tree.push(currentH2)
+      } else if (el.tagName === 'H3' && currentH2) {
+        currentH2.children!.push({ id, label })
+      }
+    }
+    tree.forEach(s => { if (s.children?.length === 0) delete s.children })
+    setSections(tree)
+  }, [])
+
+  return sections
+}
+
+export function FloatingToc() {
+  const sections = useAutoToc()
+  const [activeId, setActiveId] = useState('')
+  const [tocOpen, setTocOpen] = useState(false)
+
+  const allIds = useMemo(
+    () => sections.flatMap(s => [s.id, ...(s.children?.map(c => c.id) ?? [])]),
+    [sections],
+  )
+  const parentMap = useMemo(() => {
+    const map = new Map<string, string>()
+    sections.forEach(s => s.children?.forEach(c => map.set(c.id, s.id)))
+    return map
+  }, [sections])
+
+  const scrollTo = useCallback((id: string) => {
+    setTocOpen(false)
+    const el = document.getElementById(id)
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 96
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  }, [])
+
+  useEffect(() => {
+    const elements = allIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+    if (!elements.length) return
+    const observer = new IntersectionObserver(
+      entries => {
+        const visible = entries.filter(e => e.isIntersecting)
+        if (visible.length > 0) setActiveId(visible[0].target.id)
+      },
+      { rootMargin: '-80px 0px -60% 0px', threshold: 0 },
+    )
+    elements.forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [allIds])
+
+  const activeParent = parentMap.get(activeId) ?? activeId
+
+  if (sections.length === 0) return null
+
+  const tocNav = (
+    <nav aria-label="Table of contents">
+      <ul className="space-y-0.5">
+        {sections.map(section => {
+          const isActive = activeParent === section.id
+          const showChildren = isActive && section.children && section.children.length > 0
+          return (
+            <li key={section.id}>
+              <button
+                onClick={() => scrollTo(section.id)}
+                className={`
+                  text-left w-full px-2 py-1 rounded text-sm transition-colors
+                  ${activeId === section.id ? 'text-primary font-medium bg-primary/10' : isActive ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'}
+                `}
+              >
+                {section.label}
+              </button>
+              {showChildren && (
+                <ul className="ml-3 mt-0.5 mb-1 border-l border-border pl-2 space-y-0.5">
+                  {section.children!.map(child => (
+                    <li key={child.id}>
+                      <button
+                        onClick={() => scrollTo(child.id)}
+                        className={`
+                          text-left w-full px-2 py-0.5 rounded text-sm transition-colors
+                          ${activeId === child.id ? 'text-primary font-medium bg-primary/5' : 'text-muted-foreground hover:text-foreground'}
+                        `}
+                      >
+                        {child.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+
+  return (
+    <>
+      {/* Desktop: sticky sidebar */}
+      <div className="hidden xl:block fixed top-24 left-[max(1rem,calc(50%-38rem))] w-52 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin">
+        {tocNav}
+      </div>
+
+      {/* Mobile: floating button + drawer */}
+      <button
+        onClick={() => setTocOpen(o => !o)}
+        className="xl:hidden fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center"
+        aria-label="Toggle table of contents"
+      >
+        <List className="w-5 h-5" />
+      </button>
+      {tocOpen && (
+        <>
+          <div className="xl:hidden fixed inset-0 bg-background/60 backdrop-blur-sm z-40" onClick={() => setTocOpen(false)} />
+          <div className="xl:hidden fixed bottom-20 right-6 z-50 w-64 max-h-[70vh] overflow-y-auto bg-card border border-border rounded-xl shadow-xl p-4">
+            {tocNav}
+          </div>
+        </>
+      )}
+    </>
   )
 }

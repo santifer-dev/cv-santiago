@@ -431,15 +431,15 @@ export function WorkflowDownloadCard({ icon, name, subtitle, description, href, 
       <div className="flex items-start gap-3 mb-3">
         <span className="shrink-0 text-primary">{icon}</span>
         <div className="min-w-0">
-          <h4 className="font-display font-semibold text-foreground text-sm leading-tight">{name}</h4>
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
+          <h4 className="font-display font-semibold text-foreground text-base leading-tight">{name}</h4>
+          <p className="text-sm text-muted-foreground">{subtitle}</p>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground leading-relaxed mb-3 flex-1">{description}</p>
+      <p className="text-sm text-muted-foreground leading-relaxed mb-3 flex-1">{description}</p>
       <div className="flex flex-wrap gap-1.5 mb-4">
-        {nodes && <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{nodes}</span>}
-        {llm && <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{llm}</span>}
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{fileSize}</span>
+        {nodes && <span className="text-xs px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{nodes}</span>}
+        {llm && <span className="text-xs px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{llm}</span>}
+        <span className="text-xs px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{fileSize}</span>
       </div>
       <a
         href={href}
