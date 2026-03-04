@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Download, Copy, Check, ExternalLink, Clock, ChevronRight } from 'lucide-react'
+import { EditorModeProvider, EditorLabel, H2 } from './content-types'
 
 // ---------------------------------------------------------------------------
 // Inline utilities
@@ -37,16 +38,8 @@ export function DownloadButton({ href, label }: { href: string; label: string })
   )
 }
 
-export function AnchorHeading({ id, children }: { id: string; children: React.ReactNode }) {
-  return (
-    <h2 id={id} className="group font-display text-2xl md:text-3xl font-bold text-foreground mt-16 mb-6 scroll-mt-24">
-      <a href={`#${id}`} className="hover:text-primary transition-colors">
-        {children}
-        <span className="ml-2 opacity-0 group-hover:opacity-100 text-muted-foreground transition-opacity">#</span>
-      </a>
-    </h2>
-  )
-}
+// AnchorHeading → H2 (re-exported from content-types for backwards compat)
+export { H2 as AnchorHeading } from './content-types'
 
 // ---------------------------------------------------------------------------
 // Layout shells
@@ -54,11 +47,13 @@ export function AnchorHeading({ id, children }: { id: string; children: React.Re
 
 export function ArticleLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
-        {children}
-      </main>
-    </div>
+    <EditorModeProvider>
+      <div className="min-h-screen bg-background text-foreground">
+        <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+          {children}
+        </main>
+      </div>
+    </EditorModeProvider>
   )
 }
 
@@ -210,7 +205,7 @@ interface FaqItem {
 export function FaqSection({ heading, items }: { heading: string; items: readonly FaqItem[] }) {
   return (
     <>
-      <AnchorHeading id="faq">{heading}</AnchorHeading>
+      <H2 id="faq">{heading}</H2>
       <div className="space-y-4 mb-8">
         {items.map((item) => (
           <details key={item.q} className="group bg-card border border-border rounded-lg">
@@ -238,7 +233,7 @@ interface ResourceItem {
 export function ResourcesList({ heading, items }: { heading: string; items: readonly ResourceItem[] }) {
   return (
     <>
-      <AnchorHeading id="resources">{heading}</AnchorHeading>
+      <H2 id="resources">{heading}</H2>
       <ul className="space-y-2 text-muted-foreground mb-8">
         {items.map((item) => (
           <li key={item.url} className="flex items-center gap-2">
@@ -263,7 +258,7 @@ interface LessonItem {
 export function LessonsSection({ heading, items }: { heading: string; items: readonly LessonItem[] }) {
   return (
     <>
-      <AnchorHeading id="lessons">{heading}</AnchorHeading>
+      <H2 id="lessons">{heading}</H2>
       <div className="space-y-4 mb-8">
         {items.map((lesson, i) => (
           <div key={i} className="flex gap-3">
@@ -317,30 +312,32 @@ interface CaseStudyCtaProps {
 
 export function CaseStudyCta({ heading, body, ctaLabel, ctaHref, external }: CaseStudyCtaProps) {
   return (
-    <div className="my-10 relative rounded-2xl p-[1.5px] bg-gradient-theme">
-      <div className="p-6 sm:p-8 rounded-[calc(1rem-1.5px)] bg-card">
-        <p className="font-display font-semibold text-foreground text-lg mb-2">{heading}</p>
-        <p className="text-muted-foreground leading-relaxed mb-4">{body}</p>
-        {external ? (
-          <a
-            href={ctaHref}
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
-          >
-            {ctaLabel}
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        ) : (
-          <Link
-            to={ctaHref}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
-          >
-            {ctaLabel}
-          </Link>
-        )}
+    <EditorLabel name="CaseStudyCta">
+      <div className="my-10 relative rounded-2xl p-[1.5px] bg-gradient-theme">
+        <div className="p-6 sm:p-8 rounded-[calc(1rem-1.5px)] bg-card">
+          <p className="font-display font-semibold text-foreground text-lg mb-2">{heading}</p>
+          <p className="text-muted-foreground leading-relaxed mb-4">{body}</p>
+          {external ? (
+            <a
+              href={ctaHref}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
+            >
+              {ctaLabel}
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          ) : (
+            <Link
+              to={ctaHref}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"
+            >
+              {ctaLabel}
+            </Link>
+          )}
+        </div>
       </div>
-    </div>
+    </EditorLabel>
   )
 }
 
@@ -374,5 +371,63 @@ export function ArticleFigure({ src, alt, title, caption, width = 1200, height =
         {caption}
       </figcaption>
     </figure>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Workflow Download Components
+// ---------------------------------------------------------------------------
+
+export function InlineWorkflowDownload({ href, label, fileSize }: { href: string; label: string; fileSize: string }) {
+  return (
+    <a
+      href={href}
+      download
+      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+    >
+      <Download className="w-3.5 h-3.5" />
+      {label}
+      <span className="text-primary/60">({fileSize})</span>
+    </a>
+  )
+}
+
+interface WorkflowDownloadCardProps {
+  icon: string
+  name: string
+  subtitle: string
+  description: string
+  href: string
+  fileSize: string
+  nodes?: string
+  llm?: string
+  downloadLabel: string
+}
+
+export function WorkflowDownloadCard({ icon, name, subtitle, description, href, fileSize, nodes, llm, downloadLabel }: WorkflowDownloadCardProps) {
+  return (
+    <div className="bg-card border border-border rounded-lg p-5 flex flex-col">
+      <div className="flex items-start gap-3 mb-3">
+        <span className="text-2xl shrink-0">{icon}</span>
+        <div className="min-w-0">
+          <h4 className="font-display font-semibold text-foreground text-sm leading-tight">{name}</h4>
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground leading-relaxed mb-3 flex-1">{description}</p>
+      <div className="flex flex-wrap gap-1.5 mb-4">
+        {nodes && <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{nodes}</span>}
+        {llm && <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{llm}</span>}
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground">{fileSize}</span>
+      </div>
+      <a
+        href={href}
+        download
+        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-card border border-border hover:border-primary/50 transition-colors text-sm font-medium text-foreground"
+      >
+        <Download className="w-4 h-4 text-primary" />
+        {downloadLabel}
+      </a>
+    </div>
   )
 }
