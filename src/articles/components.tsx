@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Download, Copy, Check, ExternalLink, Clock, ChevronRight } from 'lucide-react'
-import { EditorModeProvider, EditorLabel, H2 } from './content-types'
+import { Download, Copy, Check, ExternalLink, Clock } from 'lucide-react'
+import { EditorModeProvider, EditorLabel, H2, StepList, Accordion } from './content-types'
 
 // ---------------------------------------------------------------------------
 // Inline utilities
@@ -212,21 +212,14 @@ interface FaqItem {
   a: string
 }
 
-export function FaqSection({ heading, items }: { heading: string; items: readonly FaqItem[]; editorId?: string }) {
+export function FaqSection({ heading, items, editorId }: { heading: string; items: readonly FaqItem[]; editorId?: string }) {
   return (
     <>
       <H2 id="faq">{heading}</H2>
-      <div className="space-y-4 mb-8">
-        {items.map((item) => (
-          <details key={item.q} className="group bg-card border border-border rounded-lg">
-            <summary className="px-5 py-4 cursor-pointer font-medium text-foreground flex items-center justify-between">
-              {item.q}
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-open:rotate-90 transition-transform" />
-            </summary>
-            <p className="px-5 pb-4 text-muted-foreground">{item.a}</p>
-          </details>
-        ))}
-      </div>
+      <Accordion
+        editorId={editorId}
+        items={items.map((item) => ({ title: item.q, detail: item.a }))}
+      />
     </>
   )
 }
@@ -265,21 +258,14 @@ interface LessonItem {
   detail: string
 }
 
-export function LessonsSection({ heading, items }: { heading: string; items: readonly LessonItem[]; editorId?: string }) {
+export function LessonsSection({ heading, items, editorId }: { heading: string; items: readonly LessonItem[]; editorId?: string }) {
   return (
     <>
       <H2 id="lessons">{heading}</H2>
-      <div className="space-y-4 mb-8">
-        {items.map((lesson, i) => (
-          <div key={i} className="flex gap-3">
-            <span className="text-primary font-bold text-lg shrink-0">{i + 1}.</span>
-            <div>
-              <p className="font-medium text-foreground">{lesson.title}</p>
-              <p className="text-muted-foreground">{lesson.detail}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <StepList
+        editorId={editorId}
+        items={items.map((lesson) => ({ label: lesson.title, detail: lesson.detail }))}
+      />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo, Fragment, type ReactNode } from 'react'
 import { motion } from 'motion/react'
-import { ChevronRight, List, Copy, Check } from 'lucide-react'
+import { ChevronRight, List, Copy, Check, ZoomIn } from 'lucide-react'
 
 // ---------------------------------------------------------------------------
 // Editor Mode
@@ -419,6 +419,47 @@ export function Photo1({ src, alt, caption, loading = 'lazy', className, editorI
   )
 }
 
+// ---------------------------------------------------------------------------
+// 11a. DiagramZoom — thumbnail + HD lightbox on click
+// ---------------------------------------------------------------------------
+
+interface DiagramZoomProps {
+  src: string
+  hdSrc: string
+  alt: string
+  caption?: string
+  loading?: 'lazy' | 'eager'
+  className?: string
+  editorId?: string
+}
+
+export function DiagramZoom({ src, hdSrc, alt, caption, loading = 'lazy', className, editorId }: DiagramZoomProps) {
+  const [lightbox, setLightbox] = useState(false)
+
+  return (
+    <EditorLabel name="DiagramZoom" id={editorId}>
+      <figure
+        className={`relative rounded-lg overflow-hidden border border-border shadow-lg mb-6 group cursor-zoom-in ${className ?? ''}`}
+        onClick={() => setLightbox(true)}
+      >
+        <img src={src} alt={alt} className="w-full h-auto min-h-[200px] object-contain bg-card" loading={loading} decoding="async" />
+        <span className="absolute top-3 right-3 p-1.5 rounded-md bg-black/40 text-white/50 group-hover:text-white/90 transition-colors">
+          <ZoomIn className="w-4 h-4" />
+        </span>
+        {caption && <figcaption className="px-4 py-2 text-sm text-muted-foreground text-center bg-card">{caption}</figcaption>}
+      </figure>
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 cursor-zoom-out p-4"
+          onClick={() => setLightbox(false)}
+        >
+          <img src={hdSrc} alt={alt} className="max-w-full max-h-full rounded-lg shadow-2xl" />
+        </div>
+      )}
+    </EditorLabel>
+  )
+}
+
 interface Photo2Props {
   items: readonly [PhotoItem, PhotoItem]
   caption?: string
@@ -547,6 +588,7 @@ interface CodeSegment {
 interface CodeBlockProps {
   children?: ReactNode
   segments?: readonly CodeSegment[]
+  highlight?: 'code' | 'template'
   className?: string
   editorId?: string
 }
@@ -559,11 +601,12 @@ const CN = 'text-[hsl(var(--code-number))]'     // numbers, booleans
 const CH = 'text-[hsl(var(--code-heading))] font-semibold' // ## headers
 const CV = 'text-[hsl(var(--code-var))]'        // {{vars}}, $('refs')
 
-/** Tokenize a line into colored spans */
-function highlightLine(text: string): ReactNode[] {
+/** Tokenize a line into colored spans (full JS highlighting) */
+function highlightLine(text: string, mode: 'code' | 'template' = 'code'): ReactNode[] {
   const parts: ReactNode[] = []
-  // Order matters: longer patterns first
-  const regex = /(\/\/.*$|##\s.*$|\b(?:const|let|var|return|if|else|function|new|true|false|null|undefined)\b|'[^']*'|"[^"]*"|`[^`]*`|\{\{[^}]+\}\}|\$\('[^']+'\)[.\w]*|\b\d+\b)/gm
+  const regex = mode === 'code'
+    ? /(\/\/.*$|##\s.*$|\b(?:const|let|var|return|if|else|function|new|true|false|null|undefined)\b|'[^']*'|"[^"]*"|`[^`]*`|\{\{[^}]+\}\}|\$\('[^']+'\)[.\w]*|\b\d+\b)/gm
+    : /(##\s.*$|\{\{[^}]+\}\}|\$\('[^']+'\)[.\w]*|\b\d+\b)/gm
   let last = 0
   let match: RegExpExecArray | null
 
@@ -572,20 +615,26 @@ function highlightLine(text: string): ReactNode[] {
     const val = match[0]
     let cls: string
 
-    if (val.startsWith('//')) {
-      cls = CC // comment
-    } else if (val.startsWith('##')) {
+    if (val.startsWith('##')) {
       cls = CH // heading
-    } else if (/^(const|let|var|return|if|else|function|new)$/.test(val)) {
-      cls = CK // keyword
-    } else if (/^(true|false|null|undefined)$/.test(val)) {
-      cls = CN // boolean/null
-    } else if (val.startsWith("'") || val.startsWith('"') || val.startsWith('`')) {
-      cls = CS // string
     } else if (val.startsWith('{{') || val.startsWith('$')) {
       cls = CV // template var
     } else if (/^\d+$/.test(val)) {
       cls = CN // number
+    } else if (mode === 'code') {
+      if (val.startsWith('//')) {
+        cls = CC // comment
+      } else if (/^(const|let|var|return|if|else|function|new)$/.test(val)) {
+        cls = CK // keyword
+      } else if (/^(true|false|null|undefined)$/.test(val)) {
+        cls = CN // boolean/null
+      } else if (val.startsWith("'") || val.startsWith('"') || val.startsWith('`')) {
+        cls = CS // string
+      } else {
+        parts.push(val)
+        last = match.index + val.length
+        continue
+      }
     } else {
       parts.push(val)
       last = match.index + val.length
@@ -600,20 +649,18 @@ function highlightLine(text: string): ReactNode[] {
 }
 
 /** Highlight code: handles both prompt syntax and JS */
-function highlightCode(text: string): ReactNode[] {
+function highlightCode(text: string, mode: 'code' | 'template' = 'code'): ReactNode[] {
   const lines = text.split('\n')
   return lines.map((line, i) => {
     let node: ReactNode
 
     if (/^-\s/.test(line)) {
-      // Bullet: dash in muted, rest highlighted
-      node = <span><span className={CC}>- </span>{highlightLine(line.slice(2))}</span>
+      node = <span><span className={CC}>- </span>{highlightLine(line.slice(2), mode)}</span>
     } else if (/^\s*\d+[\.\)]\s/.test(line)) {
-      // Numbered list: number in muted, rest highlighted
       const m = line.match(/^(\s*\d+[\.\)]\s)(.*)/)!
-      node = <span><span className={CC}>{m[1]}</span>{highlightLine(m[2])}</span>
+      node = <span><span className={CC}>{m[1]}</span>{highlightLine(m[2], mode)}</span>
     } else {
-      node = <span>{highlightLine(line)}</span>
+      node = <span>{highlightLine(line, mode)}</span>
     }
 
     return <Fragment key={i}>{node}{i < lines.length - 1 ? '\n' : ''}</Fragment>
@@ -633,7 +680,7 @@ function CodeCopyButton({ text }: { text: string }) {
   )
 }
 
-export function CodeBlock({ children, segments, className, editorId }: CodeBlockProps) {
+export function CodeBlock({ children, segments, highlight = 'code', className, editorId }: CodeBlockProps) {
   if (segments) {
     const fullCode = segments.map(s => s.code).join('\n\n')
     return (
@@ -643,7 +690,7 @@ export function CodeBlock({ children, segments, className, editorId }: CodeBlock
           {segments.map((seg, i) => (
             <div key={i}>
               <pre className="p-5 text-sm leading-[1.7] whitespace-pre-wrap font-mono text-[hsl(var(--codeblock-text))] overflow-x-auto">
-                {highlightCode(seg.code)}
+                {highlightCode(seg.code, highlight)}
               </pre>
               {seg.annotations?.map((ann, j) => (
                 <div key={j} className="mx-3 mb-3 bg-primary/5 border-l-2 border-primary/40 rounded-r-md px-3 py-2">
@@ -663,7 +710,7 @@ export function CodeBlock({ children, segments, className, editorId }: CodeBlock
       <div className="relative">
         {text && <CodeCopyButton text={text} />}
         <pre className={`bg-[hsl(var(--codeblock))] border border-border rounded-lg p-5 text-sm leading-[1.7] overflow-x-auto whitespace-pre-wrap font-mono text-[hsl(var(--codeblock-text))] mb-6 ${className ?? ''}`}>
-          {text ? highlightCode(text) : children}
+          {text ? highlightCode(text, highlight) : children}
         </pre>
       </div>
     </EditorLabel>

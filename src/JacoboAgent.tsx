@@ -32,6 +32,7 @@ import {
   NodeLabel,
   Photo1,
   Photo2,
+  DiagramZoom,
   CodeBlock,
   Accordion,
   DataTable,
@@ -277,7 +278,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         {/* Memory */}
         <H3 id="memory">{t.sections.architecture.memory.heading}</H3>
         <Prose editorId="memory-body">{t.sections.architecture.memory.body}</Prose>
-        <Photo1 editorId="memory-n8n-workflow" src="/jacobo/n8n-jacobo-memoria.webp" alt={lang === 'es' ? 'Workflow de memoria conversacional de Jacobo en n8n' : 'Jacobo conversational memory workflow in n8n'} />
+        <DiagramZoom editorId="memory-n8n-workflow" src="/jacobo/n8n-jacobo-memoria.webp" hdSrc="/jacobo/memory-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow de memoria conversacional de Jacobo en n8n' : 'Jacobo conversational memory workflow in n8n'} />
         <StepList editorId="memory-steps" items={t.sections.architecture.memory.steps} />
         <Callout editorId="memory-punchline">{t.sections.architecture.memory.punchline}</Callout>
 
@@ -307,7 +308,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         {/* Pseudo-streaming */}
         <H4>{t.sections.architecture.pseudoStreaming.heading}</H4>
         <Prose editorId="pseudo-streaming-body">{t.sections.architecture.pseudoStreaming.body}</Prose>
-        <Photo1 editorId="pseudo-streaming-workflow" src="/jacobo/n8n-pseudo-splitter.webp" alt={lang === 'es' ? 'Workflow de pseudo-streaming en n8n: splitter de mensajes largos para WhatsApp' : 'Pseudo-streaming workflow in n8n: long message splitter for WhatsApp'} />
+        <DiagramZoom editorId="pseudo-streaming-workflow" src="/jacobo/n8n-pseudo-splitter.webp" hdSrc="/jacobo/pseudo-streaming-workflow-2x.webp" alt={lang === 'es' ? 'Workflow de pseudo-streaming en n8n: splitter de mensajes largos para WhatsApp' : 'Pseudo-streaming workflow in n8n: long message splitter for WhatsApp'} />
 
         {/* Channels (H3 under Architecture) */}
         <H3 id="channels">{t.sections.channels.heading}</H3>
@@ -352,7 +353,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H4 id="missed-call-recovery" icon={<PhoneMissed className="w-5 h-5 text-primary" />}>{t.sections.channels.missedCallRecovery.heading}</H4>
         <Prose editorId="missed-call-body">{t.sections.channels.missedCallRecovery.body}</Prose>
 
-        <Photo1 editorId="aircall-dashboard" src="/jacobo/aircall-dashboard.webp" alt={lang === 'es' ? 'Dashboard de Aircall — árbol de distribución de llamadas con Jacobo como nodo de la centralita' : 'Aircall dashboard — call distribution tree with Jacobo as a PBX node'} caption={lang === 'es' ? 'Árbol de distribución real en Aircall — Jacobo integrado como un nodo más de la centralita' : 'Actual call distribution tree in Aircall — Jacobo plugged in as another PBX node'} className="mb-4" />
+        <DiagramZoom editorId="aircall-dashboard" src="/jacobo/aircall-dashboard.webp" hdSrc="/jacobo/aircall-dashboard-2x.webp" alt={lang === 'es' ? 'Dashboard de Aircall — árbol de distribución de llamadas con Jacobo como nodo de la centralita' : 'Aircall dashboard — call distribution tree with Jacobo as a PBX node'} caption={lang === 'es' ? 'Árbol de distribución real en Aircall — Jacobo integrado como un nodo más de la centralita' : 'Actual call distribution tree in Aircall — Jacobo plugged in as another PBX node'} className="mb-4" />
 
         <ScreenshotGrid editorId="missed-call-flow" lang={lang} items={[
           { src: 'missed-call-template.webp', altEs: 'Template de WhatsApp tras llamada perdida: botones Pedir presupuesto, Tomar cita', altEn: 'WhatsApp template after missed call: buttons Get a quote, Book appointment' },
@@ -366,12 +367,12 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <Callout editorId="unified-voice-punchline">{(t.sections.channels.unifiedVoiceUx as any).punchline}</Callout>
         <Prose editorId="unified-voice-audio-intro">{(t.sections.channels.unifiedVoiceUx as any).audioIntro}</Prose>
         <AudioPlayer editorId="pbx-audio" items={(t.sections.channels.unifiedVoiceUx as any).audios} lang={lang} />
-        <Photo1 editorId="aircall-dashboard-detail" src="/jacobo/aircall-dashboard-detail.webp" alt={lang === 'es' ? 'Detalle de Aircall: audios de bienvenida e IVR generados con ElevenLabs con la voz de Jacobo' : 'Aircall detail: welcome and IVR audio generated with ElevenLabs using Jacobo\'s voice'} caption={lang === 'es' ? 'Los nodos "ElevenLabs" son audios pregrabados con la misma voz de Jacobo: bienvenida, IVR y buzón. Cuando salta el agente real, la voz es idéntica' : 'The "ElevenLabs" nodes are pre-recorded audio using Jacobo\'s same voice: welcome, IVR and voicemail. When the live agent picks up, the voice is identical'} className="mb-4" />
+        <DiagramZoom editorId="aircall-dashboard-detail" src="/jacobo/aircall-dashboard-detail.webp" hdSrc="/jacobo/aircall-dashboard-detail-2x.webp" alt={lang === 'es' ? 'Detalle de Aircall: audios de bienvenida e IVR generados con ElevenLabs con la voz de Jacobo' : 'Aircall detail: welcome and IVR audio generated with ElevenLabs using Jacobo\'s voice'} caption={lang === 'es' ? 'Los nodos "ElevenLabs" son audios pregrabados con la misma voz de Jacobo: bienvenida, IVR y buzón. Cuando salta el agente real, la voz es idéntica' : 'The "ElevenLabs" nodes are pre-recorded audio using Jacobo\'s same voice: welcome, IVR and voicemail. When the live agent picks up, the voice is identical'} className="mb-4" />
 
         {/* Event routing / Pre-filtering */}
         <H4 id="pre-filtering">{t.sections.channels.eventRouting.heading}</H4>
         <Prose editorId="event-routing-body">{t.sections.channels.eventRouting.body}</Prose>
-        <Photo1 editorId="prefiltrado-n8n" src="/jacobo/n8n-prefiltrado.webp" alt={lang === 'es' ? 'Pre-filtrado de eventos en n8n' : 'Event pre-filtering in n8n'} className="mb-4" />
+        <DiagramZoom editorId="prefiltrado-n8n" src="/jacobo/n8n-prefiltrado.webp" hdSrc="/jacobo/prefiltrado-n8n-2x.webp" alt={lang === 'es' ? 'Pre-filtrado de eventos en n8n' : 'Event pre-filtering in n8n'} className="mb-4" />
         <StepList editorId="event-routing-steps" items={t.sections.channels.eventRouting.steps} />
         <Callout editorId="event-routing-punchline" className="mb-8">{t.sections.channels.eventRouting.punchline}</Callout>
 
@@ -402,7 +403,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         {/* WhatsApp Router (n8n) */}
         <H3 id="whatsapp-router">{t.sections.mainRouter.whatsappRouter.heading}</H3>
         <Prose editorId="whatsapp-router-body">{t.sections.mainRouter.whatsappRouter.body}</Prose>
-        <Photo1 editorId="main-router-workflow" src="/jacobo/n8n-router-principal.webp" alt={lang === 'es' ? 'Workflow del Router Principal en n8n: 37 nodos' : 'Main Router workflow in n8n: 37 nodes'} className="mb-4" />
+        <DiagramZoom editorId="main-router-workflow" src="/jacobo/n8n-router-principal.webp" hdSrc="/jacobo/main-router-workflow-2x.webp" alt={lang === 'es' ? 'Workflow del Router Principal en n8n: 37 nodos' : 'Main Router workflow in n8n: 37 nodes'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['jacobo-chatbot-v2'].href} label={t.downloads.inlineLabel} fileSize={wfById['jacobo-chatbot-v2'].fileSize} />
 
         {/* Voice Router (ElevenLabs) */}
@@ -413,7 +414,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         {/* Tool Calling */}
         <H3 id="tool-calling">{t.sections.toolCalling.heading}</H3>
         <Prose editorId="tool-calling-body">{t.sections.toolCalling.body}</Prose>
-        <Photo1 editorId="tool-calling-n8n" src="/jacobo/n8n-tool-calling.webp" alt={lang === 'es' ? 'Tool calling en n8n: 7 herramientas definidas como HTTP endpoints' : 'Tool calling in n8n: 7 tools defined as HTTP endpoints'} className="mb-4" />
+        <DiagramZoom editorId="tool-calling-n8n" src="/jacobo/n8n-tool-calling.webp" hdSrc="/jacobo/tool-calling-n8n-2x.webp" alt={lang === 'es' ? 'Tool calling en n8n: 7 herramientas definidas como HTTP endpoints' : 'Tool calling in n8n: 7 tools defined as HTTP endpoints'} className="mb-4" />
         <ToolList editorId="tool-calling-tools" items={t.sections.toolCalling.tools} />
 
         {/* Wait message */}
@@ -452,7 +453,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         {/* Business hours */}
         <H4 id="business-hours">{t.sections.promptEngineering.businessHours.heading}</H4>
         <Prose editorId="business-hours-body" className="mb-3">{t.sections.promptEngineering.businessHours.body}</Prose>
-        <Photo1 editorId="business-hours-n8n" src="/jacobo/n8n-business-hours-check.webp" alt={lang === 'es' ? 'Nodo isBusinessHours en n8n: lógica de horario comercial' : 'isBusinessHours node in n8n: business hours logic'} className="mb-4" />
+        <DiagramZoom editorId="business-hours-n8n" src="/jacobo/n8n-business-hours-check.webp" hdSrc="/jacobo/business-hours-n8n-2x.webp" alt={lang === 'es' ? 'Nodo isBusinessHours en n8n: lógica de horario comercial' : 'isBusinessHours node in n8n: business hours logic'} className="mb-4" />
         <CodeBlock editorId="business-hours-code">{t.sections.promptEngineering.businessHours.code}</CodeBlock>
 
         {/* Business hours screenshots */}
@@ -466,7 +467,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H4 id="main-prompt">{t.sections.promptEngineering.mainPrompt.heading}</H4>
         <Prose editorId="main-prompt-body">{t.sections.promptEngineering.mainPrompt.body}</Prose>
 
-        <Photo1 editorId="main-prompt-n8n" src="/jacobo/n8n-prompt-principal.webp" alt={lang === 'es' ? 'System prompt del router principal en n8n' : 'Main router system prompt in n8n'} className="mb-4" />
+        <DiagramZoom editorId="main-prompt-n8n" src="/jacobo/n8n-prompt-principal.webp" hdSrc="/jacobo/main-prompt-n8n-2x.webp" alt={lang === 'es' ? 'System prompt del router principal en n8n' : 'Main router system prompt in n8n'} className="mb-4" />
 
         <CodeBlock editorId="main-prompt-code" segments={t.sections.promptEngineering.mainPrompt.segments} />
 
@@ -498,35 +499,35 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <Prose editorId="booking-challenge-body" className="mb-6">{t.sections.deepDiveBooking.challenge.body}</Prose>
 
         {/* Workflow screenshot */}
-        <Photo1 editorId="booking-n8n-workflow" src="/jacobo/n8n-subagente-citas.webp" alt={lang === 'es' ? 'Workflow del sub-agente de citas en n8n: 18 nodos' : 'Appointments sub-agent workflow in n8n: 18 nodes'} className="mb-4" />
+        <DiagramZoom editorId="booking-n8n-workflow" src="/jacobo/n8n-subagente-citas.webp" hdSrc="/jacobo/booking-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow del sub-agente de citas en n8n: 18 nodos' : 'Appointments sub-agent workflow in n8n: 18 nodes'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['subagente-citas'].href} label={t.downloads.inlineLabel} fileSize={wfById['subagente-citas'].fileSize} />
 
 
         {/* Step 1: ParseURL */}
         <H3 id="parseurl">{t.sections.deepDiveBooking.parseUrl.heading}</H3>
-        <Photo1 editorId="booking-parseurl-n8n" src="/jacobo/n8n-parseurl.webp" alt={lang === 'es' ? 'Nodo ParseURL en n8n: extrae subdomain y query params' : 'ParseURL node in n8n: extracts subdomain and query params'} className="mb-4" />
+        <DiagramZoom editorId="booking-parseurl-n8n" src="/jacobo/n8n-parseurl.webp" hdSrc="/jacobo/booking-parseurl-n8n-2x.webp" alt={lang === 'es' ? 'Nodo ParseURL en n8n: extrae subdomain y query params' : 'ParseURL node in n8n: extracts subdomain and query params'} className="mb-4" />
         <Prose editorId="booking-parseurl-body">{t.sections.deepDiveBooking.parseUrl.body}</Prose>
 
         {/* Step 2: AnalizarDisponibilidad */}
         <H3 id="analizar-disponibilidad">{t.sections.deepDiveBooking.analizarDisponibilidad.heading}</H3>
-        <Photo1 editorId="booking-analizar-n8n" src="/jacobo/n8n-analizar-disponibilidad.webp" alt={lang === 'es' ? 'Nodo AnalizarDisponibilidad en n8n: agente LLM con reglas temporales' : 'AnalizarDisponibilidad node in n8n: LLM agent with temporal rules'} className="mb-4" />
+        <DiagramZoom editorId="booking-analizar-n8n" src="/jacobo/n8n-analizar-disponibilidad.webp" hdSrc="/jacobo/booking-analizar-n8n-2x.webp" alt={lang === 'es' ? 'Nodo AnalizarDisponibilidad en n8n: agente LLM con reglas temporales' : 'AnalizarDisponibilidad node in n8n: LLM agent with temporal rules'} className="mb-4" />
         <Prose editorId="booking-analizar-body">{t.sections.deepDiveBooking.analizarDisponibilidad.body}</Prose>
         <BulletList editorId="booking-analizar-rules" items={t.sections.deepDiveBooking.analizarDisponibilidad.rules} />
 
         {/* Step 3: YCBM API */}
         <H3 id="ycbm-api">{t.sections.deepDiveBooking.ycbmApi.heading}</H3>
-        <Photo1 editorId="booking-ycbm-n8n" src="/jacobo/n8n-ycbm-api.webp" alt={lang === 'es' ? 'Pipeline YCBM API en n8n: 3 llamadas HTTP secuenciales' : 'YCBM API pipeline in n8n: 3 sequential HTTP requests'} className="mb-4" />
+        <DiagramZoom editorId="booking-ycbm-n8n" src="/jacobo/n8n-ycbm-api.webp" hdSrc="/jacobo/booking-ycbm-n8n-2x.webp" alt={lang === 'es' ? 'Pipeline YCBM API en n8n: 3 llamadas HTTP secuenciales' : 'YCBM API pipeline in n8n: 3 sequential HTTP requests'} className="mb-4" />
         <Prose editorId="booking-ycbm-body">{t.sections.deepDiveBooking.ycbmApi.body}</Prose>
         <StepList editorId="booking-ycbm-steps" items={t.sections.deepDiveBooking.ycbmApi.steps} />
 
         {/* Step 4: FilterSlots */}
         <H3 id="filter-slots">{t.sections.deepDiveBooking.filterSlots.heading}</H3>
-        <Photo1 editorId="booking-filter-n8n" src="/jacobo/n8n-filter-slots.webp" alt={lang === 'es' ? 'Nodo FilterSlots en n8n: intersección de rangos LLM y slots YCBM' : 'FilterSlots node in n8n: intersection of LLM ranges and YCBM slots'} className="mb-4" />
+        <DiagramZoom editorId="booking-filter-n8n" src="/jacobo/n8n-filter-slots.webp" hdSrc="/jacobo/booking-filter-n8n-2x.webp" alt={lang === 'es' ? 'Nodo FilterSlots en n8n: intersección de rangos LLM y slots YCBM' : 'FilterSlots node in n8n: intersection of LLM ranges and YCBM slots'} className="mb-4" />
         <Prose editorId="booking-filter-body">{t.sections.deepDiveBooking.filterSlots.body}</Prose>
 
         {/* Step 5: Auto-booking */}
         <H3 id="auto-booking">{t.sections.deepDiveBooking.autoBooking.heading}</H3>
-        <Photo1 editorId="booking-auto-n8n" src="/jacobo/n8n-auto-booking.webp" alt={lang === 'es' ? 'Auto-booking condicional en n8n: 3 caminos según número de slots' : 'Conditional auto-booking in n8n: 3 paths based on slot count'} className="mb-4" />
+        <DiagramZoom editorId="booking-auto-n8n" src="/jacobo/n8n-auto-booking.webp" hdSrc="/jacobo/booking-auto-n8n-2x.webp" alt={lang === 'es' ? 'Auto-booking condicional en n8n: 3 caminos según número de slots' : 'Conditional auto-booking in n8n: 3 paths based on slot count'} className="mb-4" />
         <Prose editorId="booking-auto-body">{t.sections.deepDiveBooking.autoBooking.body}</Prose>
         <ConditionList editorId="booking-auto-paths" items={t.sections.deepDiveBooking.autoBooking.paths} />
 
@@ -546,7 +547,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H3 id="appointments-prompt">{t.sections.promptEngineering.citasPrompt.heading}</H3>
         <Prose editorId="appointments-prompt-body">{t.sections.promptEngineering.citasPrompt.body}</Prose>
 
-        <Photo1 editorId="appointments-prompt-n8n" src="/jacobo/n8n-prompt-citas.webp" alt={lang === 'es' ? 'System prompt del sub-agente de citas' : 'Appointments sub-agent system prompt'} className="mb-4" />
+        <DiagramZoom editorId="appointments-prompt-n8n" src="/jacobo/n8n-prompt-citas.webp" hdSrc="/jacobo/appointments-prompt-n8n-2x.webp" alt={lang === 'es' ? 'System prompt del sub-agente de citas' : 'Appointments sub-agent system prompt'} className="mb-4" />
 
         <CodeBlock editorId="appointments-prompt-code" segments={t.sections.promptEngineering.citasPrompt.segments} />
 
@@ -561,27 +562,27 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <Prose editorId="quotes-challenge-body" className="mb-6">{t.sections.deepDiveQuotes.challenge.body}</Prose>
 
         {/* Workflow screenshot */}
-        <Photo1 editorId="quotes-n8n-workflow" src="/jacobo/n8n-subagente-presupuestos.webp" alt={lang === 'es' ? 'Workflow del sub-agente de presupuestos en n8n: 11 nodos' : 'Quotes sub-agent workflow in n8n: 11 nodes'} className="mb-4" />
+        <DiagramZoom editorId="quotes-n8n-workflow" src="/jacobo/n8n-subagente-presupuestos.webp" hdSrc="/jacobo/quotes-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow del sub-agente de presupuestos en n8n: 11 nodos' : 'Quotes sub-agent workflow in n8n: 11 nodes'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['presupuesto-modelo'].href} label={t.downloads.inlineLabel} fileSize={wfById['presupuesto-modelo'].fileSize} />
 
 
         {/* CleanModel */}
         <H3 id="clean-model">{t.sections.deepDiveQuotes.cleanModel.heading}</H3>
-        <Photo1 editorId="clean-model-n8n" src="/jacobo/n8n-presupuesto-clean-model.webp" alt={lang === 'es' ? 'Nodo CleanModel en n8n: normalización de input' : 'CleanModel node in n8n: input normalization'} className="mb-4" />
+        <DiagramZoom editorId="clean-model-n8n" src="/jacobo/n8n-presupuesto-clean-model.webp" hdSrc="/jacobo/clean-model-n8n-2x.webp" alt={lang === 'es' ? 'Nodo CleanModel en n8n: normalización de input' : 'CleanModel node in n8n: input normalization'} className="mb-4" />
         <Prose editorId="clean-model-body">{t.sections.deepDiveQuotes.cleanModel.body}</Prose>
         <Prose editorId="clean-model-detail">{t.sections.deepDiveQuotes.cleanModel.detail}</Prose>
         <Callout editorId="clean-model-insight">{t.sections.deepDiveQuotes.cleanModel.insight}</Callout>
 
         {/* AI Agent */}
         <H3 id="ai-agent-quotes">{t.sections.deepDiveQuotes.aiAgent.heading}</H3>
-        <Photo1 editorId="ai-agent-quotes-n8n" src="/jacobo/n8n-presupuesto-ai-agent.webp" alt={lang === 'es' ? 'Nodo AI Agent del sub-agente de presupuestos en n8n' : 'AI Agent node in quotes sub-agent in n8n'} className="mb-4" />
+        <DiagramZoom editorId="ai-agent-quotes-n8n" src="/jacobo/n8n-presupuesto-ai-agent.webp" hdSrc="/jacobo/ai-agent-quotes-n8n-2x.webp" alt={lang === 'es' ? 'Nodo AI Agent del sub-agente de presupuestos en n8n' : 'AI Agent node in quotes sub-agent in n8n'} className="mb-4" />
         <Prose editorId="ai-agent-quotes-body">{t.sections.deepDiveQuotes.aiAgent.body}</Prose>
         <StepList editorId="ai-agent-quotes-tools" items={t.sections.deepDiveQuotes.aiAgent.tools} />
         <Prose editorId="ai-agent-quotes-fallback">{t.sections.deepDiveQuotes.aiAgent.fallback}</Prose>
 
         {/* FiltrarRespuesta */}
         <H3 id="filtrar-respuesta">{t.sections.deepDiveQuotes.filtrarRespuesta.heading}</H3>
-        <Photo1 editorId="filtrar-respuesta-n8n" src="/jacobo/n8n-presupuesto-filtrar-respuesta.webp" alt={lang === 'es' ? 'Nodo FiltrarRespuesta en n8n: post-procesado determinista' : 'FiltrarRespuesta node in n8n: deterministic post-processing'} className="mb-4" />
+        <DiagramZoom editorId="filtrar-respuesta-n8n" src="/jacobo/n8n-presupuesto-filtrar-respuesta.webp" hdSrc="/jacobo/filtrar-respuesta-n8n-2x.webp" alt={lang === 'es' ? 'Nodo FiltrarRespuesta en n8n: post-procesado determinista' : 'FiltrarRespuesta node in n8n: deterministic post-processing'} className="mb-4" />
         <Prose editorId="filtrar-respuesta-body">{t.sections.deepDiveQuotes.filtrarRespuesta.body}</Prose>
         <ConditionList editorId="filtrar-respuesta-rules" items={t.sections.deepDiveQuotes.filtrarRespuesta.rules} />
 
@@ -591,7 +592,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H3 id="quotes-prompt">{t.sections.deepDiveQuotes.presupuestoPrompt.heading}</H3>
         <Prose editorId="quotes-prompt-body">{t.sections.deepDiveQuotes.presupuestoPrompt.body}</Prose>
 
-        <Photo1 editorId="quotes-prompt-n8n" src="/jacobo/n8n-prompt-presupuestos.webp" alt={lang === 'es' ? 'System prompt del sub-agente de presupuestos' : 'Quotes sub-agent system prompt'} className="mb-4" />
+        <DiagramZoom editorId="quotes-prompt-n8n" src="/jacobo/n8n-prompt-presupuestos.webp" hdSrc="/jacobo/quotes-prompt-n8n-2x.webp" alt={lang === 'es' ? 'System prompt del sub-agente de presupuestos' : 'Quotes sub-agent system prompt'} className="mb-4" />
 
         <CodeBlock editorId="quotes-prompt-code" segments={t.sections.deepDiveQuotes.presupuestoPrompt.segments} />
 
@@ -613,7 +614,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H3 id="orders-agent">{t.sections.deepDiveOthers.orders.heading}</H3>
         <Prose editorId="orders-body" className="mb-2">{t.sections.deepDiveOthers.orders.body}</Prose>
         <NodeLabel editorId="orders-nodes">{t.sections.deepDiveOthers.orders.nodes}</NodeLabel>
-        <Photo1 editorId="orders-n8n-workflow" src="/jacobo/n8n-hacer-pedido.webp" alt={lang === 'es' ? 'Workflow de Pedidos en n8n' : 'Orders workflow in n8n'} className="mb-4" />
+        <DiagramZoom editorId="orders-n8n-workflow" src="/jacobo/n8n-hacer-pedido.webp" hdSrc="/jacobo/orders-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow de Pedidos en n8n' : 'Orders workflow in n8n'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['hacer-pedido'].href} label={t.downloads.inlineLabel} fileSize={wfById['hacer-pedido'].fileSize} />
 
         <BulletList editorId="orders-details" items={t.sections.deepDiveOthers.orders.details} className="mb-8" />
@@ -622,7 +623,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H3 id="calculator-agent">{t.sections.deepDiveOthers.calculator.heading}</H3>
         <Prose editorId="calculator-body" className="mb-2">{t.sections.deepDiveOthers.calculator.body}</Prose>
         <NodeLabel editorId="calculator-nodes">{t.sections.deepDiveOthers.calculator.nodes}</NodeLabel>
-        <Photo1 editorId="calculator-n8n-workflow" src="/jacobo/n8n-calculadora.webp" alt={lang === 'es' ? 'Workflow de la Calculadora de Descuentos en n8n: Webhook → Code (lógica de descuentos) → Response' : 'Discount Calculator workflow in n8n: Webhook → Code (discount logic) → Response'} className="mb-4" />
+        <DiagramZoom editorId="calculator-n8n-workflow" src="/jacobo/n8n-calculadora.webp" hdSrc="/jacobo/calculator-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow de la Calculadora de Descuentos en n8n: Webhook → Code (lógica de descuentos) → Response' : 'Discount Calculator workflow in n8n: Webhook → Code (discount logic) → Response'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['calculadora-santifer'].href} label={t.downloads.inlineLabel} fileSize={wfById['calculadora-santifer'].fileSize} />
 
         <BulletList editorId="calculator-details" items={t.sections.deepDiveOthers.calculator.details} className="mb-4" />
@@ -632,7 +633,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H3 id="hitl-agent">{t.sections.deepDiveOthers.hitl.heading}</H3>
         <Prose editorId="hitl-body" className="mb-2">{t.sections.deepDiveOthers.hitl.body}</Prose>
         <NodeLabel editorId="hitl-nodes">{t.sections.deepDiveOthers.hitl.nodes}</NodeLabel>
-        <Photo1 editorId="hitl-n8n-workflow" src="/jacobo/n8n-hitl-slack.webp" alt={lang === 'es' ? 'Workflow de HITL Handoff en n8n' : 'HITL Handoff workflow in n8n'} className="mb-4" />
+        <DiagramZoom editorId="hitl-n8n-workflow" src="/jacobo/n8n-hitl-slack.webp" hdSrc="/jacobo/hitl-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow de HITL Handoff en n8n' : 'HITL Handoff workflow in n8n'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['contactar-agente-humano'].href} label={t.downloads.inlineLabel} fileSize={wfById['contactar-agente-humano'].fileSize} />
 
         <BulletList editorId="hitl-details" items={t.sections.deepDiveOthers.hitl.details} />
@@ -655,7 +656,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         <H3 id="whatsapp-agent">{t.sections.deepDiveOthers.whatsapp.heading}</H3>
         <Prose editorId="whatsapp-cross-channel-body" className="mb-2">{t.sections.deepDiveOthers.whatsapp.body}</Prose>
         <NodeLabel editorId="whatsapp-nodes">{t.sections.deepDiveOthers.whatsapp.nodes}</NodeLabel>
-        <Photo1 editorId="whatsapp-n8n-workflow" src="/jacobo/n8n-enviar-whatsapp.webp" alt={lang === 'es' ? 'Workflow de EnviarMensajeWati en n8n' : 'EnviarMensajeWati workflow in n8n'} className="mb-4" />
+        <DiagramZoom editorId="whatsapp-n8n-workflow" src="/jacobo/n8n-enviar-whatsapp.webp" hdSrc="/jacobo/whatsapp-n8n-workflow-2x.webp" alt={lang === 'es' ? 'Workflow de EnviarMensajeWati en n8n' : 'EnviarMensajeWati workflow in n8n'} className="mb-4" />
         <InlineWorkflowDownload href={wfById['enviar-mensaje-wati'].href} label={t.downloads.inlineLabel} fileSize={wfById['enviar-mensaje-wati'].fileSize} />
 
         <BulletList editorId="whatsapp-cross-channel-details" items={t.sections.deepDiveOthers.whatsapp.details} className="mb-8" />

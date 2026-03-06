@@ -2,8 +2,6 @@ import { n8nContent, CLASSIFICATION_PROMPT, type N8nLang } from './n8n-i18n'
 import { buildArticleJsonLd } from './articles/json-ld'
 import { useArticleSeo } from './articles/use-article-seo'
 import {
-  AnchorHeading,
-  CopyButton,
   DownloadButton,
   ArticleLayout,
   ArticleHeader,
@@ -13,6 +11,18 @@ import {
   LessonsSection,
   CaseStudyCta,
 } from './articles/components'
+import {
+  H2,
+  H3,
+  Prose,
+  Callout,
+  InfoCard,
+  BulletList,
+  StepList,
+  DiagramZoom,
+  CodeBlock,
+  FloatingToc,
+} from './articles/content-types'
 
 function buildJsonLd(lang: N8nLang) {
   const t = n8nContent[lang]
@@ -74,6 +84,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
 
   return (
     <ArticleLayout lang={lang}>
+        <FloatingToc />
         <ArticleHeader
           editorId="hero-header"
           kicker={t.header.kicker}
@@ -88,13 +99,13 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
         <article className="prose-custom">
 
           {/* Intro narrative */}
-          <p className="text-lg text-foreground leading-relaxed mb-4">
+          <Prose variant="hook">
             {t.intro.hook}
-          </p>
-          <p className="text-muted-foreground leading-relaxed mb-4">
+          </Prose>
+          <Prose>
             {t.intro.body}
-          </p>
-          <p className="text-muted-foreground leading-relaxed mb-8">
+          </Prose>
+          <Prose className="mb-8">
             {t.intro.punchline.split(lang === 'es' ? 'Era un router de datos muy caro.' : 'I was a very expensive data router.').map((part, i, arr) =>
               i < arr.length - 1 ? (
                 <span key={i}>{part}<strong className="text-foreground">{lang === 'es' ? 'Era un router de datos muy caro.' : 'I was a very expensive data router.'}</strong></span>
@@ -102,7 +113,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
                 <span key={i}>{part}</span>
               )
             )}
-          </p>
+          </Prose>
 
           {/* Preview CTA */}
           <div className="mb-10 relative rounded-2xl p-[1.5px] bg-gradient-theme">
@@ -118,7 +129,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           </div>
 
           {/* Time Sinks Table */}
-          <AnchorHeading id="time-sinks">{t.timeSinks.heading}</AnchorHeading>
+          <H2 id="time-sinks">{t.timeSinks.heading}</H2>
           <div className="overflow-x-auto -mx-4 sm:mx-0">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -143,8 +154,8 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           </div>
 
           {/* Workflow 1 */}
-          <AnchorHeading id="workflow-1">{t.workflow1.heading}</AnchorHeading>
-          <p className="text-muted-foreground mb-4 leading-relaxed">{t.workflow1.description}</p>
+          <H2 id="workflow-1">{t.workflow1.heading}</H2>
+          <Prose>{t.workflow1.description}</Prose>
 
           <div className="bg-muted/30 rounded-lg p-4 mb-6 font-mono text-sm overflow-x-auto">
             {t.workflow1.pipelineLabels.map((step, i) => (
@@ -155,33 +166,21 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             ))}
           </div>
 
-          <figure className="rounded-lg overflow-hidden border border-border mb-6">
-            <img
-              src="/workflows/n8n-sprint-report-automation-workflow.webp"
-              alt={t.workflow1.imgAlt}
-              title={t.workflow1.imgTitle}
-              className="w-full h-auto"
-              width={1200}
-              height={499}
-              loading="lazy"
+          <DiagramZoom
+            src="/workflows/n8n-sprint-report-automation-workflow.webp"
+            hdSrc="/workflows/n8n-sprint-report-automation-workflow-hd.webp"
+            alt={t.workflow1.imgAlt}
+            caption={t.workflow1.figcaption}
+          />
+
+          <InfoCard heading={t.workflow1.nodesHeading}>
+            <BulletList
+              variant="in-card"
+              items={t.workflow1.nodes.map((node) => ({ label: node.name, detail: node.detail }))}
             />
-            <figcaption className="text-xs text-muted-foreground text-center py-2 bg-muted/20">
-              {t.workflow1.figcaption}
-            </figcaption>
-          </figure>
+          </InfoCard>
 
-          <div className="bg-card border border-border rounded-lg p-5 mb-6 space-y-3">
-            <h3 className="font-display font-semibold text-foreground">{t.workflow1.nodesHeading}</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              {t.workflow1.nodes.map((node) => (
-                <li key={node.name} className="flex gap-2"><span className="text-primary font-medium shrink-0">{node.name}</span> {node.detail}</li>
-              ))}
-            </ul>
-          </div>
-
-          <blockquote className="border-l-4 border-primary/40 pl-4 py-1 text-foreground italic mb-6">
-            {t.workflow1.quote}
-          </blockquote>
+          <Callout>{t.workflow1.quote}</Callout>
 
           <DownloadButton href="/workflows/workflow-1-automatable-friday.json" label={t.workflow1.downloadLabel} />
 
@@ -192,8 +191,8 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           </div>
 
           {/* Workflow 2 */}
-          <AnchorHeading id="workflow-2">{t.workflow2.heading}</AnchorHeading>
-          <p className="text-muted-foreground mb-4 leading-relaxed">{t.workflow2.description}</p>
+          <H2 id="workflow-2">{t.workflow2.heading}</H2>
+          <Prose>{t.workflow2.description}</Prose>
 
           <div className="bg-muted/30 rounded-lg p-4 mb-6 font-mono text-sm overflow-x-auto">
             {t.workflow2.pipelineLabels.map((step, i) => (
@@ -204,60 +203,39 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             ))}
           </div>
 
-          <figure className="rounded-lg overflow-hidden border border-border mb-6">
-            <img
-              src="/workflows/n8n-ai-feedback-classification-workflow.webp"
-              alt={t.workflow2.imgAlt}
-              title={t.workflow2.imgTitle}
-              className="w-full h-auto"
-              width={1200}
-              height={499}
-              loading="lazy"
-            />
-            <figcaption className="text-xs text-muted-foreground text-center py-2 bg-muted/20">
-              {t.workflow2.figcaption}
-            </figcaption>
-          </figure>
+          <DiagramZoom
+            src="/workflows/n8n-ai-feedback-classification-workflow.webp"
+            hdSrc="/workflows/n8n-ai-feedback-classification-workflow-hd.webp"
+            alt={t.workflow2.imgAlt}
+            caption={t.workflow2.figcaption}
+          />
 
-          <div className="bg-card border border-border rounded-lg p-5 mb-6 space-y-3">
-            <h3 className="font-display font-semibold text-foreground">{t.workflow2.nodesHeading}</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              {t.workflow2.nodes.map((node) => (
-                <li key={node.name} className="flex gap-2"><span className="text-primary font-medium shrink-0">{node.name}</span> {node.detail}</li>
-              ))}
-            </ul>
-          </div>
+          <InfoCard heading={t.workflow2.nodesHeading}>
+            <BulletList
+              variant="in-card"
+              items={t.workflow2.nodes.map((node) => ({ label: node.name, detail: node.detail }))}
+            />
+          </InfoCard>
 
           {/* Classification Prompt */}
-          <h3 className="font-display text-xl font-semibold text-foreground mt-8 mb-4">{t.workflow2.promptHeading}</h3>
-          <div className="relative">
-            <div className="absolute top-3 right-3 z-10">
-              <CopyButton text={CLASSIFICATION_PROMPT} copyLabel={t.workflow2.promptCopyLabel} copiedLabel={t.workflow2.promptCopiedLabel} />
-            </div>
-            <pre className="bg-muted/30 border border-border rounded-lg p-5 pt-12 sm:pt-5 overflow-x-auto text-sm leading-relaxed font-mono text-foreground whitespace-pre-wrap">
-              {CLASSIFICATION_PROMPT}
-            </pre>
-          </div>
+          <H3 id="classification-prompt">{t.workflow2.promptHeading}</H3>
+          <CodeBlock highlight="template">{CLASSIFICATION_PROMPT}</CodeBlock>
 
-          <div className="bg-card border border-border rounded-lg p-5 mt-6 mb-6 space-y-3">
-            <h3 className="font-display font-semibold text-foreground">{t.workflow2.whyWorksHeading}</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              {t.workflow2.whyWorks.map((item) => (
-                <li key={item.label} className="flex gap-2"><span className="text-primary font-medium shrink-0">{item.label}</span> {item.detail}</li>
-              ))}
-            </ul>
-          </div>
+          <InfoCard heading={t.workflow2.whyWorksHeading}>
+            <BulletList
+              variant="in-card"
+              items={t.workflow2.whyWorks.map((item) => ({ label: item.label, detail: item.detail }))}
+            />
+          </InfoCard>
 
-          <blockquote className="border-l-4 border-primary/40 pl-4 py-1 text-foreground italic mb-6">
-            {t.workflow2.quote}
-          </blockquote>
+          <Callout>{t.workflow2.quote}</Callout>
 
           {/* The ambiguous test */}
-          <h3 className="font-display text-xl font-semibold text-foreground mt-8 mb-4">{t.workflow2.ambiguousHeading}</h3>
-          <div className="bg-card border border-border rounded-lg p-5 mb-4">
+          <H3 id="ambiguous-test">{t.workflow2.ambiguousHeading}</H3>
+          <InfoCard>
             <p className="text-muted-foreground italic">{t.workflow2.ambiguousExample}</p>
-          </div>
-          <p className="text-muted-foreground mb-4 leading-relaxed">
+          </InfoCard>
+          <Prose>
             {t.workflow2.ambiguousExplanation1.split(lang === 'es' ? 'clasificar como BUG' : 'classify as BUG').map((part, i, arr) =>
               i < arr.length - 1 ? (
                 <span key={i}>{part}<strong className="text-foreground">{lang === 'es' ? 'clasificar como BUG' : 'classify as BUG'}</strong></span>
@@ -265,16 +243,16 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
                 <span key={i}>{part}</span>
               )
             )}
-          </p>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
+          </Prose>
+          <Prose>
             {t.workflow2.ambiguousExplanation2}
-          </p>
+          </Prose>
 
           <DownloadButton href="/workflows/workflow-2-intelligent-router.json" label={t.workflow2.downloadLabel} />
 
           {/* The Pattern */}
-          <AnchorHeading id="the-pattern">{t.pattern.heading}</AnchorHeading>
-          <p className="text-muted-foreground mb-4 leading-relaxed">{t.pattern.description}</p>
+          <H2 id="the-pattern">{t.pattern.heading}</H2>
+          <Prose>{t.pattern.description}</Prose>
 
           <div className="bg-muted/30 rounded-lg p-4 mb-6 font-mono text-sm text-center">
             <span className="text-primary">{t.pattern.labels.trigger}</span> ({t.pattern.labels.when}) <span className="text-muted-foreground">&rarr;</span>{' '}
@@ -283,16 +261,10 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             <span className="text-primary">{t.pattern.labels.act}</span> ({t.pattern.labels.notify})
           </div>
 
-          <p className="text-muted-foreground mb-3">{t.pattern.worksFor}</p>
-          <ul className="space-y-1.5 text-muted-foreground mb-6 ml-4">
-            {t.pattern.useCases.map((useCase) => (
-              <li key={useCase} className="flex items-start gap-2"><span className="text-primary mt-1.5 text-xs">&#9679;</span>{useCase}</li>
-            ))}
-          </ul>
+          <Prose>{t.pattern.worksFor}</Prose>
+          <BulletList items={t.pattern.useCases} />
 
-          <div className="bg-primary/5 border border-primary/20 rounded-lg p-5 mb-6">
-            <p className="text-foreground font-medium">{t.pattern.punchline}</p>
-          </div>
+          <Callout>{t.pattern.punchline}</Callout>
 
           {/* Bootcamp CTA */}
           <CaseStudyCta
@@ -304,24 +276,19 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           />
 
           {/* Get Started */}
-          <AnchorHeading id="get-started">{t.getStarted.heading}</AnchorHeading>
-          <ol className="space-y-3 text-muted-foreground mb-8 ml-1">
-            {t.getStarted.steps.map((step) => (
-              <li key={step.num} className="flex items-start gap-3">
-                <span className="bg-primary text-primary-foreground w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">{step.num}</span>
-                <span>
-                  {step.text.includes('<a>') ? (
-                    <>
-                      <a href="https://n8n.io" target="_blank" rel="noopener noreferrer nofollow" className="text-primary hover:underline font-medium">
-                        {step.text.match(/<a>(.*?)<\/a>/)?.[1]}
-                      </a>
-                      {step.text.replace(/<a>.*?<\/a>/, '')}
-                    </>
-                  ) : step.text}
-                </span>
-              </li>
-            ))}
-          </ol>
+          <H2 id="get-started">{t.getStarted.heading}</H2>
+          <StepList
+            items={t.getStarted.steps.map((step) =>
+              step.text.includes('<a>') ? (
+                <>
+                  <a href="https://n8n.io" target="_blank" rel="noopener noreferrer nofollow" className="text-primary hover:underline font-medium">
+                    {step.text.match(/<a>(.*?)<\/a>/)?.[1]}
+                  </a>
+                  {step.text.replace(/<a>.*?<\/a>/, '')}
+                </>
+              ) : step.text
+            )}
+          />
 
           {/* Bonus step — bootcamp */}
           <div className="flex items-start gap-3 mt-3 mb-8 ml-1 text-muted-foreground">
@@ -345,9 +312,7 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
             </span>
           </div>
 
-          <blockquote className="border-l-4 border-primary/40 pl-4 py-1 text-foreground italic mb-8">
-            {t.getStarted.quote}
-          </blockquote>
+          <Callout>{t.getStarted.quote}</Callout>
 
           {/* Lessons Learned */}
           <LessonsSection heading={t.lessons.heading} items={t.lessons.items} />
@@ -356,20 +321,19 @@ export default function N8nForPMs({ lang = 'en' }: { lang?: N8nLang }) {
           <FaqSection heading={t.faq.heading} items={t.faq.items} />
 
           {/* Import Workflows */}
-          <AnchorHeading id="import">{t.import.heading}</AnchorHeading>
-          <p className="text-muted-foreground mb-5 leading-relaxed">
+          <H2 id="import">{t.import.heading}</H2>
+          <Prose>
             {t.import.description}
-          </p>
+          </Prose>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <DownloadButton href="/workflows/workflow-1-automatable-friday.json" label={t.import.wf1Label} />
             <DownloadButton href="/workflows/workflow-2-intelligent-router.json" label={t.import.wf2Label} />
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-5 mb-6">
-            <h3 className="font-display font-semibold text-foreground mb-2">{t.import.howToHeading}</h3>
+          <InfoCard heading={t.import.howToHeading}>
             <p className="text-muted-foreground">{t.import.howToText}</p>
-          </div>
+          </InfoCard>
 
           {/* Resources */}
           <ResourcesList heading={t.resources.heading} items={t.resources.items} />
