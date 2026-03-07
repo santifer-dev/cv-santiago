@@ -5,7 +5,7 @@ Contact: hi@santifer.io
 Site: https://santifer.io
 Location: Seville, Spain
 LinkedIn: https://linkedin.com/in/santifer
-GitHub: https://github.com/santifer-dev
+GitHub: https://github.com/santifer
 
 /* THANKS */
 AI Pair: Claude Code (Anthropic)

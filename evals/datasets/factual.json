@@ -74,7 +74,7 @@
       "lang": "es",
       "assertions": [
         { "type": "contains_any", "values": ["público", "publica", "open", "GitHub"] },
-        { "type": "contains_any", "values": ["santifer-dev", "cv-santiago"] },
+        { "type": "contains_any", "values": ["santifer", "cv-santiago"] },
         { "type": "not_contains", "value": "privado" }
       ]
     },

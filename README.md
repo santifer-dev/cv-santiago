@@ -74,7 +74,7 @@ This isn't a toy chatbot — it runs a full observability and evaluation pipelin
 ## Quick Start
 
 ```bash
-git clone https://github.com/santifer-dev/cv-santiago.git
+git clone https://github.com/santifer/cv-santiago.git
 cd cv-santiago
 npm install
 npm run dev
@@ -211,7 +211,7 @@ No es un chatbot de juguete — ejecuta un pipeline completo de observabilidad y
 ## Inicio Rápido
 
 ```bash
-git clone https://github.com/santifer-dev/cv-santiago.git
+git clone https://github.com/santifer/cv-santiago.git
 cd cv-santiago
 npm install
 npm run dev

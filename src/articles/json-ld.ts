@@ -40,7 +40,7 @@ const PERSON = {
   jobTitle: 'AI Product Manager',
   sameAs: [
     'https://www.linkedin.com/in/santifer',
-    'https://github.com/santifer-dev',
+    'https://github.com/santifer',
   ],
 }
 

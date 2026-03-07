@@ -9,7 +9,7 @@
 - **Email:** hi@santifer.io
 - **Website:** https://santifer.io
 - **LinkedIn:** https://linkedin.com/in/santifer
-- **GitHub:** https://github.com/santifer-dev
+- **GitHub:** https://github.com/santifer
 - **Content Digest:** https://contentdigest.santifer.io
 - **Newsletter (Substack):** https://santifer.substack.com
 - **dev.to:** https://dev.to/santifer

@@ -817,7 +817,7 @@ export default function JacoboAgent({ lang = 'en' }: { lang?: Lang }) {
         {/* GitHub repo link */}
         <div className="flex justify-center mb-4">
           <a
-            href="https://github.com/santifer-dev/jacobo-workflows"
+            href="https://github.com/santifer/jacobo-workflows"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors text-sm"

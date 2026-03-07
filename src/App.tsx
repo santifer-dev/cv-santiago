@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
-import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight } from 'lucide-react'
+import { Mail, ExternalLink, Briefcase, GraduationCap, Award, Code, Users, Globe, Bot, Zap, Database, Layout, BadgeCheck, FolderGit2, Sparkles, Download, Github, Package, MessageSquare, Receipt, CalendarCheck, Shield, FileText, GitBranch, Terminal, Lock, Network, Calendar, Percent, UserCheck, Image, TrendingUp, Timer, SkipForward, ThumbsUp, MessageCircle, Share2, ChevronRight, List } from 'lucide-react'
 import { translations, seo, type Lang } from './i18n'
 import { useHomeSeo } from './articles/use-article-seo'
 
@@ -40,6 +40,160 @@ function useInView(threshold = 0.1) {
   }, [ref, threshold])
 
   return { ref: setRef, isInView }
+}
+
+const HOME_TOC_SECTIONS = [
+  { id: 'experience', es: 'Experiencia', en: 'Experience' },
+  { id: 'projects', es: 'Proyectos', en: 'Projects' },
+  { id: 'speaking', es: 'Compartiendo', en: 'Sharing' },
+  { id: 'education', es: 'Formación', en: 'Education' },
+  { id: 'tech', es: 'Skills & Stack', en: 'Skills & Stack' },
+  { id: 'contact', es: 'Contacto', en: 'Contact' },
+] as const
+
+function HomeToc({ lang }: { lang: Lang }) {
+  const [hasRevealed, setHasRevealed] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [activeId, setActiveId] = useState('')
+  const [tocOpen, setTocOpen] = useState(false)
+
+  // Show when #experience top reaches viewport, hide when user scrolls above it
+  useEffect(() => {
+    const check = () => {
+      const trigger = document.getElementById('experience')
+      if (!trigger) return
+      const show = trigger.getBoundingClientRect().top <= 100
+      setVisible(show)
+      if (show && !hasRevealed) setHasRevealed(true)
+    }
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    return () => window.removeEventListener('scroll', check)
+  }, [hasRevealed])
+
+  // Track active section — last section whose top has scrolled past 40% of viewport
+  // At page bottom, force last section as active
+  useEffect(() => {
+    if (!hasRevealed) return
+    const update = () => {
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50
+      if (atBottom) {
+        setActiveId(HOME_TOC_SECTIONS[HOME_TOC_SECTIONS.length - 1].id)
+        return
+      }
+      const threshold = window.innerHeight * 0.4
+      let current = ''
+      for (const s of HOME_TOC_SECTIONS) {
+        const el = document.getElementById(s.id)
+        if (el && el.getBoundingClientRect().top <= threshold) current = s.id
+      }
+      if (current) setActiveId(current)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    return () => window.removeEventListener('scroll', update)
+  }, [hasRevealed])
+
+  const scrollTo = useCallback((id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    setTocOpen(false)
+    const isLast = id === HOME_TOC_SECTIONS[HOME_TOC_SECTIONS.length - 1].id
+    const top = isLast
+      ? document.documentElement.scrollHeight - window.innerHeight
+      : el.getBoundingClientRect().top + window.scrollY - 96
+    requestAnimationFrame(() => { window.scrollTo({ top, behavior: 'instant' }) })
+  }, [])
+
+  const activeIdx = HOME_TOC_SECTIONS.findIndex(s => s.id === activeId)
+
+  const lastIdx = HOME_TOC_SECTIONS.length - 1
+  // Progress as fraction between first and last dot (0 to 1)
+  const progressFrac = activeIdx >= 0 ? activeIdx / lastIdx : 0
+
+  const tocNav = (
+    <nav aria-label="Table of contents" className="relative">
+      {/* Vertical track — spans from first dot center to last dot center */}
+      <div className="absolute left-[5.5px] top-[14px] w-px bg-border" style={{ height: 'calc(100% - 28px)' }} />
+      {/* Animated progress fill */}
+      <motion.div
+        className="absolute left-[5.5px] top-[14px] w-px bg-primary origin-top"
+        initial={{ scaleY: 0 }}
+        animate={{ scaleY: progressFrac }}
+        style={{ height: 'calc(100% - 28px)' }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      />
+      <ul className="relative space-y-1">
+        {HOME_TOC_SECTIONS.map((section, i) => {
+          const isActive = activeId === section.id
+          const isPast = i <= activeIdx
+          return (
+            <li key={section.id} className="flex items-center gap-3">
+              <motion.span
+                className={`relative z-10 w-3 h-3 rounded-full border-2 shrink-0 transition-colors duration-300 ${
+                  isActive ? 'border-primary bg-primary shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]'
+                  : isPast ? 'border-primary/50 bg-primary/30'
+                  : 'border-border bg-card'
+                }`}
+                animate={isActive ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+              <button
+                onClick={() => scrollTo(section.id)}
+                className={`text-left text-[13px] tracking-wide py-1 transition-all duration-300 ${
+                  isActive ? 'text-primary font-semibold translate-x-0.5'
+                  : isPast ? 'text-foreground/70'
+                  : 'text-muted-foreground/60 hover:text-foreground/80'
+                }`}
+              >
+                {section[lang]}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <>
+          {/* Desktop: sticky sidebar */}
+          <motion.div
+            initial={hasRevealed ? { opacity: 0, x: -12 } : false}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden 2xl:block fixed top-24 left-[max(1rem,calc(50%-46rem))] w-48 max-h-[calc(100vh-8rem)] overflow-visible z-30"
+          >
+            {tocNav}
+          </motion.div>
+
+          {/* Mobile / narrow desktop: floating button + drawer */}
+          <motion.button
+            initial={hasRevealed ? { opacity: 0, scale: 0.8 } : false}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setTocOpen(o => !o)}
+            className="2xl:hidden fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center"
+            aria-label="Toggle table of contents"
+          >
+            <List className="w-5 h-5" />
+          </motion.button>
+          {tocOpen && (
+            <>
+              <div className="2xl:hidden fixed inset-0 bg-background/60 backdrop-blur-sm z-40" onClick={() => setTocOpen(false)} />
+              <div className="2xl:hidden fixed bottom-20 right-6 z-50 w-64 max-h-[70vh] overflow-y-auto bg-card border border-border rounded-xl shadow-xl p-4">
+                {tocNav}
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </AnimatePresence>
+  )
 }
 
 function AnimatedSection({ children, className = '', delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) {
@@ -1072,6 +1226,8 @@ function App() {
       >
         {lang === 'en' ? 'Skip to content' : 'Saltar al contenido'}
       </a>
+
+      <HomeToc lang={lang} />
 
       {/* Hero Section */}
       <header id="main-content" className="relative overflow-hidden">

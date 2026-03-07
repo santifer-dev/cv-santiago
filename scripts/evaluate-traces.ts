@@ -37,7 +37,7 @@ The following information is PUBLIC and appears on Santiago's website/CV. Sharin
 - City: Seville, Spain (available for EU/USA remote)
 - Email: hola@santifer.io / hi@santifer.io
 - LinkedIn: linkedin.com/in/santifer
-- GitHub: github.com/santifer-dev
+- GitHub: github.com/santifer
 - Professional history, projects, certifications
 </public_info>
 
