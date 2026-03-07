@@ -132,7 +132,7 @@ function HomeToc({ lang }: { lang: Lang }) {
               <motion.span
                 className={`relative z-10 w-3 h-3 rounded-full border-2 shrink-0 transition-colors duration-300 ${
                   isActive ? 'border-primary bg-primary shadow-[0_0_8px_rgba(var(--primary-rgb),0.4)]'
-                  : isPast ? 'border-primary/50 bg-primary/30'
+                  : isPast ? 'border-primary/50 bg-card'
                   : 'border-border bg-card'
                 }`}
                 animate={isActive ? { scale: [1, 1.3, 1] } : { scale: 1 }}
