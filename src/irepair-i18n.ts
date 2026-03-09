@@ -44,6 +44,11 @@ interface IRepairContent {
     body: string
     ctaLabel: string
   }
+  pseoCta: {
+    heading: string
+    body: string
+    ctaLabel: string
+  }
 }
 
 export const irepairContent: Record<IRepairLang, IRepairContent> = {
@@ -91,6 +96,11 @@ export const irepairContent: Record<IRepairLang, IRepairContent> = {
       body: 'Un agente IA con voz que gestionaba citas, presupuestos y consultas. 90% autoservicio.',
       ctaLabel: 'Ver el caso Jacobo',
     },
+    pseoCta: {
+      heading: 'La web que se construye sola',
+      body: '4.700+ landing pages generadas desde el ERP. 2M+ impresiones orgánicas. Cero contenido IA.',
+      ctaLabel: 'Ver el SEO Programático',
+    },
   },
   en: {
     slug: 'santifer-irepair-founder',
@@ -135,6 +145,11 @@ export const irepairContent: Record<IRepairLang, IRepairContent> = {
       heading: 'The agent that answered the phone',
       body: 'An AI voice agent that handled bookings, quotes, and inquiries. 90% self-service.',
       ctaLabel: 'See the Jacobo case study',
+    },
+    pseoCta: {
+      heading: 'The website that builds itself',
+      body: '4,700+ landing pages generated from the ERP. 2M+ organic impressions. Zero AI content.',
+      ctaLabel: 'See the Programmatic SEO',
     },
   },
 }

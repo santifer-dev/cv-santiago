@@ -995,12 +995,13 @@ export interface ScreenshotItem {
 }
 
 interface ScreenshotGridProps {
-  items: ScreenshotItem[]
+  items: readonly ScreenshotItem[]
   lang: 'es' | 'en'
+  basePath?: string
   editorId?: string
 }
 
-export function ScreenshotGrid({ items, lang, editorId }: ScreenshotGridProps) {
+export function ScreenshotGrid({ items, lang, basePath = '/jacobo/screenshots', editorId }: ScreenshotGridProps) {
   if (items.length < 3) {
     return (
       <EditorLabel name="ScreenshotGrid" id={editorId}>
@@ -1008,7 +1009,7 @@ export function ScreenshotGrid({ items, lang, editorId }: ScreenshotGridProps) {
           {items.map(n => (
             <ScreenshotFigure
               key={n.src}
-              src={`/jacobo/screenshots/${n.src}`}
+              src={`${basePath}/${n.src}`}
               alt={lang === 'es' ? n.altEs : n.altEn}
               summaryEn={n.altEn}
               lang={lang}
@@ -1025,7 +1026,7 @@ export function ScreenshotGrid({ items, lang, editorId }: ScreenshotGridProps) {
         {items.map(n => (
           <ScreenshotFigure
             key={n.src}
-            src={`/jacobo/screenshots/${n.src}`}
+            src={`${basePath}/${n.src}`}
             alt={lang === 'es' ? n.altEs : n.altEn}
             summaryEn={n.altEn}
             lang={lang}

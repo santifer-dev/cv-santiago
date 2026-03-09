@@ -69,6 +69,7 @@ export default function SantiferIRepair({ lang }: { lang: IRepairLang }) {
   const homePath = lang === 'en' ? '/en' : '/'
   const businessOsPath = lang === 'en' ? '/business-os-for-airtable' : '/business-os-para-airtable'
   const jacoboPath = lang === 'en' ? '/ai-agent-jacobo' : '/agente-ia-jacobo'
+  const pseoPath = lang === 'en' ? '/programmatic-seo' : '/seo-programatico'
 
   return (
     <ArticleLayout lang={lang}>
@@ -173,6 +174,12 @@ export default function SantiferIRepair({ lang }: { lang: IRepairLang }) {
         body={t.jacoboCta.body}
         ctaLabel={t.jacoboCta.ctaLabel}
         ctaHref={jacoboPath}
+      />
+      <CaseStudyCta
+        heading={t.pseoCta.heading}
+        body={t.pseoCta.body}
+        ctaLabel={t.pseoCta.ctaLabel}
+        ctaHref={pseoPath}
       />
     </ArticleLayout>
   )
