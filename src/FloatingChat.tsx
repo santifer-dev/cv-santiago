@@ -378,9 +378,9 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
             >
               {/* Avatar */}
               <picture>
-                <source srcSet="/chatbot-avatar.webp" type="image/webp" />
+                <source srcSet="/foto-avatar-sm.webp" type="image/webp" />
                 <img
-                  src="/chatbot-avatar.png"
+                  src="/foto-avatar-sm.webp"
                   alt={lang === 'en' ? 'Chat with Santi' : 'Chat con Santi'}
                   className="w-full h-full rounded-full object-cover"
                   width={56}
@@ -436,9 +436,9 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
             >
               <div className="flex items-center gap-3">
                 <picture>
-                  <source srcSet="/chatbot-avatar.webp" type="image/webp" />
+                  <source srcSet="/foto-avatar-sm.webp" type="image/webp" />
                   <img
-                    src="/chatbot-avatar.png"
+                    src="/foto-avatar-sm.webp"
                     alt="santifer avatar"
                     className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
                     width={40}
