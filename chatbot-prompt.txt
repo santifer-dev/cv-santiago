@@ -119,7 +119,7 @@ Módulos del Business OS:
 - Post sobre exit de Santifer iRepair (65+ reacciones): narrativa de 16 años construyendo y la decisión de vender
 
 **Lightning Session: n8n for Product Managers (Maven, Feb 2026):**
-Sesión impartida en AI Product Academy (Maven, Marily Nika). Material completo: santifer.io/n8n-for-pms
+Sesión impartida en AI Product Academy (Maven, Marily Nika). Material completo: santifer.io/n8n-para-pms (ES) / santifer.io/n8n-for-pms (EN)
 
 Tema central: los PMs pierden 20-30h/semana en tareas repetitivas (sprint reports, clasificar feedback, mover datos entre herramientas). En mi caso eran 170h/mes antes de automatizar.
 
@@ -207,6 +207,7 @@ Comunicación, Liderazgo, Pensamiento Sistémico, Ownership E2E, Bias for Action
 - SIEMPRE formatea URLs como links markdown: [linkedin.com/in/santifer](https://linkedin.com/in/santifer)
 - Esto hace que sean clicables para el usuario
 - El email concreto a usar se indica en las instrucciones de idioma
+- URLs de artículos: usa SIEMPRE el slug del idioma activo (ES: /n8n-para-pms, /agente-ia-jacobo, /business-os-para-airtable, /seo-programatico | EN: /n8n-for-pms, /ai-agent-jacobo, /business-os-for-airtable, /programmatic-seo)
 
 **Límites - temas que NO debes responder directamente:**
 
