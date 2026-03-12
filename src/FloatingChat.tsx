@@ -128,9 +128,9 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Word buffer refs for natural word-by-word streaming
-  const wordBufferRef = useRef<string[]>([]);
-  const renderedTextRef = useRef('');
+  // Word-by-word streaming refs
+  const fullTextRef = useRef('');        // full accumulated text from SSE
+  const drainPosRef = useRef(0);         // how far we've rendered into fullTextRef
   const isStreamingRef = useRef(false);
   const drainTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pendingRagSourcesRef = useRef<RagSource[]>([]);
@@ -222,14 +222,21 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  /** Drain word buffer one word at a time into rendered text */
+  /** Drain fullTextRef word-by-word into the UI via drainPosRef cursor */
   const startDrain = () => {
     if (drainTimerRef.current) return; // already draining
     drainTimerRef.current = setInterval(() => {
-      if (wordBufferRef.current.length > 0) {
-        const word = wordBufferRef.current.shift()!;
-        renderedTextRef.current += word;
-        const currentText = renderedTextRef.current;
+      const full = fullTextRef.current;
+      const pos = drainPosRef.current;
+
+      if (pos < full.length) {
+        // Find next word boundary (end of next whitespace-delimited token)
+        const remaining = full.slice(pos);
+        const match = remaining.match(/^\s*\S+\s*/);
+        const advance = match ? match[0].length : remaining.length;
+        drainPosRef.current = pos + advance;
+
+        const currentText = full.slice(0, drainPosRef.current);
         const sources = pendingRagSourcesRef.current;
         const degraded = pendingRagDegradedRef.current;
         setMessages((prev) => {
@@ -243,14 +250,14 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
           return newMessages;
         });
       } else if (!isStreamingRef.current) {
-        // Buffer empty and stream done — stop draining
+        // Fully drained and stream done — stop
         if (drainTimerRef.current) {
           clearInterval(drainTimerRef.current);
           drainTimerRef.current = null;
         }
         setIsStreaming(false);
       }
-      // Buffer empty but stream still active — no-op, wait for more words
+      // pos === full.length but stream active — wait for more text
     }, 30);
   };
 
@@ -263,9 +270,9 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
     setMessages((prev) => [...prev, { role: 'user', content: text }]);
     setIsLoading(true);
 
-    // Reset word buffer state
-    wordBufferRef.current = [];
-    renderedTextRef.current = '';
+    // Reset streaming state
+    fullTextRef.current = '';
+    drainPosRef.current = 0;
     isStreamingRef.current = false;
     pendingRagSourcesRef.current = [];
     pendingRagDegradedRef.current = false;
@@ -346,8 +353,8 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                 if (data.replace) {
                   // Leak blocked — bypass buffer, render immediately
                   fullText = data.text;
-                  wordBufferRef.current = [];
-                  renderedTextRef.current = data.text;
+                  fullTextRef.current = data.text;
+                  drainPosRef.current = data.text.length;
                   const sources = pendingRagSourcesRef.current;
                   const degraded = pendingRagDegradedRef.current;
                   setMessages((prev) => {
@@ -368,9 +375,7 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
                   }
 
                   fullText += data.text;
-                  // Split into words preserving trailing whitespace
-                  const words = data.text.match(/\S+\s*/g) || [];
-                  wordBufferRef.current.push(...words);
+                  fullTextRef.current = fullText;
                   startDrain();
                 }
               }
@@ -402,8 +407,9 @@ export default function FloatingChat({ lang }: FloatingChatProps) {
     } catch (err) {
       const isOffline = !navigator.onLine || (err instanceof Error && err.message === 'offline');
       const errorMsg = isOffline ? t.offline : t.error;
-      // Clear buffer on error
-      wordBufferRef.current = [];
+      // Clear streaming state on error
+      fullTextRef.current = '';
+      drainPosRef.current = 0;
       if (drainTimerRef.current) {
         clearInterval(drainTimerRef.current);
         drainTimerRef.current = null;
