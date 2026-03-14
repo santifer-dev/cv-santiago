@@ -36,7 +36,14 @@ export const SESSION_TIMEOUT_S = 120;
 
 export function useVoiceMode() {
   const [status, setStatus] = useState<VoiceStatus>('idle');
-  const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
+  const [transcript, _setTranscript] = useState<TranscriptEntry[]>([]);
+  const setTranscript: typeof _setTranscript = (update) => {
+    _setTranscript(prev => {
+      const next = typeof update === 'function' ? update(prev) : update;
+      transcriptRef.current = next;
+      return next;
+    });
+  };
   const [error, setError] = useState<string | null>(null);
   const [remainingSeconds, setRemainingSeconds] = useState(SESSION_TIMEOUT_S);
   const [debugLog, setDebugLog] = useState<string[]>([]);
@@ -55,6 +62,9 @@ export function useVoiceMode() {
   const pendingListenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const thinkingSoundStopRef = useRef<(() => void) | null>(null);
   const sessionStartRef = useRef(0);
+  const langRef = useRef('es');
+  const sessionIdRef = useRef('');
+  const transcriptRef = useRef<TranscriptEntry[]>([]);
 
   // Audio analysis
   const inputAnalyser = useAudioAnalyser();
@@ -239,6 +249,32 @@ export function useVoiceMode() {
     }
   }, []);
 
+  // Ensure transcript is sent even if the user closes the tab/navigates away
+  useEffect(() => {
+    const sendBeaconTrace = () => {
+      if (!traceIdRef.current || transcriptRef.current.length === 0) return;
+      // sendBeacon works even during page unload
+      const blob = new Blob([JSON.stringify({
+        traceId: traceIdRef.current,
+        sessionId: sessionIdRef.current,
+        transcript: transcriptRef.current,
+        durationMs: Date.now() - sessionStartRef.current,
+        lang: langRef.current,
+      })], { type: 'application/json' });
+      navigator.sendBeacon('/api/voice-trace', blob);
+      traceIdRef.current = null; // Prevent duplicate sends
+    };
+
+    window.addEventListener('beforeunload', sendBeaconTrace);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') sendBeaconTrace();
+    });
+
+    return () => {
+      window.removeEventListener('beforeunload', sendBeaconTrace);
+    };
+  }, []);
+
   const stop = useCallback(() => {
     cleanup();
     setStatus('idle');
@@ -247,6 +283,8 @@ export function useVoiceMode() {
 
   const start = useCallback(async (history: Message[], lang: string, sessionId: string, currentPage?: string) => {
     currentPageRef.current = currentPage || '';
+    langRef.current = lang;
+    sessionIdRef.current = sessionId;
     setVoiceSources([]);
     if (!isSupported) {
       setError('unsupported');
@@ -257,6 +295,7 @@ export function useVoiceMode() {
     setStatus('connecting');
     setError(null);
     setTranscript([]);
+    transcriptRef.current = [];
     setRemainingSeconds(SESSION_TIMEOUT_S);
     sessionStartRef.current = Date.now();
     currentTranscriptRef.current = '';

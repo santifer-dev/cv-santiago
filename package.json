@@ -8,7 +8,7 @@
     "rag:export": "npx tsx --tsconfig tsconfig.app.json scripts/export-chunks.ts",
     "rag:ingest": "npx tsx --tsconfig tsconfig.app.json scripts/ingest-rag.ts",
     "rag:sync": "npm run rag:export && npm run rag:ingest",
-    "build": "npm run rag:sync && npm run prompt:sync && tsc -b && vite build && npx tsx --tsconfig tsconfig.app.json scripts/generate-sitemap.ts && npx tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts && npx tsx --tsconfig tsconfig.app.json scripts/validate-llms-txt.ts && npx tsx --tsconfig tsconfig.app.json scripts/prerender.tsx",
+    "build": "npm run rag:sync && npm run prompt:sync && npx tsx --tsconfig tsconfig.app.json scripts/embed-evals.ts && tsc -b && vite build && npx tsx --tsconfig tsconfig.app.json scripts/generate-sitemap.ts && npx tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts && npx tsx --tsconfig tsconfig.app.json scripts/validate-llms-txt.ts && npx tsx --tsconfig tsconfig.app.json scripts/prerender.tsx",
     "validate-llms-txt": "npx tsx --tsconfig tsconfig.app.json scripts/validate-llms-txt.ts",
     "validate-articles": "npx tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts",
     "validate-articles:fix": "npx tsx --tsconfig tsconfig.app.json scripts/validate-articles.ts --fix",
@@ -20,7 +20,10 @@
     "prompt:regression": "npx tsx scripts/prompt-regression.ts",
     "adversarial": "npx tsx scripts/adversarial-test.ts",
     "chats": "npx tsx scripts/chats.ts",
-    "chats:tui": "npx tsx scripts/chats-tui.ts"
+    "chats:tui": "npx tsx scripts/chats-tui.ts",
+    "test:contract": "npx tsx tests/ops-contract.test.ts",
+    "test:ops": "npx tsx tests/ops-dashboard.test.ts",
+    "diagnose:rag": "npx tsx scripts/diagnose-rag.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
@@ -35,6 +38,7 @@
     "react-dom": "^19.2.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.12.0",
+    "recharts": "^3.8.0",
     "resend": "^6.9.1"
   },
   "devDependencies": {

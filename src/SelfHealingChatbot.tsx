@@ -23,6 +23,7 @@ import {
   Timeline,
   StackGrid,
   FloatingToc,
+  DiagramZoom,
 } from './articles/content-types'
 import { chatbotContent } from './chatbot-i18n'
 
@@ -65,6 +66,9 @@ const stackIcons: Record<string, React.ReactNode> = {
   OpenAI: (
     <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365 2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/></svg>
   ),
+  'OpenAI Realtime': (
+    <svg viewBox="0 0 24 24" className="w-8 h-8" fill="currentColor"><path d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.18a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.759a.771.771 0 0 0 .78 0l5.843-3.369v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.5 4.5 0 0 1-6.14-1.646zM2.34 7.896a4.485 4.485 0 0 1 2.366-1.973V11.6a.766.766 0 0 0 .388.676l5.815 3.355-2.02 1.168a.076.076 0 0 1-.071 0l-4.83-2.786A4.504 4.504 0 0 1 2.34 7.872zm16.597 3.855-5.833-3.387L15.119 7.2a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.105v-5.678a.79.79 0 0 0-.407-.667zm2.01-3.023-.141-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.5 4.5 0 0 1 6.68 4.66zm-12.64 4.135-2.02-1.164a.08.08 0 0 1-.038-.057V6.075a4.5 4.5 0 0 1 7.375-3.453l-.142.08L8.704 5.46a.795.795 0 0 0-.393.681zm1.097-2.365 2.602-1.5 2.607 1.5v2.999l-2.597 1.5-2.607-1.5z"/></svg>
+  ),
   Supabase: (
     <svg viewBox="0 0 24 24" className="w-8 h-8"><defs><linearGradient id="sb-a" x1="20.86%" x2="63.35%" y1="20.17%" y2="44.75%"><stop offset="0%" stopColor="#249361"/><stop offset="100%" stopColor="#3ECF8E"/></linearGradient><linearGradient id="sb-b" x1="1.99%" x2="21.4%" y1="-13.36%" y2="34.24%"><stop offset="0%"/><stop offset="100%" stopOpacity="0"/></linearGradient></defs><path fill="url(#sb-a)" d="M13.983 21.616c-.553.694-1.64.313-1.654-.578l-.21-13.046h9.273c1.68 0 2.604 1.95 1.53 3.231z"/><path fill="url(#sb-b)" fillOpacity=".2" d="M13.983 21.616c-.553.694-1.64.313-1.654-.578l-.21-13.046h9.273c1.68 0 2.604 1.95 1.53 3.231z"/><path fill="#3ECF8E" d="M10.017 2.384c.553-.694 1.64-.313 1.654.578l.071 13.046H2.607c-1.68 0-2.604-1.95-1.53-3.231z"/></svg>
   ),
@@ -95,11 +99,13 @@ function buildJsonLd(lang: Lang) {
     alternativeHeadline: t.seo.title,
     description: t.seo.description,
     datePublished: '2026-03-11',
-    dateModified: '2026-03-11',
+    dateModified: '2026-03-14',
     keywords: [
       'LLMOps', 'self-healing chatbot', 'agentic RAG', 'jailbreak defense', 'prompt injection',
       'LLM evaluation', 'closed loop LLM', 'Langfuse', 'prompt versioning', 'adversarial testing',
       'trace-to-eval', 'hybrid search pgvector', 'AI portfolio', 'chatbot evals', 'CI gate LLM',
+      'voice mode chatbot', 'OpenAI Realtime API', 'speech-to-speech AI',
+      'agentic observability', 'developer feedback loop', 'AI maintaining AI',
     ],
     images: ['https://santifer.io/chatbot/og-self-healing-chatbot.png'],
     breadcrumbHome: t.nav.breadcrumbHome,
@@ -130,7 +136,7 @@ export default function SelfHealingChatbot({ lang = 'en' }: { lang?: Lang }) {
     description: t.seo.description,
     image: 'https://santifer.io/chatbot/og-self-healing-chatbot.png',
     publishedTime: '2026-03-11',
-    modifiedTime: '2026-03-11',
+    modifiedTime: '2026-03-14',
     articleTags: 'LLMOps,self-healing chatbot,agentic RAG,jailbreak defense,Langfuse,evals,closed-loop,prompt injection',
     jsonLd: buildJsonLd(lang),
     xDefaultSlug: 'chatbot-que-se-cura-solo',
@@ -190,7 +196,7 @@ export default function SelfHealingChatbot({ lang = 'en' }: { lang?: Lang }) {
         <H3>{s.evolution.beforeAfter.heading}</H3>
         <img
           src="/chatbot/diagram-before-after.webp"
-          alt={lang === 'es' ? 'Día 1 vs Hoy: 80 líneas → sistema completo, 0 capas → 6, 0 tests → 56, sin observabilidad → Langfuse full stack' : 'Day 1 vs Today: 80 lines → full system, 0 layers → 6, 0 tests → 56, no observability → Langfuse full stack'}
+          alt={lang === 'es' ? 'Día 1 vs Hoy: 80 líneas → sistema completo, 0 capas → 6, 0 tests → 71, sin observabilidad → Langfuse full stack' : 'Day 1 vs Today: 80 lines → full system, 0 layers → 6, 0 tests → 71, no observability → Langfuse full stack'}
           className="w-full rounded-xl my-8"
           width={1400}
           height={782}
@@ -227,6 +233,38 @@ export default function SelfHealingChatbot({ lang = 'en' }: { lang?: Lang }) {
         <DataTable
           headers={[...s.architecture.lifecycle.headers]}
           rows={s.architecture.lifecycle.rows.map(r => [...r])}
+        />
+
+        <H3>{s.stack.heading}</H3>
+        <StackGrid items={s.stack.items.map(item => ({
+          icon: stackIcons[item.name] ?? <span className="w-8 h-8 flex items-center justify-center text-lg font-bold text-primary">{item.name[0]}</span>,
+          name: item.name,
+          desc: item.role,
+        }))} />
+
+        {/* ================================================================ */}
+        {/*  AGENTIC OBSERVABILITY                                           */}
+        {/* ================================================================ */}
+        <H2 id="agentic-observability">{s.agenticObservability.heading}</H2>
+        <Prose>{s.agenticObservability.body}</Prose>
+
+        <DiagramZoom
+          src="/chatbot/dashboard-evals.webp"
+          hdSrc="/chatbot/dashboard-evals.webp"
+          alt={lang === 'es' ? 'Dashboard LLMOps: tab Evals — 95.8% pass rate, 71 tests, 10 categorías con barras de progreso por categoría' : 'LLMOps Dashboard: Evals tab — 95.8% pass rate, 71 tests, 10 categories with per-category progress bars'}
+          caption={lang === 'es' ? 'Tab Evals: 95.8% pass rate en 71 tests, desglose por categoría' : 'Evals tab: 95.8% pass rate across 71 tests, breakdown by category'}
+        />
+        <DiagramZoom
+          src="/chatbot/dashboard-conversations.webp"
+          hdSrc="/chatbot/dashboard-conversations.webp"
+          alt={lang === 'es' ? 'Dashboard LLMOps: tab Conversations — lista de conversaciones reales con coste, tags, idioma y detalle de traza con spans' : 'LLMOps Dashboard: Conversations tab — real conversation list with cost, tags, language, and trace detail with spans'}
+          caption={lang === 'es' ? 'Tab Conversations: conversaciones reales con coste por traza, tags automáticos y spans de latencia' : 'Conversations tab: real conversations with per-trace cost, auto-tags, and latency spans'}
+        />
+        <DiagramZoom
+          src="/chatbot/dashboard-security.webp"
+          hdSrc="/chatbot/dashboard-security.webp"
+          alt={lang === 'es' ? 'Dashboard LLMOps: tab Security — 96.7% safety, funnel de seguridad, intentos de jailbreak recientes con detalle' : 'LLMOps Dashboard: Security tab — 96.7% safety, security funnel, recent jailbreak attempts with detail'}
+          caption={lang === 'es' ? 'Tab Security: funnel de seguridad, 96.7% safety score, jailbreak attempts en tiempo real' : 'Security tab: security funnel, 96.7% safety score, real-time jailbreak attempts'}
         />
 
         {/* ================================================================ */}
@@ -314,7 +352,7 @@ export default function SelfHealingChatbot({ lang = 'en' }: { lang?: Lang }) {
 
         <img
           src="/chatbot/diagram-evals-donut.webp"
-          alt={lang === 'es' ? '56 tests: RAG 17 (30.35%), Factual 9 (16.07%), Boundaries 7, Quality 7, Safety 7 (12.5% cada), Language 5 (8.93%), Persona 4 (7.14%)' : '56 tests: RAG 17 (30.35%), Factual 9 (16.07%), Boundaries 7, Quality 7, Safety 7 (12.5% each), Language 5 (8.93%), Persona 4 (7.14%)'}
+          alt={lang === 'es' ? '71 tests: RAG 16, Factual 9, Boundaries 7, Quality 7, Safety 7, Voice 6, Language 5, Multi-turn 5, Source Badges 5, Persona 4' : '71 tests: RAG 16, Factual 9, Boundaries 7, Quality 7, Safety 7, Voice 6, Language 5, Multi-turn 5, Source Badges 5, Persona 4'}
           className="w-full max-w-lg mx-auto rounded-xl my-8"
           width={1400}
           height={1400}
@@ -350,6 +388,9 @@ export default function SelfHealingChatbot({ lang = 'en' }: { lang?: Lang }) {
         <H3>{s.closedLoop.promptVersioning.heading}</H3>
         <Prose>{s.closedLoop.promptVersioning.body}</Prose>
 
+        <H3>{s.closedLoop.developerLoop.heading}</H3>
+        <Prose>{s.closedLoop.developerLoop.body}</Prose>
+
         {/* ================================================================ */}
         {/*  COST                                                            */}
         {/* ================================================================ */}
@@ -364,14 +405,60 @@ export default function SelfHealingChatbot({ lang = 'en' }: { lang?: Lang }) {
         <Callout>{s.cost.callout}</Callout>
 
         {/* ================================================================ */}
-        {/*  STACK                                                           */}
+        {/*  VOICE                                                           */}
         {/* ================================================================ */}
-        <H2 id="stack">{s.stack.heading}</H2>
-        <StackGrid items={s.stack.items.map(item => ({
-          icon: stackIcons[item.name] ?? <span className="w-8 h-8 flex items-center justify-center text-lg font-bold text-primary">{item.name[0]}</span>,
-          name: item.name,
-          desc: item.role,
+        <H2 id="voice">{s.voice.heading}</H2>
+        <Prose variant="hook">{s.voice.hook}</Prose>
+
+        <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto my-8">
+          <figure>
+            <img
+              src="/chatbot/voice-mode-ui.webp"
+              alt={lang === 'es'
+                ? 'Modo voz: VoiceOrb animado, timer 1:45, source badges enlazando a Agente IA Jacobo y Business OS'
+                : 'Voice mode: animated VoiceOrb, 1:45 timer, source badges linking to AI Agent Jacobo and Business OS'}
+              className="rounded-2xl w-full"
+              width={390}
+              height={560}
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs text-muted-foreground text-center">
+              {lang === 'es' ? 'Modo voz' : 'Voice mode'}
+            </figcaption>
+          </figure>
+          <figure>
+            <img
+              src="/chatbot/text-mode-ui.webp"
+              alt={lang === 'es'
+                ? 'Modo texto: respuesta sobre Jacobo con source badges, botón de micrófono para cambiar a voz'
+                : 'Text mode: response about Jacobo with source badges, microphone button to switch to voice'}
+              className="rounded-2xl w-full"
+              width={390}
+              height={560}
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs text-muted-foreground text-center">
+              {lang === 'es' ? 'Modo texto' : 'Text mode'}
+            </figcaption>
+          </figure>
+        </div>
+
+        <H3>{s.voice.architectureHeading}</H3>
+        <StepList items={s.voice.pipeline.map(item => ({
+          label: item.label,
+          detail: item.detail,
         }))} />
+
+        <H3>{s.voice.sharedHeading}</H3>
+        <Prose>{s.voice.sharedBody}</Prose>
+
+        <H3>{s.voice.constraintsHeading}</H3>
+        <StepList items={s.voice.constraints.map(item => ({
+          label: item.label,
+          detail: item.detail,
+        }))} />
+
+        <Callout>{s.voice.callout}</Callout>
 
         {/* ================================================================ */}
         {/*  LESSONS                                                         */}

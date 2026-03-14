@@ -65,7 +65,11 @@ export default async function handler(req) {
     const lastUserMessage = rawLastMessage.slice(0, 2000)
     const intentTags = classifyIntent(lastUserMessage)
 
-    if (intentTags.includes('jailbreak-attempt')) {
+    // Tag synthetic traffic (evals, adversarial, regression tests)
+    const traceSource = req.headers.get('x-trace-source')
+    if (traceSource) intentTags.push(`source:${traceSource}`)
+
+    if (intentTags.includes('jailbreak-attempt') && !traceSource) {
       waitUntil(sendJailbreakAlert(lastUserMessage))
     }
 
@@ -473,7 +477,7 @@ function streamResponse({
           }
           costBreakdown.total = Object.values(costBreakdown).reduce((a, b) => a + b, 0)
 
-          // Update trace with RAG metadata + cost + prompt version
+          // Update trace with RAG metadata + cost + prompt version + conversation
           trace?.update({
             tags: [...intentTags, ragUsed ? 'rag:yes' : 'rag:no'],
             metadata: {
@@ -614,6 +618,12 @@ function streamResponse({
 
 async function scoreTrace(traceId, userMessage, response, ragUsed, langfuse) {
   try {
+    const scoringGen = langfuse.generation({
+      traceId,
+      name: 'online_scoring',
+      model: 'claude-haiku-4-5-20251001',
+    })
+
     const scoringResponse = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 200,
@@ -631,6 +641,12 @@ ${ragUsed ? '- faithfulness: response matches retrieved context (no hallucinated
 
 JSON only: {"quality":0.0,"safety":0.0${ragUsed ? ',"faithfulness":0.0' : ''}}`
       }],
+    })
+
+    const scIn = scoringResponse.usage?.input_tokens || 0
+    const scOut = scoringResponse.usage?.output_tokens || 0
+    scoringGen.end({
+      usage: { input: scIn, output: scOut },
     })
 
     const text = scoringResponse.content[0]?.type === 'text' ? scoringResponse.content[0].text : ''

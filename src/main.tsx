@@ -9,6 +9,7 @@ import { articleRegistry, getEsSlugs } from './articles/registry'
 
 const FloatingChat = lazy(() => import('./FloatingChat'))
 const MusicToggle = lazy(() => import('./MusicToggle'))
+const OpsDashboard = lazy(() => import('./ops/OpsDashboard'))
 
 // Lazy-load article components from registry
 const articleComponents: Record<string, React.LazyExoticComponent<ComponentType<{ lang: 'es' | 'en' }>>> = {}
@@ -69,7 +70,7 @@ function GlobalChat() {
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
 
-  if (!hydrated) return null
+  if (!hydrated || pathname.startsWith('/ops')) return null
 
   const esSlugs = getEsSlugs()
   const lang = esSlugs.has(pathname) ? 'es' : 'en'
@@ -84,14 +85,21 @@ function GlobalChat() {
 }
 
 function GlobalMusic() {
+  const { pathname } = useLocation()
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => setHydrated(true), [])
-  if (!hydrated) return null
+  if (!hydrated || pathname.startsWith('/ops')) return null
   return (
     <Suspense fallback={null}>
       <MusicToggle />
     </Suspense>
   )
+}
+
+function ConditionalNav() {
+  const { pathname } = useLocation()
+  if (pathname.startsWith('/ops')) return null
+  return <GlobalNav />
 }
 
 // Console easter egg
@@ -154,12 +162,13 @@ const root = document.getElementById('root')!
 const app = (
   <StrictMode>
     <BrowserRouter>
-      <GlobalNav />
+      <ConditionalNav />
       <PageTransition>
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<App />} />
             <Route path="/en" element={<App />} />
+            <Route path="/ops" element={<OpsDashboard />} />
             {articleRegistry.map((article) => {
               const ArticleComponent = articleComponents[article.id]
               return [

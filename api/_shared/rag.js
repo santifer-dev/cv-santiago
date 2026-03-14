@@ -308,19 +308,18 @@ export async function searchPortfolio(query, trace, anthropicClient) {
 
   // 1. Embed
   let embedding
-  const embeddingSpan = trace?.span({ name: 'embedding', metadata: { query } })
+  const embeddingGen = trace?.generation({ name: 'embedding', model: 'text-embedding-3-small', metadata: { query } })
   try {
     const embResult = await embedQuery(query)
     embedding = embResult.embedding
     result.metrics.embeddingMs = embResult.latencyMs
     result.usage.embeddingTokens = embResult.totalTokens
-    embeddingSpan?.end({ metadata: {
-      latencyMs: embResult.latencyMs, model: 'text-embedding-3-small',
-      totalTokens: embResult.totalTokens,
-      cost: calcCost('text-embedding-3-small', embResult.totalTokens),
-    } })
+    embeddingGen?.end({
+      usage: { input: embResult.totalTokens, output: 0 },
+      metadata: { latencyMs: embResult.latencyMs },
+    })
   } catch (err) {
-    embeddingSpan?.end({ metadata: { error: err.message } })
+    embeddingGen?.end({ metadata: { error: err.message } })
     result.degraded = true
     result.degradedReason = 'embedding_fail'
     return result
@@ -352,20 +351,21 @@ export async function searchPortfolio(query, trace, anthropicClient) {
     }
 
     // 3. Re-rank
-    const rerankSpan = trace?.span({ name: 'reranking', metadata: { query } })
+    const rerankGen = trace?.generation({ name: 'reranking', model: 'claude-haiku-4-5-20251001', metadata: { query } })
     const rerankResult = await rerankChunks(query, filteredChunks, anthropicClient)
     result.metrics.rerankMs = rerankResult.latencyMs
     if (rerankResult.usage) {
       result.usage.rerankInputTokens = rerankResult.usage.input_tokens
       result.usage.rerankOutputTokens = rerankResult.usage.output_tokens
     }
-    rerankSpan?.end({
+    rerankGen?.end({
+      usage: {
+        input: rerankResult.usage?.input_tokens || 0,
+        output: rerankResult.usage?.output_tokens || 0,
+      },
       metadata: {
         rerankedOrder: rerankResult.rerankedOrder,
         latencyMs: rerankResult.latencyMs,
-        inputTokens: rerankResult.usage?.input_tokens,
-        outputTokens: rerankResult.usage?.output_tokens,
-        cost: rerankResult.usage ? calcCost('claude-haiku-4-5-20251001', rerankResult.usage.input_tokens, rerankResult.usage.output_tokens) : 0,
       },
     })
 

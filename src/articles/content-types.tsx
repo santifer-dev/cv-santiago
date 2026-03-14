@@ -102,12 +102,18 @@ interface HeadingProps {
   className?: string
 }
 
+function slugify(text: string): string {
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+}
+
 export function H3({ id, icon, children, className }: HeadingProps) {
   const base = 'font-display text-2xl font-semibold text-foreground mt-10 mb-4 scroll-mt-24'
   const withIcon = icon ? 'flex items-center gap-2' : ''
+  const autoId = id ?? (typeof children === 'string' ? slugify(children) : undefined)
   return (
-    <EditorLabel name="H3" id={id}>
-      <h3 id={id} className={`${base} ${withIcon} ${className ?? ''}`}>
+    <EditorLabel name="H3" id={autoId}>
+      <h3 id={autoId} className={`${base} ${withIcon} ${className ?? ''}`}>
         {icon}{children}
       </h3>
     </EditorLabel>
@@ -147,9 +153,20 @@ const proseVariants = {
 } as const
 
 export function Prose({ variant = 'body', className, children, editorId }: ProseProps) {
+  const cls = `${proseVariants[variant]} ${className ?? ''}`
+
+  if (typeof children === 'string' && children.includes('\n\n')) {
+    const paragraphs = children.split('\n\n').filter(Boolean)
+    return (
+      <EditorLabel name={`Prose:${variant}`} id={editorId}>
+        {paragraphs.map((p, i) => <p key={i} className={cls}>{p}</p>)}
+      </EditorLabel>
+    )
+  }
+
   return (
     <EditorLabel name={`Prose:${variant}`} id={editorId}>
-      <p className={`${proseVariants[variant]} ${className ?? ''}`}>{children}</p>
+      <p className={cls}>{children}</p>
     </EditorLabel>
   )
 }

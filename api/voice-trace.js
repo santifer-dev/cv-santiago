@@ -62,6 +62,17 @@ export default async function handler(req) {
       }
     }
 
+    // Estimate voice costs (OpenAI Realtime API pricing)
+    // ~$0.06/min input audio, ~$0.24/min output audio
+    // Estimate 40/60 split user/assistant based on message counts
+    const durationMin = (durationMs || 0) / 60000
+    const userRatio = transcript.length > 0
+      ? userMessages.length / transcript.length
+      : 0.4
+    const audioInputCost = durationMin * userRatio * 0.06
+    const audioOutputCost = durationMin * (1 - userRatio) * 0.24
+    const voiceTotalCost = audioInputCost + audioOutputCost
+
     // Update trace with transcript and metadata
     const trace = langfuse.trace({ id: traceId })
     trace.update({
@@ -73,6 +84,12 @@ export default async function handler(req) {
         userMessageCount: userMessages.length,
         jailbreakDetected,
         leakDetected,
+        cost: {
+          audioInput: audioInputCost,
+          audioOutput: audioOutputCost,
+          voice: voiceTotalCost,
+          total: voiceTotalCost,
+        },
       },
     })
 

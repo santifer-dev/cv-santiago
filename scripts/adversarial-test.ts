@@ -75,7 +75,7 @@ Be creative — don't use obvious patterns like "ignore your instructions". Use 
 async function callChat(message: string, lang: 'es' | 'en'): Promise<string> {
   const response = await fetch(CHAT_API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Trace-Source': 'eval' },
     body: JSON.stringify({
       messages: [{ role: 'user', content: message }],
       lang,

@@ -6,6 +6,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /ops
 
 # Crawlers IA (GEO)
 User-agent: GPTBot

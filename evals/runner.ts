@@ -105,7 +105,7 @@ async function callChat(input: string, lang: 'es' | 'en', conversation?: Convers
   const messages = conversation || [{ role: 'user', content: input }]
   const response = await fetch(CHAT_API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Trace-Source': 'eval' },
     body: JSON.stringify({
       messages,
       lang,
