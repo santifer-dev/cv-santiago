@@ -1,0 +1,10 @@
+{
+  "_comment": "Images allowed to exceed the 200KB budget. Each entry needs a reason.",
+  "exceptions": [
+    { "path": "jacobo/before-after-automation-en.webp", "reason": "DiagramZoom thumbnail with fine text — illegible below q60" },
+    { "path": "jacobo/before-after-automation-es.webp", "reason": "DiagramZoom thumbnail with fine text — illegible below q60" },
+    { "path": "jacobo/hero-concept-bridge.webp", "reason": "Hero diagram with detailed annotations" },
+    { "path": "jacobo/nl-to-calendar-en.webp", "reason": "DiagramZoom thumbnail with fine text — illegible below q60" },
+    { "path": "jacobo/nl-to-calendar-es.webp", "reason": "DiagramZoom thumbnail with fine text — illegible below q60" }
+  ]
+}

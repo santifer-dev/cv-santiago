@@ -314,8 +314,15 @@ function validateGlobalFiles(): Issue[] {
 
   // Image size budget — scan dist/ recursively
   // HD images (used as DiagramZoom lightbox) get a higher threshold (500KB warn, 1MB error)
+  // Exceptions file lists images allowed to exceed 200KB with justification
   const imageExts = new Set(['.webp', '.png', '.jpg', '.jpeg'])
   const isHdImage = (name: string) => name.includes('-hd.') || name.includes('-hd-') || name.includes('-full.')
+  const exceptionsPath = resolve(root, 'scripts', 'image-budget-exceptions.json')
+  const imageExceptions = new Set<string>()
+  if (existsSync(exceptionsPath)) {
+    const data = JSON.parse(readFileSync(exceptionsPath, 'utf-8'))
+    for (const e of data.exceptions) imageExceptions.add(e.path)
+  }
   function scanImages(dir: string) {
     if (!existsSync(dir)) return
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -334,6 +341,11 @@ function validateGlobalFiles(): Issue[] {
               issues.push({ severity: 'error', msg: `HD image too large: ${relPath} (${sizeKB}KB > 1MB)`, skill: '/seo images' })
             }
             // No warn for HD images 200-1MB — they need to be big for zoom
+          } else if (imageExceptions.has(relPath)) {
+            // Excepted images: only error if >500KB
+            if (size > 500 * 1024) {
+              issues.push({ severity: 'error', msg: `Excepted image too large: ${relPath} (${sizeKB}KB > 500KB)`, skill: '/seo images' })
+            }
           } else {
             // Regular images: strict thresholds
             if (size > 500 * 1024) {
