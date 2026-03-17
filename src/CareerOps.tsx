@@ -244,14 +244,15 @@ export default function CareerOps({ lang = 'en' }: { lang?: Lang }) {
         }))} />
 
         <figure className="rounded-lg overflow-hidden border border-border shadow-lg mb-6">
-          <video
-            src="/career-ops/pipeline-demo.mp4"
-            controls
-            preload="none"
-            playsInline
-            className="w-full"
-            poster="/career-ops/datadog.webp"
-          />
+          <div className="relative w-full" style={{ paddingBottom: '62.5%' }}>
+            <iframe
+              src="https://player.mux.com/Zhl5qjj02PoD2g01ZsOwJptHNTvThw7udv47tnza1VLUc?accent-color=%2300D9FF"
+              className="absolute inset-0 w-full h-full"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              loading="lazy"
+            />
+          </div>
           <figcaption className="px-4 py-2 text-sm text-muted-foreground text-center bg-card">
             {lang === 'es'
               ? 'Demo: auto-pipeline evaluando la oferta de Datadog Staff AI Engineer en tiempo real'
